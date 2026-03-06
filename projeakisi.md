@@ -8,7 +8,7 @@ Bu dosya Siber Şifacılar takımın haftalık proje ilerlemesini ve görev dağ
 GitHub reposu oluşturuldu. Ekip üyeleri eklendi. Proje akış dokümanı oluşturuldu.
 
 * **Selim Yağbasan (Yazılım MÜhendisi):**
-[Bu hafta yaptığı işler]
+Proje Kapsamının Belirlenmesi
 
 * **Enes Zukra (Yazılım MÜhendisi):**
 [Bu hafta yaptığı işler]
