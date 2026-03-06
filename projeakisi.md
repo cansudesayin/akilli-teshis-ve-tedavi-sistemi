@@ -17,8 +17,7 @@ Proje Kapsamının Belirlenmesi
 [Bu hafta yaptığı işler]
 
 * **Ali İstanbullu (Yazılım MÜhendisi):**
-[Bu hafta yaptığı işler]
-
+ Proje için uygun cilt ve göz hastalığı veri setleri (Kaggle üzerinden) araştırılıp erişim planı raporlandı.
 ## 2. Hafta
 
 * İlerleyen haftalarda doldurulacak
