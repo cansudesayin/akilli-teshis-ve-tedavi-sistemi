@@ -68,6 +68,27 @@ Projenin en yenilikçi yönü, teşhis sonrası süreçleri iyileştirmesidir.
 
 ---
 
+### 📊 2. Gereksinim Toplama ve Analizi
+
+👤 **Sorumlu: Enes Zukra
+📅 Tarih: 7 Mart 2026 
+
+Proje kapsamında sistemin temel gereksinimleri analiz edilmiştir.
+
+#### Fonksiyonel Gereksinimler
+- Doktorların hastaya ait cilt veya göz görüntülerini sisteme yükleyebilmesi
+- Yapay zeka modelinin görüntüleri analiz ederek hastalık tespiti yapması
+- Sistem tarafından risk skorunun ve teşhis sonucunun gösterilmesi
+- Hastaya ait temel bilgilerin sistemde saklanması
+
+#### Kullanıcı Gereksinimleri
+- Doktorların sistemi kolay kullanabilmesi
+- Analiz sonuçlarının anlaşılır şekilde gösterilmesi
+- Sistem performansının hızlı olması
+
+---
+
+
 ### 🖼️ 5. Veri Seti Araştırması ve Erişim Planı
 
 👤 **Sorumlu:** Ali İstanbullu
