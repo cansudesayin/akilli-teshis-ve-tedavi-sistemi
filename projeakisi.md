@@ -115,7 +115,7 @@ Diyabetik Retinopati için Fundus fotoğrafları, Yaşa Bağlı Makula Dejeneras
 
 - **Cansude Sayın** (Scrum Master / Yönetici): GitHub reposu oluşturuldu. Ekip üyeleri eklendi. Proje akış dokümanı oluşturuldu.
 - **Selim Yağbasan** (Yazılım Mühendisi): Proje kapsamının belirlenmesi
-- **Enes Zukra** (Yazılım Mühendisi): [Bu hafta yaptığı işler]
+- **Enes Zukra** (Yazılım Mühendisi): [Proje için temel sistem gereksinimleri analiz edildi ve belirlendi.]
 - **Edanur Yasak** (Yazılım Mühendisi): [Bu hafta yaptığı işler]
 - **Ali İstanbullu** (Yazılım Mühendisi): Proje için uygun cilt ve göz hastalığı veri setleri (Kaggle üzerinden) araştırılıp erişim planı raporlandı.
 
