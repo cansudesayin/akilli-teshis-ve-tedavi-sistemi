@@ -1,0 +1,27 @@
+Proje Tanımı: Cilt ve Göz Hastalıkları İçin Çok Modlu Klinik Karar Destek Sistemi
+Proje Özeti: Bu proje, dermatoloji ve oftalmoloji alanlarındaki tıbbi görüntüleri hastanın klinik geçmişiyle birleştirerek analiz eden yapay zeka tabanlı bir yazılım sistemidir. Sistem sadece hastalıkları sınıflandırmakla kalmaz; aynı zamanda hekimlere açıklanabilir teşhis kanıtları sunar ve hastaya özel, dinamik bir tedavi planı oluşturarak sağlık süreçlerini optimize eder.
+1. Projenin Kapsamı
+Projenin sınırları ve içerdiği modüller şunlardır:
+•	Girdi: Yüksek çözünürlüklü tıbbi görüntüler ve hastanın EHR (Elektronik Sağlık Kayıtları - yaş, cinsiyet, kan değerleri, genetik yatkınlık vb.) verileri.
+•	İşlem: Derin Öğrenme ve Takviyeli Öğrenme (tedavi optimizasyonu) algoritmaları kullanılarak çok modlu veri analizi.
+•	Çıktı: Erken teşhis uyarısı, risk skorlaması, lezyon/ödem haritalaması (ısı haritaları) ve kişiselleştirilmiş tedavi takvimi/dozaj önerisi.
+•	Sınırlandırmalar: Sistem nihai kararı veren bir doktor değildir, bir Tıbbi Cihaz Yazılımı olarak hekimin karar verme sürecini hızlandıran ve doğrulayan bir asistandır.
+
+2. Teşhisi İyileştirilecek Hastalıklar
+Sistem, teşhis sürecinde insan gözünün kaçırabileceği mikro-değişimleri tespit etmeye odaklanır.
+Dermatoloji (Cilt):
+•	Malign Melanom & Bazal Hücreli Karsinom: Dermoskopik görüntülerdeki asimetri, sınır düzensizliği, renk çeşitliliği ve çap (ABCD kuralı) özelliklerini piksel bazında analiz ederek, kanserli lezyonları henüz "ben" görünümündeyken "Evre 0" aşamasında tespit eder.
+•	Psoriasis (Sedef) & Akne: Lezyonların yayılım alanını ve şiddetini otomatik olarak hesaplayarak (PASI skoru), standart ve objektif bir şiddet derecelendirmesi yapar.
+Oftalmoloji (Göz):
+•	Diyabetik Retinopati (DR): Fundus fotoğraflarındaki mikroanevrizmaları (kılcal damar kanamaları) ve eksudaları (yağ/protein birikintileri) saniyeler içinde tespit ederek hastalığın evresini (Hafif, Orta, Şiddetli, Proliferatif) belirler.
+•	Yaşa Bağlı Makula Dejenerasyonu (Sarı Nokta): OCT (Optik Koherens Tomografi) taramalarında retina katmanları arasındaki sıvı birikimini ve doku incelmesini milimetrik olarak ölçer.
+
+3. Optimize Edilecek Tedavi Süreçleri
+Projenin en yenilikçi yönü, teşhis sonrası süreçleri iyileştirmesidir.
+•	Dinamik Tedavi Zamanlaması (Göz): Göz hastalıklarında (DR ve YBMD) uygulanan Anti-VEGF göz içi iğnelerinin zamanlamasını optimize eder. Sistem, retina altı sıvının tekrar ne zaman birikeceğini öngörerek ("Treat-and-Extend" protokolü) hastanın 4 hafta yerine belki de 8 haftada bir iğne olmasını sağlar. Bu, hastanın konforunu artırır ve gereksiz maliyetleri önler.
+•	Kişiselleştirilmiş İlaç Rotasyonu (Cilt): Sedef veya şiddetli akne gibi kronik durumlarda sistem, hastanın yaşını ve lezyonun geçmiş görüntülere göre iyileşme hızını (zaman serisi analizi) değerlendirir. Tedaviye yanıt alınamıyorsa, biyolojik ajanların (iğnelerin) veya topikal kremlerin etken maddelerinin/dozajlarının ne zaman değiştirilmesi gerektiğini doktora önerir.
+•	Cerrahi Sınır Tahmini (Cilt Kanserleri): Melanom teşhis edildiğinde, tümörün derinlik (Breslow kalınlığı) tahminini yaparak cerraha "minimum ne kadarlık sağlıklı doku marjı" ile kesi yapması gerektiğini önerir. Bu, estetik kaybı ve nüks riskini aynı anda minimize eder.
+
+4. Somut Proje Hedefleri (SMART Goals)
+•	Klinik Hedef: Melanom ve Diyabetik Retinopati için erken teşhis doğruluğunu %95'in üzerine çıkararak klinik denemelerde uzman doktor kararlarıyla eşdeğer veya daha üstün performans göstermek.
+•	Operasyonel Hedef: Bir poliklinikte rutin görüntü inceleme ve raporlama süresini hasta başına ortalama %60 oranında azaltarak doktorların daha fazla hastaya, daha kaliteli zaman ayırmasını sağlamak.
