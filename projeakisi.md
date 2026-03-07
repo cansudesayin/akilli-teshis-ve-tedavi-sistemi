@@ -88,13 +88,14 @@ Proje kapsamında sistemin temel gereksinimleri analiz edilmiştir.
 
 ---
 
-💻 **4. Geliştirme Ortamı Kurulumu**
+ **4. Geliştirme Ortamı Kurulumu**
 
-👤 **Sorumlu:** Cansude Sayın 📅 **Tarih:** 7 Mart 2026
+ **Sorumlu:** Cansude Sayın 
+ **Tarih:** 7 Mart 2026
 
 Proje geliştirme sürecinde kullanılacak yazılım araçları ve kütüphaneler araştırılmış ve geliştirme ortamı kurulmuştur. Bu kapsamda aşağıdaki teknolojiler bilgisayara kurulmuş ve çalışır durumda test edilmiştir.
 
-### ⚙️ Kurulan Araçlar ve Teknolojiler:
+### Kurulan Araçlar ve Teknolojiler:
 
 - **Python** – Projenin ana programlama dili olarak kurulmuştur.
 - **TensorFlow** – Derin öğrenme modellerinin geliştirilmesi için kurulmuştur.
@@ -103,7 +104,7 @@ Proje geliştirme sürecinde kullanılacak yazılım araçları ve kütüphanele
 - **MySQL** – Hastalara ait klinik verilerin saklanacağı veritabanı sistemi kurulmuştur.
 - **Docker** – Uygulamaların izole bir ortamda çalıştırılması ve geliştirme ortamının taşınabilir hale getirilmesi amacıyla kurulmuştur.
 
-### 🔍 Kurulum Sonrası Testler:
+### Kurulum Sonrası Testler:
 
 - Python ortamında TensorFlow kütüphanesi başarıyla import edilmiştir.
 - MySQL veritabanı servisi çalışır durumda test edilmiştir.
@@ -111,7 +112,7 @@ Proje geliştirme sürecinde kullanılacak yazılım araçları ve kütüphanele
 - Geliştirme ortamı proje geliştirme için hazır hale getirilmiştir.
 
 
-### 🖼️ 5. Veri Seti Araştırması ve Erişim Planı
+### 5. Veri Seti Araştırması ve Erişim Planı
 
 👤 **Sorumlu:** Ali İstanbullu
 📅 **Tarih:** 6 Mart 2026
