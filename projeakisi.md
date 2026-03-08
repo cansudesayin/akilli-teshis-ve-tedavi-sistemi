@@ -87,6 +87,150 @@ Proje kapsamında sistemin temel gereksinimleri analiz edilmiştir.
 - Sistem performansının hızlı olması
 
 ---
+**3. Teknoloji Araştırması ve Seçimi**
+
+**Sorumlu:** Edanur Yasak 
+**Tarih:** 8 Mart 2026
+
+---
+
+# Akıllı Teşhis ve Tedavi Sistemi
+
+## Veri Analitiği ve Makine Öğrenimi Teknoloji Seçimi
+
+### 1. Programlama Dili
+
+Bu proje için temel geliştirme dili olarak **Python** seçilmiştir.
+
+**Gerekçeler**
+
+* Makine öğrenimi ve veri analitiği alanında en yaygın kullanılan dildir
+* Tıbbi görüntü analizi için çok sayıda hazır kütüphane içerir
+* Büyük veri setleri ile çalışmayı kolaylaştırır
+* Akademik ve araştırma projelerinde standart hale gelmiştir
+
+Projedeki veri ön işleme, model eğitimi ve analiz işlemlerinin tamamı Python tabanlı yürütülecektir.
+
+
+# 2. Makine Öğrenimi ve Derin Öğrenme Kütüphaneleri
+
+## PyTorch
+
+Model geliştirme için **PyTorch** tercih edilmiştir.
+
+**Neden PyTorch?**
+
+* Derin öğrenme modelleri geliştirmek için esnek bir yapı sunar
+* Araştırma projelerinde çok yaygın kullanılır
+* Görüntü işleme modelleri için güçlü destek sağlar
+* Eğitim sürecini kolayca görselleştirmeye izin verir
+
+Bu kütüphane ile özellikle **Convolutional Neural Network (CNN)** tabanlı görüntü sınıflandırma modelleri geliştirilecektir.
+
+Bu modeller:
+
+* cilt lezyonlarını sınıflandırma
+* retina görüntülerini analiz etme
+* hastalık evrelerini belirleme
+
+gibi görevleri yerine getirecektir.
+
+# 3. Görüntü İşleme Teknolojileri
+
+## OpenCV
+
+Görüntü ön işleme işlemleri için **OpenCV** kullanılacaktır.
+
+**Kullanım amaçları**
+
+* görüntü boyutlarını standardize etmek
+* gürültü azaltma
+* kontrast iyileştirme
+* lezyon bölgelerini belirginleştirme
+
+Örneğin:
+
+* dermoskopik görüntülerde lezyon sınırlarının daha net çıkarılması
+* retina görüntülerinde damar yapılarını vurgulama
+
+
+# 4. Veri Analitiği Araçları
+
+## Pandas
+
+Hasta verilerinin analizi için **Pandas** kullanılacaktır.
+
+**Kullanım amaçları**
+
+* yaş, cinsiyet gibi demografik verilerin analizi
+* veri temizleme
+* veri setlerinin düzenlenmesi
+* model eğitimine uygun veri tabloları oluşturma
+
+
+## NumPy
+
+Sayısal işlemler için **NumPy** kullanılacaktır.
+
+Makine öğrenimi algoritmaları büyük ölçüde matris hesaplamalarına dayandığı için NumPy yüksek performans sağlar.
+
+
+# 5. Model Eğitimi Platformu
+
+## Google Colab
+
+Model eğitimi için **Google Colab** platformu kullanılacaktır.
+
+**Avantajları**
+
+* ücretsiz GPU desteği
+* Python ortamı hazır gelir
+* büyük veri setleri ile çalışma kolaylığı
+* ekip üyeleri ile paylaşım kolaylığı
+
+Bu platform özellikle görüntü verisi üzerinde eğitim yapılırken işlem süresini ciddi şekilde azaltacaktır.
+
+
+# 6. Veritabanı Teknolojisi
+
+Projedeki EHR verileri için **MySQL** gibi ilişkisel veritabanı sistemleri kullanılacaktır.
+
+Veritabanında şu bilgiler tutulacaktır:
+
+* hasta yaşı
+* cinsiyet
+* diyabet geçmişi
+* görüntü dosya yolu
+
+Bu yapı sayesinde görüntüler ve hasta bilgileri birbiriyle ilişkilendirilebilecektir.
+
+
+# 7. Sistem Arayüzü (Opsiyonel)
+
+Kullanıcıların sisteme görüntü yükleyebilmesi için basit bir web arayüzü oluşturulacaktır.
+
+Bu amaçla **Flask** kullanılabilir.
+
+Bu arayüz sayesinde kullanıcılar:
+
+* cilt veya göz görüntüsü yükleyebilir
+* analiz sonucunu görebilir
+* olası hastalık tahminlerini inceleyebilir
+
+
+
+# 8. Genel Sistem Akışı
+
+Projenin teknik çalışma akışı şu şekilde planlanmaktadır:
+
+1️⃣ Veri setlerinin **Kaggle API** ile indirilmesi
+2️⃣ Görüntülerin **OpenCV ile ön işlenmesi**
+3️⃣ Demografik verilerin **Pandas ile düzenlenmesi**
+4️⃣ Görüntülerin **PyTorch modelleri ile eğitilmesi**
+5️⃣ Tahmin sonuçlarının **SQL veritabanına kaydedilmesi**
+6️⃣ Kullanıcıların **Flask arayüzü üzerinden sisteme erişmesi**
+
+---
 
  **4. Geliştirme Ortamı Kurulumu**
 
@@ -160,7 +304,7 @@ Diyabetik Retinopati için Fundus fotoğrafları, Yaşa Bağlı Makula Dejeneras
 - **Cansude Sayın** (Scrum Master / Yönetici): GitHub reposu oluşturuldu. Ekip üyeleri eklendi. Proje akış dokümanı oluşturuldu.
 - **Selim Yağbasan** (Yazılım Mühendisi): Proje kapsamının belirlenmesi
 - **Enes Zukra** (Yazılım Mühendisi): [Proje için temel sistem gereksinimleri analiz edildi ve belirlendi.]
-- **Edanur Yasak** (Yazılım Mühendisi): [Bu hafta yaptığı işler]
+- **Edanur Yasak** (Yazılım Mühendisi): [Proje için teknoloji araştırması ve seçimi yapıldı.]
 - **Ali İstanbullu** (Yazılım Mühendisi): Proje için uygun cilt ve göz hastalığı veri setleri (Kaggle üzerinden) araştırılıp erişim planı raporlandı.
 
 ---
