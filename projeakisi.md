@@ -89,146 +89,155 @@ Proje kapsamında sistemin temel gereksinimleri analiz edilmiştir.
 ---
 **3. Teknoloji Araştırması ve Seçimi**
 
-**Sorumlu:** Edanur Yasak 
-**Tarih:** 8 Mart 2026
+**Sorumlu:** Edanur Yasak
+**Tarih:** 10 Mart 2026
+
+Bu projede dermatoloji ve oftalmoloji alanlarında görüntü analizi yaparak hastalık teşhisi ve tedavi önerisi sunan bir sistem geliştirilmesi hedeflenmektedir. Bu nedenle görüntü işleme, makine öğrenimi ve veri analitiği alanlarında güçlü araçlar tercih edilmiştir.
 
 ---
 
-# Akıllı Teşhis ve Tedavi Sistemi
+# 1. Programlama Dili
 
-## Veri Analitiği ve Makine Öğrenimi Teknoloji Seçimi
+## Python
 
-### 1. Programlama Dili
+Projenin ana programlama dili olarak **Python** seçilmiştir.
 
-Bu proje için temel geliştirme dili olarak **Python** seçilmiştir.
+### Gerekçeler
 
-**Gerekçeler**
+* Yapay zekâ ve veri bilimi projelerinde en yaygın kullanılan dildir.
+* Geniş makine öğrenimi ve görüntü işleme kütüphane desteğine sahiptir.
+* Akademik projeler ve araştırmalarda standart haline gelmiştir.
+* Veri analizi ve model geliştirme süreçlerini hızlandırır.
 
-* Makine öğrenimi ve veri analitiği alanında en yaygın kullanılan dildir
-* Tıbbi görüntü analizi için çok sayıda hazır kütüphane içerir
-* Büyük veri setleri ile çalışmayı kolaylaştırır
-* Akademik ve araştırma projelerinde standart hale gelmiştir
+Python sayesinde veri işleme, model eğitimi ve sistem entegrasyonu tek bir dil üzerinden gerçekleştirilebilecektir.
 
-Projedeki veri ön işleme, model eğitimi ve analiz işlemlerinin tamamı Python tabanlı yürütülecektir.
-
+---
 
 # 2. Makine Öğrenimi ve Derin Öğrenme Kütüphaneleri
 
-## PyTorch
+## TensorFlow
 
-Model geliştirme için **PyTorch** tercih edilmiştir.
+Projede derin öğrenme modellerinin geliştirilmesi için **TensorFlow** kullanılacaktır.
 
-**Neden PyTorch?**
+### Gerekçeler
 
-* Derin öğrenme modelleri geliştirmek için esnek bir yapı sunar
-* Araştırma projelerinde çok yaygın kullanılır
-* Görüntü işleme modelleri için güçlü destek sağlar
-* Eğitim sürecini kolayca görselleştirmeye izin verir
+* Büyük veri ile çalışmaya uygun ölçeklenebilir mimariye sahiptir.
+* Görüntü sınıflandırma ve tıbbi görüntü analizi için güçlü araçlar sunar.
+* GPU desteği sayesinde model eğitimi hızlanır.
+* Endüstride ve akademide yaygın şekilde kullanılmaktadır.
 
-Bu kütüphane ile özellikle **Convolutional Neural Network (CNN)** tabanlı görüntü sınıflandırma modelleri geliştirilecektir.
+---
 
-Bu modeller:
+## Keras
 
-* cilt lezyonlarını sınıflandırma
-* retina görüntülerini analiz etme
-* hastalık evrelerini belirleme
+Model geliştirme sürecini kolaylaştırmak amacıyla **Keras** kullanılacaktır.
 
-gibi görevleri yerine getirecektir.
+### Gerekçeler
+
+* TensorFlow üzerinde çalışan yüksek seviyeli bir derin öğrenme API’sidir.
+* Daha az kod ile model geliştirmeyi sağlar.
+* Convolutional Neural Network (CNN) gibi mimarilerin hızlı şekilde oluşturulmasına imkan tanır.
+
+Bu sayede dermatolojik görüntüler ve retina görüntüleri üzerinde sınıflandırma modelleri geliştirilebilecektir.
+
+---
 
 # 3. Görüntü İşleme Teknolojileri
 
 ## OpenCV
 
-Görüntü ön işleme işlemleri için **OpenCV** kullanılacaktır.
+Tıbbi görüntülerin işlenmesi için **OpenCV** kullanılacaktır.
 
-**Kullanım amaçları**
+### Gerekçeler
 
-* görüntü boyutlarını standardize etmek
-* gürültü azaltma
-* kontrast iyileştirme
-* lezyon bölgelerini belirginleştirme
+* Görüntü ön işleme işlemleri için güçlü fonksiyonlar sunar.
+* Gürültü azaltma, kontrast ayarlama ve görüntü kırpma işlemleri yapılabilir.
+* Makine öğrenmesi modellerine daha temiz veri sağlanmasını sağlar.
 
-Örneğin:
+Bu aşama model doğruluğunu artırmak için kritik öneme sahiptir.
 
-* dermoskopik görüntülerde lezyon sınırlarının daha net çıkarılması
-* retina görüntülerinde damar yapılarını vurgulama
+---
 
-
-# 4. Veri Analitiği Araçları
+# 4. Veri Analitiği Kütüphaneleri
 
 ## Pandas
 
-Hasta verilerinin analizi için **Pandas** kullanılacaktır.
+Veri analizi için **Pandas** kullanılacaktır.
 
-**Kullanım amaçları**
+### Kullanım Alanları
 
-* yaş, cinsiyet gibi demografik verilerin analizi
-* veri temizleme
-* veri setlerinin düzenlenmesi
-* model eğitimine uygun veri tabloları oluşturma
+* Hastalara ait demografik verilerin analizi
+* CSV formatındaki veri setlerinin işlenmesi
+* Görüntü meta verilerinin düzenlenmesi
 
+---
 
 ## NumPy
 
 Sayısal işlemler için **NumPy** kullanılacaktır.
 
-Makine öğrenimi algoritmaları büyük ölçüde matris hesaplamalarına dayandığı için NumPy yüksek performans sağlar.
+### Gerekçeler
 
+* Matris ve vektör işlemlerini hızlı şekilde gerçekleştirebilir.
+* Makine öğrenmesi algoritmalarının temel matematik altyapısını sağlar.
 
-# 5. Model Eğitimi Platformu
+---
 
-## Google Colab
+# 5. Geliştirme Ortamı
 
-Model eğitimi için **Google Colab** platformu kullanılacaktır.
+## Visual Studio Code
 
-**Avantajları**
+Yazılım geliştirme ortamı olarak **Visual Studio Code** kullanılacaktır.
 
-* ücretsiz GPU desteği
-* Python ortamı hazır gelir
-* büyük veri setleri ile çalışma kolaylığı
-* ekip üyeleri ile paylaşım kolaylığı
+### Gerekçeler
 
-Bu platform özellikle görüntü verisi üzerinde eğitim yapılırken işlem süresini ciddi şekilde azaltacaktır.
+* Python desteği güçlüdür.
+* Eklenti sistemi sayesinde veri bilimi araçları kolayca entegre edilebilir.
+* Hızlı ve hafif bir geliştirme ortamıdır.
 
+---
 
-# 6. Veritabanı Teknolojisi
+# 6. Veritabanı Yönetim Sistemi
 
-Projedeki EHR verileri için **MySQL** gibi ilişkisel veritabanı sistemleri kullanılacaktır.
+## MySQL
 
-Veritabanında şu bilgiler tutulacaktır:
+Hasta bilgileri ve meta verilerin saklanması için **MySQL** kullanılacaktır.
 
-* hasta yaşı
-* cinsiyet
-* diyabet geçmişi
-* görüntü dosya yolu
+### Kullanım Amaçları
 
-Bu yapı sayesinde görüntüler ve hasta bilgileri birbiriyle ilişkilendirilebilecektir.
+* Hasta demografik verilerinin saklanması
+* Klinik kayıtların tutulması
+* Görüntü dosyalarının veritabanındaki hasta bilgileriyle eşleştirilmesi
 
+---
 
-# 7. Sistem Arayüzü (Opsiyonel)
+# 7. Konteyner Teknolojisi
 
-Kullanıcıların sisteme görüntü yükleyebilmesi için basit bir web arayüzü oluşturulacaktır.
+## Docker
 
-Bu amaçla **Flask** kullanılabilir.
+Uygulamanın farklı ortamlarda sorunsuz çalışması için **Docker** kullanılacaktır.
 
-Bu arayüz sayesinde kullanıcılar:
+### Gerekçeler
 
-* cilt veya göz görüntüsü yükleyebilir
-* analiz sonucunu görebilir
-* olası hastalık tahminlerini inceleyebilir
+* Geliştirme ortamının taşınabilir olmasını sağlar
+* Tüm bağımlılıkların tek bir konteyner içinde çalışmasını sağlar
+* Ekip üyelerinin aynı ortamda geliştirme yapmasına imkan tanır
 
+---
 
+# Genel Teknoloji Mimarisi
 
-# 8. Genel Sistem Akışı
+Projede kullanılacak temel teknoloji stack’i aşağıdaki gibidir:
 
-Projenin teknik çalışma akışı şu şekilde planlanmaktadır:
-
-1️⃣ Veri setlerinin **Kaggle API** ile indirilmesi
-2️⃣ Görüntülerin **OpenCV ile ön işlenmesi**
-3️⃣ Demografik verilerin **Pandas ile düzenlenmesi**
-4️⃣ Görüntülerin **PyTorch modelleri ile eğitilmesi**
-5️⃣ Tahmin sonuçlarının **SQL veritabanına kaydedilmesi**
-6️⃣ Kullanıcıların **Flask arayüzü üzerinden sisteme erişmesi**
+| Katman            | Teknoloji          |
+| ----------------- | ------------------ |
+| Programlama dili  | Python             |
+| Makine öğrenimi   | TensorFlow + Keras |
+| Görüntü işleme    | OpenCV             |
+| Veri analizi      | Pandas + NumPy     |
+| Geliştirme ortamı | Visual Studio Code |
+| Veritabanı        | MySQL              |
+| Ortam yönetimi    | Docker             |
 
 ---
 
