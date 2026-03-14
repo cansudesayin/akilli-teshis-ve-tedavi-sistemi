@@ -117,7 +117,7 @@ Diyabetik Retinopati için Fundus fotoğrafları, Yaşa Bağlı Makula Dejeneras
 
 ---
 
-# 🛡️ Sistem Güvenliği ve Risk Analizi Planı
+#  Sistem Güvenliği ve Risk Analizi Planı
 
 Bu belge, **Cilt ve Göz Hastalıkları İçin Çok Modlu Klinik Karar Destek Sistemi** projesinin altyapısında, veri işleme süreçlerinde ve yapay zeka modelinde karşılaşılabilecek olası güvenlik zafiyetlerini ve bu zafiyetlerin nasıl giderileceğini tanımlar.
 
@@ -172,11 +172,11 @@ Aşağıdaki tablo, güvenlik önlemlerinin uygulanma takvimini ve ekip içi sor
 
 | Faz | Uygulanacak Güvenlik Önlemi | Sorumlu Kişi | Hedef Süre | Durum |
 | :--- | :--- | :--- | :--- | :---: |
-| **Faz 1** | Veritabanı şifrelemesi (AES-256) ve HTTPS (SSL/TLS) sertifikalarının kurulması. | **Cansude Sayın** & **Ali İstanbullu** | 1. - 2. Hafta | ⏳ Bekliyor |
-| **Faz 1** | Çok Faktörlü Doğrulama (MFA) ve Rol Bazlı Erişim (RBAC) kodlaması. | **Enes Zukra** | 2. - 3. Hafta | ⏳ Bekliyor |
-| **Faz 2** | Docker container güvenlik sıkılaştırması ve Ağ Segmentasyonu (Private Subnet). | **Cansude Sayın** | 3. Hafta | ⏳ Bekliyor |
-| **Faz 2** | Veri setlerindeki (görüntü/EHR) kişisel bilgilerin analize girmeden anonimleştirilmesi. | **Ali İstanbullu** | 4. Hafta | ⏳ Bekliyor |
-| **Faz 3** | Yapay zeka modeline gelen girdilerin doğrulanması ve Adversarial Attack savunması. | **Edanur Yasak** | 5. Hafta | ⏳ Bekliyor |
-| **Faz 4** | Tüm sistemin sızma testinden (PenTest) geçirilmesi ve KVKK raporunun hazırlanması. | **Tüm Ekip** | 6. Hafta | ⏳ Bekliyor |
+| **Faz 1** | Veritabanı şifrelemesi (AES-256) ve HTTPS (SSL/TLS) sertifikalarının kurulması. | **Cansude Sayın** & **Ali İstanbullu** | 1. - 2. Hafta |
+| **Faz 1** | Çok Faktörlü Doğrulama (MFA) ve Rol Bazlı Erişim (RBAC) kodlaması. | **Enes Zukra** | 2. - 3. Hafta |
+| **Faz 2** | Docker container güvenlik sıkılaştırması ve Ağ Segmentasyonu (Private Subnet). | **Cansude Sayın** | 3. Hafta |
+| **Faz 2** | Veri setlerindeki (görüntü/EHR) kişisel bilgilerin analize girmeden anonimleştirilmesi. | **Ali İstanbullu** | 4. Hafta |
+| **Faz 3** | Yapay zeka modeline gelen girdilerin doğrulanması ve Adversarial Attack savunması. | **Edanur Yasak** | 5. Hafta |
+| **Faz 4** | Tüm sistemin sızma testinden (PenTest) geçirilmesi ve KVKK raporunun hazırlanması. | **Tüm Ekip** | 6. Hafta |
 
 ---
