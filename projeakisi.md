@@ -59,14 +59,6 @@ Projenin en yenilikçi yönü, teşhis sonrası süreçleri iyileştirmesidir.
 
 ---
 
-### Hafta İçi Görev Listesi
-
-- 📊 2. Gereksinim Toplama ve Analizi
-- 🛠️ 3. Teknoloji Araştırması ve Seçimi
-- 💻 4. Geliştirme Ortamı Kurulumu
-- 🖼️ 5. Veri Seti İncelemesi ve Ön İşleme
-
----
 
 ### 📊 2. Gereksinim Toplama ve Analizi
 
@@ -320,4 +312,68 @@ Diyabetik Retinopati için Fundus fotoğrafları, Yaşa Bağlı Makula Dejeneras
 
 ## 2. Hafta
 
-> İlerleyen haftalarda doldurulacak.
+---
+
+# 🛡️ Sistem Güvenliği ve Risk Analizi Planı
+
+Bu belge, **Cilt ve Göz Hastalıkları İçin Çok Modlu Klinik Karar Destek Sistemi** projesinin altyapısında, veri işleme süreçlerinde ve yapay zeka modelinde karşılaşılabilecek olası güvenlik zafiyetlerini ve bu zafiyetlerin nasıl giderileceğini tanımlar.
+
+Proje, hassas Elektronik Sağlık Kayıtları (EHR) ve tıbbi görüntüler işlediği için **KVKK** ve **HIPAA** standartlarına tam uyum hedeflenmektedir.
+
+---
+
+## 1. Sistem ve Veri Risk Analizi (Zafiyet Tespiti)
+
+
+### A. Veri Gizliliği ve Sızıntı Riskleri
+* **Zafiyet:** MySQL veritabanındaki hasta kimlik bilgilerinin (ad, TC, iletişim) ve tıbbi geçmişin şifrelenmeden tutulması ihtimali.
+* **Risk (Yüksek):** Veritabanına yetkisiz erişim durumunda hastaların en mahrem sağlık verilerinin çalınması ve KVKK ihlali.
+
+### B. Altyapı ve Ağ (Docker/Sunucu) Zafiyetleri
+* **Zafiyet:** Docker container'ları varsayılan `root` (tam yetkili) kullanıcı ayarlarıyla çalıştırılması ve dış dünyaya açık gereksiz portlar (API uç noktaları).
+* **Risk (Kritik):** Kötü niyetli bir yazılımın konteynerden sızarak tüm ana sunucuyu (Host) ele geçirmesi.
+
+### C. Yapay Zeka Modeli Güvenlik Riskleri
+* **Zafiyet:** Modele dışarıdan manipüle edilmiş (Adversarial Attack) piksel gürültüsü içeren sahte görüntülerin yüklenmesi.
+* **Risk (Orta/Yüksek):** Modelin kasıtlı olarak manipüle edilip yanlış teşhis (örn. kanserli hücreye sağlıklı raporu) vermesinin sağlanması.
+
+### D. Erişim ve Kimlik Yönetimi Riskleri
+* **Zafiyet:** Doktorların ve sistem yöneticilerinin zayıf parolalar kullanması veya sisteme girişlerde çok faktörlü doğrulama (MFA) bulunmaması.
+* **Risk (Yüksek):** Çalınan bir doktor hesabı üzerinden sisteme sahte veri girilmesi veya hasta verilerinin dışarı sızdırılması.
+
+---
+
+## 2. Güvenlik Planı ve Zafiyet Giderme Stratejileri
+
+Risk analizindeki bulguları bertaraf etmek için uygulanacak teknik ve operasyonel adımlar şunlardır:
+
+###  Veri Güvenliği (KVKK/HIPAA Uyumluluğu)
+* **Anonimleştirme (Pseudonymization):** Görüntü ve EHR verileri model eğitimine veya analize girmeden önce hasta kimliklerinden (PII) arındırılacaktır.
+* **Şifreleme (Encryption):** * *Bekleyen Veri (At Rest):* MySQL veritabanındaki veriler AES-256 standardı ile şifrelenecektir.
+  * *Hareket Halindeki Veri (In Transit):* Sistem içi ve dışı tüm iletişim (Frontend - Backend - Veritabanı) TLS 1.3 / HTTPS protokolleri üzerinden yapılacaktır.
+
+###  Altyapı ve Uygulama Güvenliği
+* **Konteyner İzolasyonu:** Docker container'ları kesinlikle `root` yetkisiyle çalıştırılmayacak, "En Az Yetki (Least Privilege)" prensibi uygulanacaktır.
+* **Ağ Segmentasyonu (VPC):** Veritabanı (MySQL) internete tamamen kapalı bir özel ağda (Private Subnet) tutulacak, sadece uygulamanın çalıştığı Backend sunucusu ile iletişim kurabilecektir.
+* **Bağımlılık Taraması:** Python kütüphanelerindeki bilinen zafiyetler (CVE) düzenli olarak taranacaktır.
+
+###  Kimlik ve Erişim Yönetimi (IAM)
+* **Rol Bazlı Erişim (RBAC):** Sistemde "Süper Admin", "Uzman Doktor", "Asistan" gibi net rol ayrımları yapılacaktır.
+* **MFA (Çok Faktörlü Doğrulama):** Sisteme giriş yapacak tüm sağlık personeli için SMS veya Authenticator uygulaması zorunlu tutulacaktır.
+
+---
+
+## 3. Zaman Çizelgesi ve Sorumluluklar
+
+Aşağıdaki tablo, güvenlik önlemlerinin uygulanma takvimini ve ekip içi sorumlulukları belirtmektedir:
+
+| Faz | Uygulanacak Güvenlik Önlemi | Sorumlu Kişi | Hedef Süre | Durum |
+| :--- | :--- | :--- | :--- | :---: |
+| **Faz 1** | Veritabanı şifrelemesi (AES-256) ve HTTPS (SSL/TLS) sertifikalarının kurulması. | **Cansude Sayın** & **Ali İstanbullu** | 1. - 2. Hafta | ⏳ Bekliyor |
+| **Faz 1** | Çok Faktörlü Doğrulama (MFA) ve Rol Bazlı Erişim (RBAC) kodlaması. | **Enes Zukra** | 2. - 3. Hafta | ⏳ Bekliyor |
+| **Faz 2** | Docker container güvenlik sıkılaştırması ve Ağ Segmentasyonu (Private Subnet). | **Cansude Sayın** | 3. Hafta | ⏳ Bekliyor |
+| **Faz 2** | Veri setlerindeki (görüntü/EHR) kişisel bilgilerin analize girmeden anonimleştirilmesi. | **Ali İstanbullu** | 4. Hafta | ⏳ Bekliyor |
+| **Faz 3** | Yapay zeka modeline gelen girdilerin doğrulanması ve Adversarial Attack savunması. | **Edanur Yasak** | 5. Hafta | ⏳ Bekliyor |
+| **Faz 4** | Tüm sistemin sızma testinden (PenTest) geçirilmesi ve KVKK raporunun hazırlanması. | **Tüm Ekip** | 6. Hafta | ⏳ Bekliyor |
+
+---
