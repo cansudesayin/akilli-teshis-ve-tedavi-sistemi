@@ -367,7 +367,7 @@ Risk analizindeki bulguları bertaraf etmek için uygulanacak teknik ve operasyo
 
 Aşağıdaki tablo, güvenlik önlemlerinin uygulanma takvimini ve ekip içi sorumlulukları belirtmektedir:
 
-| Faz | Uygulanacak Güvenlik Önlemi | Sorumlu Kişi | Hedef Süre | Durum |
+| Faz | Uygulanacak Güvenlik Önlemi | Sorumlu Kişi | Hedef Süre |
 | :--- | :--- | :--- | :--- | :---: |
 | **Faz 1** | Veritabanı şifrelemesi (AES-256) ve HTTPS (SSL/TLS) sertifikalarının kurulması. | **Cansude Sayın** & **Ali İstanbullu** | 1. - 2. Hafta |
 | **Faz 1** | Çok Faktörlü Doğrulama (MFA) ve Rol Bazlı Erişim (RBAC) kodlaması. | **Enes Zukra** | 2. - 3. Hafta |
