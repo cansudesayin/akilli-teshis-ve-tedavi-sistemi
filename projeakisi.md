@@ -376,3 +376,36 @@ Risk analizindeki bulguları bertaraf etmek için uygulanacak teknik ve operasyo
 | **Faz 3** | Yapay zeka modeline gelen girdilerin doğrulanması ve Adversarial Attack savunması. | **Edanur Yasak** | 5. Hafta |
 | **Faz 4** | Tüm sistemin Penetration Test (PenTest) sürecinden geçirilmesi ve KVKK raporunun hazırlanması. | **Tüm Ekip** | 6. Hafta |
 
+
+-------------------------------
+
+
+
+#   Sistem Güvenlik Açığı Analizi ve Risk Değerlendirmesi
+
+👤 **Sorumlu:** Enes Zukra
+📅 **Tarih:** 16 Mart 2026
+
+Gereksinim analizi aşamasında belirlenen sistem özellikleri (hasta verilerinin saklanması, tıbbi görüntülerin yüklenmesi ve yapay zeka analizi) doğrultusunda olası güvenlik açıkları tespit edilmiş, riskleri değerlendirilmiş ve Siber Şifacılar ekibinin sonraki adımları için bir eylem planı oluşturulmuştur.
+
+#### 🔍 1. Olası Güvenlik Açıkları
+- **Yetkisiz Erişim ve Kimlik Avı:** Doktor hesaplarının ele geçirilmesi sonucu sisteme ve hasta verilerine yetkisiz kişilerin erişimi.
+- **Veri İhlali (Sızıntı):** Görüntülerin veya elektronik sağlık kayıtlarının (EHR) sisteme yüklenmesi veya veritabanında saklanması sırasında çalınması.
+- **Yapay Zeka Manipülasyonu (Adversarial Attacks):** Kötü niyetli kişilerin sisteme yüklenen görüntüleri manipüle ederek modelin yanlış teşhis (örn. risk skorunun kasıtlı değiştirilmesi) yapmasına neden olması.
+- **API ve Veritabanı Zafiyetleri:** Sistemin arka planında (backend) oluşabilecek SQL Injection, XSS veya API uç nokta ihlalleri.
+
+#### ⚠️ 2. Risk Değerlendirmesi
+- **Hasta Mahremiyeti İhlali (Kritik Risk):** Hassas sağlık verilerinin açığa çıkması, ciddi yasal (KVKK/GDPR ihlali) ve etik sorunlara yol açar.
+- **Hatalı Teşhis ve Hasta Güvenliği (Kritik Risk):** Modelin veya veritabanındaki verilerin manipüle edilmesi, doktorun yanlış yönlendirilmesine ve hastanın zarar görmesine neden olabilir.
+- **Sistem Kesintisi (Orta Risk):** Sistemin DDoS gibi saldırılarla erişilemez hale gelmesi, poliklinik operasyonlarını yavaşlatır.
+
+#### 🛡️ 3. Eylem Planı (Risk Azaltma Stratejileri)
+- **Güçlü Kimlik Doğrulama:** Doktor girişlerinde Rol Tabanlı Erişim Kontrolü (RBAC) ve İki Aşamalı Doğrulama (2FA/MFA) zorunlu kılınacaktır.
+- **Uçtan Uca Şifreleme:** Veri iletiminde TLS/SSL protokolleri kullanılacak, durağan hasta verileri (EHR) AES-256 gibi güçlü algoritmalarla veritabanında şifrelenecektir.
+- **Veri Anonimleştirme:** Yapay zeka modelinin eğitimi ve analizi sırasında hastaların kişisel kimlik bilgileri (PII) maskelenecek/anonimleştirilecektir.
+- **Güvenlik Loglaması (Audit Trails):** Sistemde kimin, ne zaman, hangi veriye eriştiği değiştirilemez şekilde kayıt altına alınarak izlenebilirlik sağlanacaktır.
+- **Girdi Doğrulama (Input Validation):** Sisteme yüklenen dosyalar ve API istekleri kötü amaçlı yazılımlara ve manipülasyonlara karşı sıkı bir taramadan geçirilecektir.
+
+-------------------------------
+
+
