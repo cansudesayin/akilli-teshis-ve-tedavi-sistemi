@@ -410,4 +410,108 @@ Gereksinim analizi aşamasında belirlenen sistem özellikleri (hasta verilerini
 ## 3. Hafta
 
 * **Ali İstanbullu:** Projenin Frontend ve Backend haberleşmesini sağlayacak API tasarımı yapıldı ve Endpoint'ler belirlendi.
+#           Teknoloji Araştırması ve Seçimi (Siber Güvenlik Araçları)
+
+ **Sorumlu:** Cansude Sayın
+ **Tarih:** 23 Mart 2026
+
+Geliştirme ortamının kurulmasının ardından, proje kapsamında kullanılacak siber güvenlik araçları araştırılmıştır. Bu araçlar; sistem güvenliğini sağlamak, zafiyetleri tespit etmek ve analiz süreçlerini desteklemek amacıyla incelenmiştir.
+
+#### İncelenen Araç Kategorileri
+
+Siber güvenlik araçları üç ana kategoride değerlendirilmiştir:
+
+- Zafiyet Tarayıcıları (Vulnerability Scanners)
+- Sızma Testi Araçları (Pentest Tools)
+- Ağ Analiz Araçları (Network Analysis Tools)
+
+---
+
+#### Araç Analizi ve Karşılaştırma
+
+##### Zafiyet Tarayıcıları
+
+- Nessus / OpenVAS  
+  Özellik: Sistemlerdeki güvenlik açıklarını otomatik olarak tespit eder.  
+  Avantaj: Hızlı ve kapsamlı tarama yapar.  
+  Dezavantaj: Yanlış pozitif sonuçlar verebilir.
+
+---
+
+##### Sızma Testi Araçları
+
+- Metasploit  
+  Özellik: Güvenlik açıklarını test etmek ve exploit geliştirmek için kullanılır.  
+  Avantaj: Güçlü ve modüler yapı  
+  Dezavantaj: Öğrenmesi zor olabilir
+
+- Burp Suite  
+  Özellik: Web uygulamalarındaki açıkları analiz eder.  
+  Avantaj: Web güvenliği için etkilidir  
+  Dezavantaj: Ücretsiz versiyonu sınırlıdır
+
+---
+
+##### Ağ Analiz Araçları
+
+- Nmap  
+  Özellik: Ağ tarama ve açık port tespiti yapar  
+  Avantaj: Hızlı ve güçlü analiz  
+  Dezavantaj: Komut satırı bilgisi gerektirir
+
+- Wireshark  
+  Özellik: Ağ trafiğini analiz eder  
+  Avantaj: Detaylı veri analizi  
+  Dezavantaj: Yeni başlayanlar için karmaşık olabilir
+
+---
+
+#### Genel Karşılaştırma
+
+| Araç | Kullanım Alanı | Avantaj | Dezavantaj |
+|------|--------------|--------|-----------|
+| Nessus / OpenVAS | Zafiyet tarama | Otomatik analiz | Yanlış pozitif |
+| Metasploit | Sızma testi | Güçlü exploit sistemi | Karmaşık |
+| Burp Suite | Web güvenliği | Detaylı analiz | Ücretli özellikler |
+| Nmap | Ağ tarama | Hızlı ve etkili | CLI zor olabilir |
+| Wireshark | Trafik analizi | Derin analiz | Öğrenmesi zor |
+
+---
+
+#### Proje İçin Seçilen Araçlar
+
+Siber Şifacılar grubu olarak proje ihtiyaçları doğrultusunda aşağıdaki araçların kullanılması uygun görülmüştür:
+
+- Nmap → Ağ ve sistem keşfi  
+- Wireshark → Veri trafiği analizi  
+- Metasploit → Güvenlik açıklarının test edilmesi  
+- OpenVAS / Nessus → Zafiyet taraması  
+
+---
+
+#### Kullanım Planı
+
+Proje sürecinde araçların kullanım planı aşağıdaki şekilde belirlenmiştir:
+
+1. Geliştirme Aşaması  
+   Sistem mimarisi oluşturulurken temel güvenlik kontrolleri yapılacaktır.
+
+2. Test Aşaması  
+   Nmap ile sistem taraması yapılacaktır.  
+   OpenVAS ile zafiyet analizi gerçekleştirilecektir.
+
+3. Güvenlik Testleri  
+   Metasploit ile sızma testleri uygulanacaktır.  
+   Wireshark ile ağ trafiği analiz edilecektir.
+
+4. Raporlama  
+   Tespit edilen güvenlik açıkları raporlanacaktır.  
+   Geliştirilecek sistemde gerekli güvenlik önlemleri alınacaktır.
+
+---
+
+#### Sonuç
+
+Yapılan analizler sonucunda, proje için gerekli siber güvenlik araçları belirlenmiş ve kullanım planı oluşturulmuştur. Bu araçlar sayesinde sistemin güvenliği artırılacak ve olası tehditler erken aşamada tespit edilecektir.
+
 
