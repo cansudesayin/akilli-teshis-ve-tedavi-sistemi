@@ -407,7 +407,9 @@ Gereksinim analizi aşamasında belirlenen sistem özellikleri (hasta verilerini
 - **Girdi Doğrulama (Input Validation):** Sisteme yüklenen dosyalar ve API istekleri kötü amaçlı yazılımlara ve manipülasyonlara karşı sıkı bir taramadan geçirilecektir.
 
 -------------------------------
+## 3. Hafta
 
+* **Ali İstanbullu:** Projenin Frontend ve Backend haberleşmesini sağlayacak API tasarımı yapıldı ve Endpoint'ler belirlendi.
 #           Teknoloji Araştırması ve Seçimi (Siber Güvenlik Araçları)
 
  **Sorumlu:** Cansude Sayın
