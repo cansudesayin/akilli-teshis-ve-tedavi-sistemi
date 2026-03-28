@@ -7,63 +7,63 @@ Bu dosya, **Siber Şifacılar** takımının haftalık proje ilerlemesini ve gö
 
 ## 1. Hafta (5–12 Mart)
 
-### 🎯 Proje Tanımı ve Hedef Belirleme
+###  Proje Tanımı ve Hedef Belirleme
 
-#### 🏥 Cilt ve Göz Hastalıkları İçin Çok Modlu Klinik Karar Destek Sistemi
+####  Cilt ve Göz Hastalıkları İçin Çok Modlu Klinik Karar Destek Sistemi
 
-💡 Bu proje, dermatoloji ve oftalmoloji alanlarındaki tıbbi görüntüleri hastanın klinik geçmişiyle birleştirerek analiz eden yapay zeka tabanlı bir yazılım sistemidir. Sistem sadece hastalıkları sınıflandırmakla kalmaz; aynı zamanda hekimlere açıklanabilir teşhis kanıtları sunar ve hastaya özel, dinamik bir tedavi planı oluşturarak sağlık süreçlerini optimize eder.
+ Bu proje, dermatoloji ve oftalmoloji alanlarındaki tıbbi görüntüleri hastanın klinik geçmişiyle birleştirerek analiz eden yapay zeka tabanlı bir yazılım sistemidir. Sistem sadece hastalıkları sınıflandırmakla kalmaz; aynı zamanda hekimlere açıklanabilir teşhis kanıtları sunar ve hastaya özel, dinamik bir tedavi planı oluşturarak sağlık süreçlerini optimize eder.
 
 ---
 
-### 📌 1. Projenin Kapsamı
+###  1. Projenin Kapsamı
 
 Projenin sınırları ve içerdiği modüller şunlardır:
 
-- 📥 **Girdi:** Yüksek çözünürlüklü tıbbi görüntüler ve hastanın EHR (Elektronik Sağlık Kayıtları — yaş, cinsiyet, kan değerleri, genetik yatkınlık vb.) verileri.
-- ⚙️ **İşlem:** Derin Öğrenme ve Takviyeli Öğrenme (tedavi optimizasyonu) algoritmaları kullanılarak çok modlu veri analizi.
-- 📤 **Çıktı:** Erken teşhis uyarısı, risk skorlaması, lezyon/ödem haritalaması (ısı haritaları) ve kişiselleştirilmiş tedavi takvimi/dozaj önerisi.
-- ⚠️ **Sınırlandırmalar:** Sistem nihai kararı veren bir doktor değildir. Tıbbi Cihaz Yazılımı olarak hekimin karar verme sürecini hızlandıran ve doğrulayan bir asistandır.
+-  **Girdi:** Yüksek çözünürlüklü tıbbi görüntüler ve hastanın EHR (Elektronik Sağlık Kayıtları — yaş, cinsiyet, kan değerleri, genetik yatkınlık vb.) verileri.
+-  **İşlem:** Derin Öğrenme ve Takviyeli Öğrenme (tedavi optimizasyonu) algoritmaları kullanılarak çok modlu veri analizi.
+-  **Çıktı:** Erken teşhis uyarısı, risk skorlaması, lezyon/ödem haritalaması (ısı haritaları) ve kişiselleştirilmiş tedavi takvimi/dozaj önerisi.
+-  **Sınırlandırmalar:** Sistem nihai kararı veren bir doktor değildir. Tıbbi Cihaz Yazılımı olarak hekimin karar verme sürecini hızlandıran ve doğrulayan bir asistandır.
 
 ---
 
-### 🔬 2. Teşhisi İyileştirilecek Hastalıklar
+###  2. Teşhisi İyileştirilecek Hastalıklar
 
 Sistem, teşhis sürecinde insan gözünün kaçırabileceği mikro-değişimleri tespit etmeye odaklanır.
 
-#### 🧑‍⚕️ Dermatoloji (Cilt)
+####  Dermatoloji (Cilt)
 
-- 🦠 **Malign Melanom & Bazal Hücreli Karsinom:** Dermoskopik görüntülerdeki asimetri, sınır düzensizliği, renk çeşitliliği ve çap (ABCD kuralı) özelliklerini piksel bazında analiz ederek kanserli lezyonları henüz "ben" görünümündeyken "Evre 0" aşamasında tespit eder.
-- 🔴 **Psoriasis (Sedef) & Akne:** Lezyonların yayılım alanını ve şiddetini otomatik olarak hesaplayarak (PASI skoru) standart ve objektif bir şiddet derecelendirmesi yapar.
+-  **Malign Melanom & Bazal Hücreli Karsinom:** Dermoskopik görüntülerdeki asimetri, sınır düzensizliği, renk çeşitliliği ve çap (ABCD kuralı) özelliklerini piksel bazında analiz ederek kanserli lezyonları henüz "ben" görünümündeyken "Evre 0" aşamasında tespit eder.
+-  **Psoriasis (Sedef) & Akne:** Lezyonların yayılım alanını ve şiddetini otomatik olarak hesaplayarak (PASI skoru) standart ve objektif bir şiddet derecelendirmesi yapar.
 
-#### 👁️ Oftalmoloji (Göz)
+####  Oftalmoloji (Göz)
 
-- 🩸 **Diyabetik Retinopati (DR):** Fundus fotoğraflarındaki mikroanevrizmaları (kılcal damar kanamaları) ve eksudaları (yağ/protein birikintileri) saniyeler içinde tespit ederek hastalığın evresini (Hafif, Orta, Şiddetli, Proliferatif) belirler.
-- 👀 **Yaşa Bağlı Makula Dejenerasyonu (Sarı Nokta):** OCT (Optik Koherens Tomografi) taramalarında retina katmanları arasındaki sıvı birikimini ve doku incelmesini milimetrik olarak ölçer.
+-  **Diyabetik Retinopati (DR):** Fundus fotoğraflarındaki mikroanevrizmaları (kılcal damar kanamaları) ve eksudaları (yağ/protein birikintileri) saniyeler içinde tespit ederek hastalığın evresini (Hafif, Orta, Şiddetli, Proliferatif) belirler.
+-  **Yaşa Bağlı Makula Dejenerasyonu (Sarı Nokta):** OCT (Optik Koherens Tomografi) taramalarında retina katmanları arasındaki sıvı birikimini ve doku incelmesini milimetrik olarak ölçer.
 
 ---
 
-### 🚀 3. Optimize Edilecek Tedavi Süreçleri
+###  3. Optimize Edilecek Tedavi Süreçleri
 
 Projenin en yenilikçi yönü, teşhis sonrası süreçleri iyileştirmesidir.
 
-- ⏱️ **Dinamik Tedavi Zamanlaması (Göz):** Göz hastalıklarında (DR ve YBMD) uygulanan Anti-VEGF göz içi iğnelerinin zamanlamasını optimize eder. Sistem, retina altı sıvının tekrar ne zaman birikeceğini öngörerek ("Treat-and-Extend" protokolü) hastanın 4 hafta yerine belki de 8 haftada bir iğne olmasını sağlar. Bu, hastanın konforunu artırır ve gereksiz maliyetleri önler.
-- 💊 **Kişiselleştirilmiş İlaç Rotasyonu (Cilt):** Sedef veya şiddetli akne gibi kronik durumlarda sistem, hastanın yaşını ve lezyonun geçmiş görüntülere göre iyileşme hızını (zaman serisi analizi) değerlendirir. Tedaviye yanıt alınamıyorsa, biyolojik ajanların veya topikal kremlerin etken maddelerinin/dozajlarının ne zaman değiştirilmesi gerektiğini doktora önerir.
-- 🔪 **Cerrahi Sınır Tahmini (Cilt Kanserleri):** Melanom teşhis edildiğinde, tümörün derinlik (Breslow kalınlığı) tahminini yaparak cerraha minimum sağlıklı doku marjını önerir. Bu, estetik kaybı ve nüks riskini aynı anda minimize eder.
+-  **Dinamik Tedavi Zamanlaması (Göz):** Göz hastalıklarında (DR ve YBMD) uygulanan Anti-VEGF göz içi iğnelerinin zamanlamasını optimize eder. Sistem, retina altı sıvının tekrar ne zaman birikeceğini öngörerek ("Treat-and-Extend" protokolü) hastanın 4 hafta yerine belki de 8 haftada bir iğne olmasını sağlar. Bu, hastanın konforunu artırır ve gereksiz maliyetleri önler.
+-  **Kişiselleştirilmiş İlaç Rotasyonu (Cilt):** Sedef veya şiddetli akne gibi kronik durumlarda sistem, hastanın yaşını ve lezyonun geçmiş görüntülere göre iyileşme hızını (zaman serisi analizi) değerlendirir. Tedaviye yanıt alınamıyorsa, biyolojik ajanların veya topikal kremlerin etken maddelerinin/dozajlarının ne zaman değiştirilmesi gerektiğini doktora önerir.
+-  **Cerrahi Sınır Tahmini (Cilt Kanserleri):** Melanom teşhis edildiğinde, tümörün derinlik (Breslow kalınlığı) tahminini yaparak cerraha minimum sağlıklı doku marjını önerir. Bu, estetik kaybı ve nüks riskini aynı anda minimize eder.
 
 ---
 
-### 🎯 4. Somut Proje Hedefleri (SMART Goals)
+###  4. Somut Proje Hedefleri (SMART Goals)
 
-- 🏥 **Klinik Hedef:** Melanom ve Diyabetik Retinopati için erken teşhis doğruluğunu %95'in üzerine çıkararak klinik denemelerde uzman doktor kararlarıyla eşdeğer veya daha üstün performans göstermek.
-- 📈 **Operasyonel Hedef:** Bir poliklinikte rutin görüntü inceleme ve raporlama süresini hasta başına ortalama %60 oranında azaltarak doktorların daha fazla hastaya, daha kaliteli zaman ayırmasını sağlamak.
+-  **Klinik Hedef:** Melanom ve Diyabetik Retinopati için erken teşhis doğruluğunu %95'in üzerine çıkararak klinik denemelerde uzman doktor kararlarıyla eşdeğer veya daha üstün performans göstermek.
+-  **Operasyonel Hedef:** Bir poliklinikte rutin görüntü inceleme ve raporlama süresini hasta başına ortalama %60 oranında azaltarak doktorların daha fazla hastaya, daha kaliteli zaman ayırmasını sağlamak.
 
 ---
 
 
-### 📊 2. Gereksinim Toplama ve Analizi
+###  2. Gereksinim Toplama ve Analizi
 
-👤 **Sorumlu: Enes Zukra
-📅 Tarih: 7 Mart 2026 
+ **Sorumlu: Enes Zukra
+ Tarih: 7 Mart 2026 
 
 Proje kapsamında sistemin temel gereksinimleri analiz edilmiştir.
 
@@ -259,44 +259,44 @@ Proje geliştirme sürecinde kullanılacak yazılım araçları ve kütüphanele
 
 ### 5. Veri Seti Araştırması ve Erişim Planı
 
-👤 **Sorumlu:** Ali İstanbullu
-📅 **Tarih:** 6 Mart 2026
+ **Sorumlu:** Ali İstanbullu
+ **Tarih:** 6 Mart 2026
 
 Proje kapsam belgesinde belirtilen teşhis ve tedavi optimizasyonu hedefleri doğrultusunda, model eğitiminde kullanılacak uygun veri setleri ve bu verilere erişim adımları aşağıda planlanmıştır. Sistem "Çok Modlu" (Görüntü + EHR) çalışacağı için, meta veri (yaş, cinsiyet, bölgesel analiz) içeren veri setlerine öncelik verilmiştir.
 
-#### 🧑‍⚕️ Dermatoloji (Cilt Hastalıkları) Veri Setleri
+####  Dermatoloji (Cilt Hastalıkları) Veri Setleri
 
 Projedeki Malign Melanom, Bazal Hücreli Karsinom, Sedef ve Akne teşhisleri için dermoskopik ve klinik görüntüler kullanılacaktır.
 
-**🦠 ISIC 2019 & HAM10000** (Melanom ve Karsinom için)
-- 📦 **İçerik:** 25.000'den fazla dermoskopik görüntü. Hastaların yaş, cinsiyet ve lezyon bölgesi (EHR verisi) CSV formatında görsellerle eşleştirilmiştir.
-- 🔓 **Durum:** Açık Kaynaklı (Kaggle / ISIC Arşivi)
-- ✅ **Proje Uyumu:** ABCD kuralı analizi ve "Evre 0" tespiti hedeflerine tam uygundur.
+** ISIC 2019 & HAM10000** (Melanom ve Karsinom için)
+-  **İçerik:** 25.000'den fazla dermoskopik görüntü. Hastaların yaş, cinsiyet ve lezyon bölgesi (EHR verisi) CSV formatında görsellerle eşleştirilmiştir.
+-  **Durum:** Açık Kaynaklı (Kaggle / ISIC Arşivi)
+-  **Proje Uyumu:** ABCD kuralı analizi ve "Evre 0" tespiti hedeflerine tam uygundur.
 
-**🔴 Dermnet** (Sedef ve Akne için)
-- 📦 **İçerik:** 23 farklı cilt hastalığı kategorisinde toplanmış binlerce klinik cilt fotoğrafı.
-- 🔓 **Durum:** Açık Kaynaklı (Kaggle)
-- ✅ **Proje Uyumu:** Lezyon yayılım alanı ve PASI skoru hesaplamaları için kullanılacaktır.
+** Dermnet** (Sedef ve Akne için)
+-  **İçerik:** 23 farklı cilt hastalığı kategorisinde toplanmış binlerce klinik cilt fotoğrafı.
+-  **Durum:** Açık Kaynaklı (Kaggle)
+-  **Proje Uyumu:** Lezyon yayılım alanı ve PASI skoru hesaplamaları için kullanılacaktır.
 
-#### 👁️ Oftalmoloji (Göz Hastalıkları) Veri Setleri
+####  Oftalmoloji (Göz Hastalıkları) Veri Setleri
 
 Diyabetik Retinopati için Fundus fotoğrafları, Yaşa Bağlı Makula Dejenerasyonu (YBMD) için ise OCT taramaları kullanılacaktır.
 
-**🩸 APTOS 2019 Körlük Tespiti** (Diyabetik Retinopati)
-- 📦 **İçerik:** 3.662 yüksek çözünürlüklü retina fundus fotoğrafı. Görüntüler uzmanlar tarafından 0 (Sağlıklı) ile 4 (Proliferatif DR) arasında derecelendirilmiştir.
-- 🔓 **Durum:** Açık Kaynaklı (Kaggle)
-- ✅ **Proje Uyumu:** Mikroanevrizma ve eksuda tespiti ile DR evrelendirmesi hedefini doğrudan karşılar.
+** APTOS 2019 Körlük Tespiti** (Diyabetik Retinopati)
+-  **İçerik:** 3.662 yüksek çözünürlüklü retina fundus fotoğrafı. Görüntüler uzmanlar tarafından 0 (Sağlıklı) ile 4 (Proliferatif DR) arasında derecelendirilmiştir.
+-  **Durum:** Açık Kaynaklı (Kaggle)
+-  **Proje Uyumu:** Mikroanevrizma ve eksuda tespiti ile DR evrelendirmesi hedefini doğrudan karşılar.
 
-**👀 Retinal OCT Görüntüleri — Kermany ve ark.** (YBMD / Sarı Nokta)
-- 📦 **İçerik:** 84.495 Optik Koherens Tomografi (OCT) taraması.
-- 🔓 **Durum:** Açık Kaynaklı (Kaggle / Mendeley Data)
-- ✅ **Proje Uyumu:** Retina katmanları arasındaki sıvı birikiminin tespiti ve Anti-VEGF iğne zamanlamasının ("Treat-and-Extend") optimize edilmesi için kullanılacaktır.
+** Retinal OCT Görüntüleri — Kermany ve ark.** (YBMD / Sarı Nokta)
+-  **İçerik:** 84.495 Optik Koherens Tomografi (OCT) taraması.
+-  **Durum:** Açık Kaynaklı (Kaggle / Mendeley Data)
+-  **Proje Uyumu:** Retina katmanları arasındaki sıvı birikiminin tespiti ve Anti-VEGF iğne zamanlamasının ("Treat-and-Extend") optimize edilmesi için kullanılacaktır.
 
-#### ⚙️ Veri Erişimi ve Entegrasyon Planı
+####  Veri Erişimi ve Entegrasyon Planı
 
 - ⬇️ **Veri Çekme:** Veri setleri çok büyük (GB'larca) olduğu için manuel indirme yapılmayacaktır. Python ortamında Kaggle API kullanılarak veriler doğrudan geliştirme sunucusuna otomatik çekilecektir.
-- 🧹 **Veri Ön İşleme:** Görüntü boyutları (örn. 224×224 piksel) standardize edilecek ve gürültü azaltma (noise reduction) filtreleri uygulanacaktır.
-- 🗄️ **Veritabanı (SQL) Entegrasyonu:** Hastaların EHR verileri (yaş, cinsiyet, diyabet geçmişi) ilişkisel SQL veritabanına aktarılacak; görüntülerin dosya yolları bu demografik tablolarla eşleştirilecektir.
+-  **Veri Ön İşleme:** Görüntü boyutları (örn. 224×224 piksel) standardize edilecek ve gürültü azaltma (noise reduction) filtreleri uygulanacaktır.
+-  **Veritabanı (SQL) Entegrasyonu:** Hastaların EHR verileri (yaş, cinsiyet, diyabet geçmişi) ilişkisel SQL veritabanına aktarılacak; görüntülerin dosya yolları bu demografik tablolarla eşleştirilecektir.
 
 ---
 
@@ -383,23 +383,23 @@ Risk analizindeki bulguları bertaraf etmek için uygulanacak teknik ve operasyo
 
 #   Sistem Güvenlik Açığı Analizi ve Risk Değerlendirmesi
 
-👤 **Sorumlu:** Enes Zukra
-📅 **Tarih:** 16 Mart 2026
+ **Sorumlu:** Enes Zukra
+ **Tarih:** 16 Mart 2026
 
 Gereksinim analizi aşamasında belirlenen sistem özellikleri (hasta verilerinin saklanması, tıbbi görüntülerin yüklenmesi ve yapay zeka analizi) doğrultusunda olası güvenlik açıkları tespit edilmiş, riskleri değerlendirilmiş ve Siber Şifacılar ekibinin sonraki adımları için bir eylem planı oluşturulmuştur.
 
-#### 🔍 1. Olası Güvenlik Açıkları
+####  1. Olası Güvenlik Açıkları
 - **Yetkisiz Erişim ve Kimlik Avı:** Doktor hesaplarının ele geçirilmesi sonucu sisteme ve hasta verilerine yetkisiz kişilerin erişimi.
 - **Veri İhlali (Sızıntı):** Görüntülerin veya elektronik sağlık kayıtlarının (EHR) sisteme yüklenmesi veya veritabanında saklanması sırasında çalınması.
 - **Yapay Zeka Manipülasyonu (Adversarial Attacks):** Kötü niyetli kişilerin sisteme yüklenen görüntüleri manipüle ederek modelin yanlış teşhis (örn. risk skorunun kasıtlı değiştirilmesi) yapmasına neden olması.
 - **API ve Veritabanı Zafiyetleri:** Sistemin arka planında (backend) oluşabilecek SQL Injection, XSS veya API uç nokta ihlalleri.
 
-#### ⚠️ 2. Risk Değerlendirmesi
+####  2. Risk Değerlendirmesi
 - **Hasta Mahremiyeti İhlali (Kritik Risk):** Hassas sağlık verilerinin açığa çıkması, ciddi yasal (KVKK/GDPR ihlali) ve etik sorunlara yol açar.
 - **Hatalı Teşhis ve Hasta Güvenliği (Kritik Risk):** Modelin veya veritabanındaki verilerin manipüle edilmesi, doktorun yanlış yönlendirilmesine ve hastanın zarar görmesine neden olabilir.
 - **Sistem Kesintisi (Orta Risk):** Sistemin DDoS gibi saldırılarla erişilemez hale gelmesi, poliklinik operasyonlarını yavaşlatır.
 
-#### 🛡️ 3. Eylem Planı (Risk Azaltma Stratejileri)
+####  3. Eylem Planı (Risk Azaltma Stratejileri)
 - **Güçlü Kimlik Doğrulama:** Doktor girişlerinde Rol Tabanlı Erişim Kontrolü (RBAC) ve İki Aşamalı Doğrulama (2FA/MFA) zorunlu kılınacaktır.
 - **Uçtan Uca Şifreleme:** Veri iletiminde TLS/SSL protokolleri kullanılacak, durağan hasta verileri (EHR) AES-256 gibi güçlü algoritmalarla veritabanında şifrelenecektir.
 - **Veri Anonimleştirme:** Yapay zeka modelinin eğitimi ve analizi sırasında hastaların kişisel kimlik bilgileri (PII) maskelenecek/anonimleştirilecektir.
@@ -409,9 +409,9 @@ Gereksinim analizi aşamasında belirlenen sistem özellikleri (hasta verilerini
 
 
 
-# 🗄️ Akıllı Teşhis ve Tedavi Sistemi
-👤 **Sorumlu:** Edanur Yasak
-📅 **Tarih:** 28 Mart 2026
+#  Akıllı Teşhis ve Tedavi Sistemi
+ **Sorumlu:** Edanur Yasak
+ **Tarih:** 28 Mart 2026
 
 ## Veritabanı Tasarımı ve İlişkiler
 
@@ -433,7 +433,7 @@ Bu sistem 5 ana tablodan oluşur:
 
 # 2️⃣ Tablolar ve Alanlar
 
-## 👤 1. Patients (Hastalar)
+##  1. Patients (Hastalar)
 
 Hastaya ait temel bilgiler tutulur.
 
@@ -449,7 +449,7 @@ Hastaya ait temel bilgiler tutulur.
 
 ---
 
-## 👨‍⚕️ 2. Doctors (Doktorlar)
+##  2. Doctors (Doktorlar)
 
 Sistemi kullanan doktorlar.
 
@@ -462,7 +462,7 @@ Sistemi kullanan doktorlar.
 
 ---
 
-## 🖼️ 3. Images (Tıbbi Görüntüler)
+##  3. Images (Tıbbi Görüntüler)
 
 Modelin analiz ettiği görüntüler.
 
@@ -476,7 +476,7 @@ Modelin analiz ettiği görüntüler.
 
 ---
 
-## 🧠 4. Diagnoses (Teşhisler)
+##  4. Diagnoses (Teşhisler)
 
 AI modelinin ürettiği sonuçlar.
 
@@ -491,7 +491,7 @@ AI modelinin ürettiği sonuçlar.
 
 ---
 
-## 💊 5. Treatments (Tedavi Planı)
+##  5. Treatments (Tedavi Planı)
 
 Kişiye özel öneriler.
 
@@ -517,7 +517,7 @@ Bu sistemde ilişkiler şöyle çalışır:
 
 ---
 
-## 🔗 İlişki Şeması (Mantık)
+##  İlişki Şeması (Mantık)
 
 ```
 Patients (1) ──── (N) Images
