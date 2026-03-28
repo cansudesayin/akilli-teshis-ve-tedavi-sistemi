@@ -406,6 +406,183 @@ Gereksinim analizi aşamasında belirlenen sistem özellikleri (hasta verilerini
 - **Güvenlik Loglaması (Audit Trails):** Sistemde kimin, ne zaman, hangi veriye eriştiği değiştirilemez şekilde kayıt altına alınarak izlenebilirlik sağlanacaktır.
 - **Girdi Doğrulama (Input Validation):** Sisteme yüklenen dosyalar ve API istekleri kötü amaçlı yazılımlara ve manipülasyonlara karşı sıkı bir taramadan geçirilecektir.
 
+
+
+
+# 🗄️ Akıllı Teşhis ve Tedavi Sistemi
+👤 **Sorumlu:** Edanur Yasak
+📅 **Tarih:** 28 Mart 2026
+
+## Veritabanı Tasarımı ve İlişkiler
+
+Bu sistemde hem **görüntü verisi** hem de **hasta bilgileri (EHR)** tutulacağı için ilişkisel bir yapı tercih edilmiştir. Bu amaçla **MySQL** kullanılmıştır.
+
+---
+
+# 1️⃣ Temel Varlıklar (Tablolar)
+
+Bu sistem 5 ana tablodan oluşur:
+
+* Hasta (Patients)
+* Doktor (Doctors)
+* Görüntü (Images)
+* Teşhis (Diagnoses)
+* Tedavi Planı (Treatments)
+
+---
+
+# 2️⃣ Tablolar ve Alanlar
+
+## 👤 1. Patients (Hastalar)
+
+Hastaya ait temel bilgiler tutulur.
+
+| Alan            | Tür      | Açıklama           |
+| --------------- | -------- | ------------------ |
+| patient_id      | INT (PK) | Hasta ID           |
+| age             | INT      | Yaş                |
+| gender          | VARCHAR  | Cinsiyet           |
+| medical_history | TEXT     | Geçmiş hastalıklar |
+| diabetes        | BOOLEAN  | Diyabet durumu     |
+
+📌 Not: KVKK gereği isim/TC gibi bilgiler tutulmayabilir (anonimleştirme).
+
+---
+
+## 👨‍⚕️ 2. Doctors (Doktorlar)
+
+Sistemi kullanan doktorlar.
+
+| Alan           | Tür      | Açıklama                   |
+| -------------- | -------- | -------------------------- |
+| doctor_id      | INT (PK) | Doktor ID                  |
+| name           | VARCHAR  | Doktor adı                 |
+| specialization | VARCHAR  | Uzmanlık (dermatoloji vb.) |
+| email          | VARCHAR  | Giriş bilgisi              |
+
+---
+
+## 🖼️ 3. Images (Tıbbi Görüntüler)
+
+Modelin analiz ettiği görüntüler.
+
+| Alan        | Tür      | Açıklama              |
+| ----------- | -------- | --------------------- |
+| image_id    | INT (PK) | Görüntü ID            |
+| patient_id  | INT (FK) | Hastaya bağlı         |
+| image_path  | VARCHAR  | Dosya yolu            |
+| image_type  | VARCHAR  | (cilt / retina / OCT) |
+| upload_date | DATETIME | Yüklenme tarihi       |
+
+---
+
+## 🧠 4. Diagnoses (Teşhisler)
+
+AI modelinin ürettiği sonuçlar.
+
+| Alan         | Tür      | Açıklama         |
+| ------------ | -------- | ---------------- |
+| diagnosis_id | INT (PK) | Teşhis ID        |
+| image_id     | INT (FK) | Hangi görüntüden |
+| disease_name | VARCHAR  | Hastalık adı     |
+| risk_score   | FLOAT    | Risk oranı (%)   |
+| stage        | VARCHAR  | Hastalık evresi  |
+| created_at   | DATETIME | Tarih            |
+
+---
+
+## 💊 5. Treatments (Tedavi Planı)
+
+Kişiye özel öneriler.
+
+| Alan           | Tür      | Açıklama              |
+| -------------- | -------- | --------------------- |
+| treatment_id   | INT (PK) | Tedavi ID             |
+| diagnosis_id   | INT (FK) | Hangi teşhise bağlı   |
+| treatment_type | VARCHAR  | İlaç / iğne / cerrahi |
+| dosage         | VARCHAR  | Doz bilgisi           |
+| schedule       | VARCHAR  | Tedavi sıklığı        |
+| notes          | TEXT     | Açıklama              |
+
+---
+
+# 3️⃣ İlişkiler (Relationships)
+
+Bu sistemde ilişkiler şöyle çalışır:
+
+* 1 hasta → birçok görüntü
+* 1 görüntü → 1 teşhis
+* 1 teşhis → 1 tedavi
+* 1 doktor → birçok hasta (opsiyonel eklenebilir)
+
+---
+
+## 🔗 İlişki Şeması (Mantık)
+
+```
+Patients (1) ──── (N) Images
+Images (1) ──── (1) Diagnoses
+Diagnoses (1) ──── (1) Treatments
+Doctors (1) ──── (N) Patients
+```
+
+---
+
+# 4️⃣ SQL Örnek
+
+
+```sql
+CREATE TABLE Patients (
+    patient_id INT PRIMARY KEY AUTO_INCREMENT,
+    age INT,
+    gender VARCHAR(10),
+    medical_history TEXT,
+    diabetes BOOLEAN
+);
+
+CREATE TABLE Images (
+    image_id INT PRIMARY KEY AUTO_INCREMENT,
+    patient_id INT,
+    image_path VARCHAR(255),
+    image_type VARCHAR(50),
+    upload_date DATETIME,
+    FOREIGN KEY (patient_id) REFERENCES Patients(patient_id)
+);
+
+CREATE TABLE Diagnoses (
+    diagnosis_id INT PRIMARY KEY AUTO_INCREMENT,
+    image_id INT,
+    disease_name VARCHAR(100),
+    risk_score FLOAT,
+    stage VARCHAR(50),
+    created_at DATETIME,
+    FOREIGN KEY (image_id) REFERENCES Images(image_id)
+);
+
+CREATE TABLE Treatments (
+    treatment_id INT PRIMARY KEY AUTO_INCREMENT,
+    diagnosis_id INT,
+    treatment_type VARCHAR(100),
+    dosage VARCHAR(100),
+    schedule VARCHAR(100),
+    notes TEXT,
+    FOREIGN KEY (diagnosis_id) REFERENCES Diagnoses(diagnosis_id)
+);
+```
+
+---
+
+# 5️⃣ Tasarımın Mantığı
+
+Bu veritabanı tasarımı:
+
+* Çok modlu veri yapısını destekler (görüntü + EHR)
+* Veri tekrarını önler (normalize yapı)
+* Yapay zeka çıktılarının izlenmesini sağlar
+* Tedavi sürecinin zaman içinde takip edilmesine olanak tanır
+
+
+
 -------------------------------
 ## 3. Hafta
 
