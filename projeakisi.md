@@ -741,6 +741,32 @@ Sistemin genel bakış ekranı. Günlük analiz sayısı, bekleyen teşhisler, A
 
 DICOM görüntü görüntüleyici ekranı. Karanlık temelli viewer, kesit navigasyonu ve AI analiz sonuçlarını içerir. Tespit edilen anomali görüntü üzerinde kırmızıyla işaretlenir.
 
+![Görüntü Analizi]<img width="1897" height="877" alt="image" src="https://github.com/user-attachments/assets/0762f793-1a96-4c5c-9dbe-23a6a029b26f" />
+
+**Temel özellikler:**
+- Karanlık DICOM viewer (Akciğer BT, kesit 45/120)
+- Araç çubuğu: seçim, zoom, ölçüm, anotasyon, W/L kontrolü
+- Parlaklık ve kontrast slider'ları
+- Anomali işaretleyici (kırmızı, pulse animasyonu)
+- Kesit thumbnail şeridi (8 kesit)
+- Sağ panel AI bulguları:
+  - Şüpheli Nodül — Sağ alt lob, 8.2mm solid — **%87 güven**
+  - Küçük İnfiltrasyon — Sol üst lob, periferik — **%62 güven**
+- İşlemler: Teşhis Oluştur, Rapor Görüntüle, İkinci Görüş İste
+
+---
+
+## 4. Teşhis Sonuçları
+
+AI tarafından üretilen teşhis bulgularının doktor tarafından incelendiği ve onaylandığı ekran.
+
+### 4.1 Birincil Teşhis ve Bulgular
+
+![Teşhis Sonuçları]<img width="1896" height="875" alt="image" src="https://github.com/user-attachments/assets/689c3d1f-77a6-4d8f-8e45-60b691e0df09" />
+![Teşhis Sonuçları-2]<img width="1896" height="762" alt="image" src="https://github.com/user-attachments/assets/a382ca1e-91f2-42ef-8320-1b1c2f463619" />
+
+
+
 
 
 #### Sonuç
