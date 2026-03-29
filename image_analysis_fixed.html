@@ -1,0 +1,184 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.app { display: flex; height: 100vh; min-height: 660px; background: var(--color-background-tertiary); font-family: var(--font-sans); }
+.sidebar { width: 220px; background: var(--color-background-primary); border-right: 0.5px solid var(--color-border-tertiary); display: flex; flex-direction: column; flex-shrink: 0; }
+.logo { padding: 20px 20px 16px; border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; gap: 8px; }
+.logo-icon { width: 28px; height: 28px; background: #1a5fa8; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.logo-text { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+.logo-sub { font-size: 11px; color: var(--color-text-secondary); }
+.nav { padding: 12px 8px; flex: 1; }
+.nav-section { font-size: 10px; color: var(--color-text-tertiary); padding: 8px 12px 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 6px; cursor: pointer; margin-bottom: 1px; font-size: 13px; color: var(--color-text-secondary); }
+.nav-item.active { background: #e8f0fb; color: #1a5fa8; font-weight: 500; }
+.nav-item:hover:not(.active) { background: var(--color-background-secondary); }
+.nav-icon { width: 16px; height: 16px; flex-shrink: 0; }
+.nav-badge { margin-left: auto; background: #1a5fa8; color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 10px; }
+.sidebar-user { padding: 12px 16px; border-top: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; gap: 10px; }
+.u-av { width: 32px; height: 32px; border-radius: 50%; background: #e8f0fb; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: #1a5fa8; flex-shrink: 0; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+.topbar { background: var(--color-background-primary); border-bottom: 0.5px solid var(--color-border-tertiary); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.topbar h1 { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+.topbar p { font-size: 12px; color: var(--color-text-secondary); margin-top: 1px; }
+.btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 6px; font-size: 12px; cursor: pointer; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-primary); }
+.btn-primary { background: #1a5fa8; color: #fff; border-color: #1a5fa8; }
+.workspace { display: flex; flex: 1; overflow: hidden; }
+.viewer-panel { flex: 1; background: #0d0d0d; display: flex; flex-direction: column; min-width: 0; }
+.viewer-toolbar { background: #1a1a1a; padding: 8px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 0.5px solid #333; flex-shrink: 0; }
+.tool-btn { width: 30px; height: 30px; border-radius: 4px; background: transparent; border: 0.5px solid #333; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #aaa; font-size: 11px; }
+.tool-btn.active { background: #1a5fa8; border-color: #1a5fa8; color: #fff; }
+.tool-sep { width: 0.5px; height: 20px; background: #333; margin: 0 4px; }
+.viewer-main { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; }
+.ct-image { width: 340px; height: 340px; border-radius: 4px; position: relative; overflow: hidden; }
+.ct-bg { width: 100%; height: 100%; background: radial-gradient(ellipse at 48% 48%, #3a3a3a 0%, #1c1c1c 40%, #0a0a0a 100%); border-radius: 50%; }
+.lung-l { position: absolute; left: 25%; top: 22%; width: 30%; height: 52%; background: radial-gradient(ellipse, #505050 0%, #2a2a2a 60%, transparent 100%); border-radius: 40% 50% 50% 40%; opacity: .85; }
+.lung-r { position: absolute; right: 22%; top: 22%; width: 28%; height: 52%; background: radial-gradient(ellipse, #484848 0%, #282828 60%, transparent 100%); border-radius: 50% 40% 40% 50%; opacity: .85; }
+.anomaly { position: absolute; right: 28%; top: 38%; width: 14%; height: 14%; background: rgba(226,75,74,.25); border: 1.5px solid #e24b4a; border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(226,75,74,.4)} 50%{box-shadow:0 0 0 6px rgba(226,75,74,0)} }
+.viewer-info { position: absolute; top: 12px; left: 12px; color: #888; font-size: 10px; line-height: 1.6; font-family: monospace; }
+.viewer-info-r { position: absolute; top: 12px; right: 12px; color: #888; font-size: 10px; line-height: 1.6; font-family: monospace; text-align: right; }
+.slice-bar { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.slice-track { width: 4px; height: 120px; background: #2a2a2a; border-radius: 2px; position: relative; }
+.slice-thumb { width: 14px; height: 6px; background: #1a5fa8; border-radius: 3px; position: absolute; left: -5px; top: 40%; cursor: pointer; }
+.thumb-strip { background: #141414; border-top: 0.5px solid #2a2a2a; padding: 8px 16px; display: flex; gap: 8px; flex-shrink: 0; }
+.thumb { width: 48px; height: 48px; border-radius: 4px; background: #222; flex-shrink: 0; border: 1.5px solid transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; position: relative; }
+.thumb.on { border-color: #1a5fa8; }
+.thumb-inner { width: 36px; height: 36px; border-radius: 50%; background: radial-gradient(ellipse, #383838 0%, #1a1a1a 70%); }
+.thumb-n { font-size: 9px; color: #555; position: absolute; bottom: 2px; right: 3px; }
+.right-panel { width: 280px; background: var(--color-background-primary); border-left: 0.5px solid var(--color-border-tertiary); display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; }
+.panel-sec { padding: 16px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.sec-title { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 12px; }
+.pt-tag { display: flex; align-items: center; gap: 8px; }
+.pt-av { width: 36px; height: 36px; border-radius: 50%; background: #e8f0fb; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: #1a5fa8; flex-shrink: 0; }
+.info-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.info-row:last-child { border-bottom: none; }
+.ik { font-size: 11px; color: var(--color-text-secondary); }
+.iv { font-size: 11px; color: var(--color-text-primary); font-weight: 500; }
+.ai-box { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+.finding-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; }
+.f-icon { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; }
+.f-lbl { font-size: 12px; color: var(--color-text-primary); font-weight: 500; }
+.f-desc { font-size: 11px; color: var(--color-text-secondary); margin-top: 1px; }
+.conf-head { display: flex; justify-content: space-between; font-size: 10px; color: var(--color-text-secondary); margin-bottom: 3px; }
+.conf-track { height: 4px; background: var(--color-border-tertiary); border-radius: 2px; }
+.conf-fill { height: 100%; border-radius: 2px; }
+.action-col { display: flex; flex-direction: column; gap: 8px; }
+</style>
+<div class="app">
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v4M8 10v4M2 8h4M10 8h4" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+      <div><div class="logo-text">MediAI</div><div class="logo-sub">Teşhis Sistemi</div></div>
+    </div>
+    <div class="nav">
+      <div class="nav-section">Ana Menü</div>
+      <div class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/></svg>Dashboard</div>
+      <div class="nav-item active"><svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="8" r="2" fill="currentColor"/></svg>Görüntü Analizi <span class="nav-badge">3</span></div>
+      <div class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Teşhis Sonuçları</div>
+      <div class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="3" y="2" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M6 6h4M6 9h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Tedavi Planı</div>
+      <div class="nav-section">Hasta</div>
+      <div class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M3 13c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Hasta Profili</div>
+    </div>
+    <div class="sidebar-user">
+      <div class="u-av">DA</div>
+      <div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Dr. Ahmet Yılmaz</div><div style="font-size:11px;color:var(--color-text-secondary)">Radyoloji Uzmanı</div></div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <div><h1>Görüntü Analizi</h1><p>Hasta: Ahmet Yıldız · Akciğer BT · 29.03.2026</p></div>
+      <div style="display:flex;gap:8px">
+        <div class="btn"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M4 6l4 4 4-4M2 12h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>DICOM İndir</div>
+        <div class="btn btn-primary"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="white" stroke-width="1.3"/><path d="M6 8l1.5 1.5L10 6" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>Analizi Onayla</div>
+      </div>
+    </div>
+    <div class="workspace">
+      <div class="viewer-panel">
+        <div class="viewer-toolbar">
+          <div class="tool-btn active"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 2L12 8l-4 1-2 4-2-11z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
+          <div class="tool-btn"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4" stroke="currentColor" stroke-width="1.2"/><path d="M10.5 10.5L14 14M6.5 4v5M4 6.5h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+          <div class="tool-btn"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M10 4l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="tool-btn"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="4" stroke="currentColor" stroke-width="1.2"/></svg></div>
+          <div class="tool-sep"></div>
+          <div class="tool-btn" style="width:auto;padding:0 8px;font-size:10px;color:#aaa">W/L</div>
+          <div class="tool-sep"></div>
+          <div style="display:flex;align-items:center;gap:6px;margin-left:auto">
+            <span style="font-size:10px;color:#666">Parlaklık</span>
+            <input type="range" min="0" max="100" value="60" style="width:70px;accent-color:#1a5fa8">
+            <span style="font-size:10px;color:#666">Kontrast</span>
+            <input type="range" min="0" max="100" value="75" style="width:70px;accent-color:#1a5fa8">
+          </div>
+        </div>
+        <div class="viewer-main">
+          <div class="ct-image">
+            <div class="ct-bg"></div>
+            <div class="lung-l"></div>
+            <div class="lung-r"></div>
+            <div class="anomaly"></div>
+          </div>
+          <div class="viewer-info">Hasta: Ahmet Yıldız<br>Tarih: 29.03.2026<br>Modalite: CT<br>Kesit: 45/120</div>
+          <div class="viewer-info-r">WW: 400<br>WL: 40<br>Zoom: 1.0x<br><span style="color:#e24b4a;font-weight:500">● Anomali</span></div>
+          <div class="slice-bar">
+            <span style="font-size:9px;color:#555">120</span>
+            <div class="slice-track"><div class="slice-thumb"></div></div>
+            <span style="font-size:9px;color:#555">1</span>
+          </div>
+        </div>
+        <div class="thumb-strip">
+          <div class="thumb"><div class="thumb-inner"></div><span class="thumb-n">15</span></div>
+          <div class="thumb"><div class="thumb-inner"></div><span class="thumb-n">30</span></div>
+          <div class="thumb on"><div class="thumb-inner"></div><span class="thumb-n">45</span></div>
+          <div class="thumb"><div class="thumb-inner"></div><span class="thumb-n">60</span></div>
+          <div class="thumb"><div class="thumb-inner"></div><span class="thumb-n">75</span></div>
+          <div class="thumb"><div class="thumb-inner"></div><span class="thumb-n">90</span></div>
+          <div class="thumb"><div class="thumb-inner"></div><span class="thumb-n">105</span></div>
+          <div class="thumb"><div class="thumb-inner"></div><span class="thumb-n">120</span></div>
+        </div>
+      </div>
+      <div class="right-panel">
+        <div class="panel-sec">
+          <div class="sec-title">Hasta</div>
+          <div class="pt-tag">
+            <div class="pt-av">AY</div>
+            <div><div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">Ahmet Yıldız</div><div style="font-size:11px;color:var(--color-text-secondary)">48 yaş · Erkek · #P-2041</div></div>
+          </div>
+        </div>
+        <div class="panel-sec">
+          <div class="sec-title">Görüntü Bilgisi</div>
+          <div class="info-row"><span class="ik">Modalite</span><span class="iv">BT (Toraks)</span></div>
+          <div class="info-row"><span class="ik">Tarih</span><span class="iv">29.03.2026</span></div>
+          <div class="info-row"><span class="ik">Kesit Sayısı</span><span class="iv">120</span></div>
+          <div class="info-row"><span class="ik">Çözünürlük</span><span class="iv">512 × 512</span></div>
+          <div class="info-row"><span class="ik">Boyut</span><span class="iv">248 MB</span></div>
+        </div>
+        <div class="panel-sec">
+          <div class="sec-title">AI Analiz Sonuçları</div>
+          <div class="ai-box">
+            <div class="finding-row">
+              <div class="f-icon" style="background:#fcebeb"><svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M8 4v5M8 11v1" stroke="#a32d2d" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+              <div><div class="f-lbl">Şüpheli Nodül</div><div class="f-desc">Sağ alt lob, 8.2mm solid</div></div>
+            </div>
+            <div class="conf-head"><span>Güven skoru</span><span style="color:#a32d2d;font-weight:500">87%</span></div>
+            <div class="conf-track"><div class="conf-fill" style="width:87%;background:#e24b4a"></div></div>
+          </div>
+          <div class="ai-box">
+            <div class="finding-row">
+              <div class="f-icon" style="background:#faeeda"><svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M8 4v5M8 11v1" stroke="#854f0b" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+              <div><div class="f-lbl">Küçük Infiltrasyon</div><div class="f-desc">Sol üst lob, periferik</div></div>
+            </div>
+            <div class="conf-head"><span>Güven skoru</span><span style="color:#854f0b;font-weight:500">62%</span></div>
+            <div class="conf-track"><div class="conf-fill" style="width:62%;background:#ba7517"></div></div>
+          </div>
+        </div>
+        <div class="panel-sec">
+          <div class="sec-title">İşlemler</div>
+          <div class="action-col">
+            <div class="btn btn-primary" style="justify-content:center">Teşhis Oluştur</div>
+            <div class="btn" style="justify-content:center">Rapor Görüntüle</div>
+            <div class="btn" style="justify-content:center">İkinci Görüş İste</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
