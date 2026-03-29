@@ -687,6 +687,9 @@ Proje sürecinde araçların kullanım planı aşağıdaki şekilde belirlenmiş
 
 ---
 
+<img width="1887" height="863" alt="image" src="https://github.com/user-attachments/assets/b4b74892-f146-45a2-8da6-faef3a5d9b47" />
+
+
 #### Sonuç
 
 Yapılan analizler sonucunda, proje için gerekli siber güvenlik araçları belirlenmiş ve kullanım planı oluşturulmuştur. Bu araçlar sayesinde sistemin güvenliği artırılacak ve olası tehditler erken aşamada tespit edilecektir.
