@@ -1,0 +1,158 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.app { display: flex; min-height: 700px; background: var(--color-background-tertiary); font-family: var(--font-sans); }
+.sidebar { width: 220px; background: var(--color-background-primary); border-right: 0.5px solid var(--color-border-tertiary); display: flex; flex-direction: column; flex-shrink: 0; }
+.logo { padding: 20px 20px 16px; border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; gap: 8px; }
+.logo-icon { width: 28px; height: 28px; background: #1a5fa8; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.nav { padding: 12px 8px; flex: 1; }
+.nav-section { font-size: 10px; color: var(--color-text-tertiary); padding: 8px 12px 4px; text-transform: uppercase; letter-spacing: .08em; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 6px; cursor: pointer; margin-bottom: 1px; font-size: 13px; color: var(--color-text-secondary); }
+.nav-item.active { background: #e8f0fb; color: #1a5fa8; font-weight: 500; }
+.nav-icon { width: 16px; height: 16px; flex-shrink: 0; }
+.sidebar-user { padding: 12px 16px; border-top: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; gap: 10px; }
+.u-av { width: 32px; height: 32px; border-radius: 50%; background: #e8f0fb; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: #1a5fa8; flex-shrink: 0; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: var(--color-background-primary); border-bottom: 0.5px solid var(--color-border-tertiary); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.topbar h1 { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+.topbar p { font-size: 12px; color: var(--color-text-secondary); margin-top: 1px; }
+.btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 6px; font-size: 12px; cursor: pointer; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-primary); }
+.btn-primary { background: #1a5fa8; color: #fff; border-color: #1a5fa8; }
+.btn-danger { background: #fcebeb; color: #a32d2d; border-color: #f7c1c1; }
+.content { padding: 24px; display: flex; gap: 20px; flex: 1; }
+.left-col { flex: 1; min-width: 0; }
+.right-col { width: 300px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px; }
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+.card:last-child { margin-bottom: 0; }
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.card-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.badge { font-size: 11px; padding: 3px 9px; border-radius: 10px; font-weight: 500; }
+.br { background: #fcebeb; color: #a32d2d; }
+.ba { background: #faeeda; color: #854f0b; }
+.bg { background: #eaf3de; color: #3b6d11; }
+.bb { background: #e6f1fb; color: #185fa5; }
+.diag-header { display: flex; align-items: flex-start; gap: 14px; padding: 14px; background: var(--color-background-secondary); border-radius: 8px; margin-bottom: 14px; }
+.diag-icon { width: 42px; height: 42px; border-radius: 8px; background: #fcebeb; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.conf-track { height: 8px; background: var(--color-border-tertiary); border-radius: 4px; overflow: hidden; position: relative; }
+.conf-fill-main { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #e24b4a, #ba7517 60%, #639922); width: 87%; }
+.conf-ptr { position: absolute; top: -2px; width: 12px; height: 12px; background: #1a5fa8; border-radius: 50%; border: 2px solid var(--color-background-primary); left: 85%; transform: translateX(-50%); }
+.conf-marks { display: flex; justify-content: space-between; font-size: 9px; color: var(--color-text-tertiary); margin-top: 4px; }
+.finding-item { border: 0.5px solid var(--color-border-tertiary); border-radius: 8px; padding: 12px; margin-bottom: 8px; }
+.finding-item:last-child { margin-bottom: 0; }
+.finding-thumb { width: 52px; height: 52px; border-radius: 4px; background: #0d0d0d; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.thumb-mini { width: 44px; height: 44px; border-radius: 50%; background: radial-gradient(ellipse, #3a3a3a 0%, #111 70%); position: relative; }
+.thumb-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(226,75,74,.7); border: 1px solid #e24b4a; position: absolute; right: 10px; top: 14px; }
+.diff-table { width: 100%; border-collapse: collapse; }
+.diff-table th { font-size: 10px; color: var(--color-text-tertiary); font-weight: 500; text-align: left; padding: 4px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.diff-table td { font-size: 11px; padding: 6px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); }
+.diff-table tr:last-child td { border-bottom: none; }
+.prob-bar { height: 4px; background: var(--color-border-tertiary); border-radius: 2px; flex: 1; }
+.prob-fill { height: 100%; border-radius: 2px; background: #1a5fa8; }
+.note-area { width: 100%; border: 0.5px solid var(--color-border-tertiary); border-radius: 6px; padding: 10px; font-size: 12px; color: var(--color-text-primary); background: var(--color-background-secondary); resize: none; outline: none; font-family: var(--font-sans); line-height: 1.5; }
+.tl-item { display: flex; gap: 10px; padding-bottom: 12px; position: relative; }
+.tl-item::before { content:''; position: absolute; left: 7px; top: 16px; bottom: 0; width: 0.5px; background: var(--color-border-tertiary); }
+.tl-item:last-child::before { display: none; }
+.tl-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; border: 2px solid var(--color-background-primary); }
+.step-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.step-row:last-child { border-bottom: none; }
+</style>
+<div class="app">
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v4M8 10v4M2 8h4M10 8h4" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+      <div><div style="font-size:14px;font-weight:500;color:var(--color-text-primary)">MediAI</div><div style="font-size:11px;color:var(--color-text-secondary)">Teşhis Sistemi</div></div>
+    </div>
+    <div class="nav">
+      <div class="nav-section">Ana Menü</div>
+      <div class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/></svg>Dashboard</div>
+      <div class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="8" r="2" fill="currentColor"/></svg>Görüntü Analizi</div>
+      <div class="nav-item active"><svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Teşhis Sonuçları</div>
+      <div class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="3" y="2" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M6 6h4M6 9h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Tedavi Planı</div>
+      <div class="nav-section">Hasta</div>
+      <div class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M3 13c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Hasta Profili</div>
+    </div>
+    <div class="sidebar-user">
+      <div class="u-av">DA</div>
+      <div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Dr. Ahmet Yılmaz</div><div style="font-size:11px;color:var(--color-text-secondary)">Radyoloji Uzmanı</div></div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <div><h1>Teşhis Sonuçları</h1><p>Ahmet Yıldız · BT Toraks · #T-20260329-041</p></div>
+      <div style="display:flex;gap:8px">
+        <div class="btn btn-danger">Reddet</div>
+        <div class="btn btn-primary">Teşhisi Onayla</div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="left-col">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Birincil Teşhis</span><span class="badge br">Yüksek Öncelik</span></div>
+          <div class="diag-header">
+            <div class="diag-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#a32d2d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div style="flex:1">
+              <div style="font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px">Pulmoner Nodül — Malignite Şüphesi</div>
+              <div style="font-size:11px;color:var(--color-text-secondary)">ICD-10: R91.1 · Sağ alt lob, solid, 8.2mm</div>
+              <div style="display:flex;gap:8px;margin-top:6px"><span class="badge br">Pirads 4</span><span class="badge ba">Biyopsi Gerekli</span></div>
+            </div>
+          </div>
+          <div style="margin:14px 0">
+            <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px">AI Güven Skoru — %87</div>
+            <div class="conf-track"><div class="conf-fill-main"></div><div class="conf-ptr"></div></div>
+            <div class="conf-marks"><span>Düşük</span><span>Orta</span><span>Yüksek</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Tespit Edilen Bulgular</span><span style="font-size:11px;color:var(--color-text-secondary)">2 bulgu</span></div>
+          <div class="finding-item" style="border-color:#f7c1c1">
+            <div style="display:flex;align-items:flex-start;gap:10px">
+              <div style="flex:1">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Solid Nodül</span><span class="badge br">%87 güven</span></div>
+                <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.5">Sağ alt lobda 8.2mm × 7.6mm boyutlarında solid nodül. Düzensiz spiküler sınır. Malignite açısından değerlendirme gereklidir.</div>
+                <div style="display:flex;gap:12px;margin-top:8px;font-size:10px;color:var(--color-text-tertiary)"><span>Konum: SAL</span><span>Boyut: 8.2mm</span><span>Tip: Solid</span></div>
+              </div>
+              <div class="finding-thumb"><div class="thumb-mini"><div class="thumb-dot"></div></div></div>
+            </div>
+          </div>
+          <div class="finding-item">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Periferik Infiltrasyon</span><span class="badge ba">%62 güven</span></div>
+            <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.5">Sol üst lobda periferik buzlu cam opasitesi. Enflamatuar süreçle uyumlu olabilir, takip önerilir.</div>
+            <div style="display:flex;gap:12px;margin-top:8px;font-size:10px;color:var(--color-text-tertiary)"><span>Konum: SÜL</span><span>Tip: GGO</span><span>Boyut: Diffüz</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Ayırıcı Tanı</span></div>
+          <table class="diff-table">
+            <thead><tr><th>Tanı</th><th>Olasılık</th><th></th></tr></thead>
+            <tbody>
+              <tr><td>Primer akciğer kanseri</td><td style="color:#e24b4a;font-weight:500">72%</td><td style="width:120px"><div style="display:flex;align-items:center;gap:6px"><div class="prob-bar"><div class="prob-fill" style="width:72%;background:#e24b4a"></div></div></div></td></tr>
+              <tr><td>Metastatik lezyon</td><td style="color:#ba7517;font-weight:500">18%</td><td><div style="display:flex;align-items:center;gap:6px"><div class="prob-bar"><div class="prob-fill" style="width:18%;background:#ba7517"></div></div></div></td></tr>
+              <tr><td>Karsinoid tümör</td><td style="color:#534ab7;font-weight:500">7%</td><td><div style="display:flex;align-items:center;gap:6px"><div class="prob-bar"><div class="prob-fill" style="width:7%;background:#534ab7"></div></div></div></td></tr>
+              <tr><td>Benign granülom</td><td style="color:#0f6e56;font-weight:500">3%</td><td><div style="display:flex;align-items:center;gap:6px"><div class="prob-bar"><div class="prob-fill" style="width:3%;background:#0f6e56"></div></div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Doktor Notu</span></div>
+          <textarea class="note-area" rows="3">Sağ alt lobdaki solid nodül yüksek şüphe taşımaktadır. PET-CT ve bronkoskopik biyopsi planlanacak. Hasta bilgilendirildi.</textarea>
+        </div>
+      </div>
+      <div class="right-col">
+        <div class="card" style="margin-bottom:0">
+          <div class="card-header"><span class="card-title">Teşhis Geçmişi</span></div>
+          <div class="tl-item"><div class="tl-dot" style="background:#1a5fa8"></div><div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">BT Analizi</div><div style="font-size:11px;color:var(--color-text-secondary)">AI analizi tamamlandı</div><div style="font-size:10px;color:var(--color-text-tertiary);margin-top:2px">Bugün 09:14</div></div></div>
+          <div class="tl-item"><div class="tl-dot" style="background:#ba7517"></div><div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Görüntü Yüklendi</div><div style="font-size:11px;color:var(--color-text-secondary)">120 kesit DICOM</div><div style="font-size:10px;color:var(--color-text-tertiary);margin-top:2px">Bugün 08:52</div></div></div>
+          <div class="tl-item"><div class="tl-dot" style="background:#0f6e56"></div><div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Önceki BT</div><div style="font-size:11px;color:var(--color-text-secondary)">Normal bulgular</div><div style="font-size:10px;color:var(--color-text-tertiary);margin-top:2px">12.01.2026</div></div></div>
+          <div class="tl-item"><div class="tl-dot" style="background:#888780"></div><div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">İlk Başvuru</div><div style="font-size:11px;color:var(--color-text-secondary)">Nefes darlığı şikayeti</div><div style="font-size:10px;color:var(--color-text-tertiary);margin-top:2px">03.01.2026</div></div></div>
+        </div>
+        <div class="card" style="margin-bottom:0">
+          <div class="card-header"><span class="card-title">Önerilen Adımlar</span></div>
+          <div class="step-row"><span style="font-size:12px;color:var(--color-text-primary)">PET-CT Tetkiki</span><span class="badge br">Acil</span></div>
+          <div class="step-row"><span style="font-size:12px;color:var(--color-text-primary)">Bronkoskopik Biyopsi</span><span class="badge ba">Planlandı</span></div>
+          <div class="step-row"><span style="font-size:12px;color:var(--color-text-primary)">Onkoloji Konsültasyonu</span><span class="badge bb">Bekliyor</span></div>
+          <div class="step-row"><span style="font-size:12px;color:var(--color-text-primary)">Kontrol BT (3 ay)</span><span class="badge ba">Planlandı</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
