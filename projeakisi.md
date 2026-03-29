@@ -686,8 +686,44 @@ Proje sürecinde araçların kullanım planı aşağıdaki şekilde belirlenmiş
    Geliştirilecek sistemde gerekli güvenlik önlemleri alınacaktır.
 
 ---
+ **Sorumlu:** Cansude Sayın
+ **Tarih:** 29 Mart 2026
+ 
+ # MediAI — Arayüz Tasarım Raporu
 
-<img width="1887" height="863" alt="image" src="https://github.com/user-attachments/assets/b4b74892-f146-45a2-8da6-faef3a5d9b47" />
+Tıbbi yapay zeka teşhis sistemine ait kullanıcı arayüzü tasarımları. Sistem; giriş, dashboard, görüntü analizi, teşhis sonuçları, tedavi planı ve hasta profili sayfalarından oluşmaktadır.
+
+---
+
+## İçindekiler
+
+1. [Giriş Ekranı](#1-giriş-ekranı)
+2. [Dashboard](#2-dashboard)
+3. [Görüntü Analizi](#3-görüntü-analizi)
+4. [Teşhis Sonuçları](#4-teşhis-sonuçları)
+5. [Tedavi Planı](#5-tedavi-planı)
+6. [Hasta Profili](#6-hasta-profili)
+
+---
+
+## 1. Giriş Ekranı
+
+Klinik kimlik doğrulama ekranı. Doktor uzmanlık alanını seçerek (Oftalmoloji, Dermatoloji, Diğer) e-posta/şifre veya kurumsal SSO ile sisteme erişir. 256-bit TLS şifrelemesi ve KVKK uyumluluğu belirtilmiştir.
+
+![Giriş Ekranı] <img width="1887" height="863" alt="image" src="https://github.com/user-attachments/assets/b4b74892-f146-45a2-8da6-faef3a5d9b47" />
+
+**Temel özellikler:**
+- Uzmanlık alanı seçimi (kart tabanlı)
+- E-posta / Doktor ID ve şifre alanları
+- Kurumsal SSO girişi (Active Directory)
+- Güvenlik bilgisi (TLS, KVKK)
+- Sol panelde sistem istatistikleri (%95.4 doğruluk, %60 raporlama süresi azalması)
+
+---
+
+## 2. Dashboard
+
+Sistemin genel bakış ekranı. Günlük analiz sayısı, bekleyen teşhisler, AI doğruluk oranı ve aktif hasta metrikleri anlık olarak izlenebilir.
 
 
 #### Sonuç
