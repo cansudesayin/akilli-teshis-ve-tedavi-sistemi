@@ -791,7 +791,70 @@ Hasta için oluşturulan tedavi sürecinin adım adım izlendiği ekran.
 
 ### 5.1 Fazlar ve Adımlar
 
-![Tedavi Planı](./screenshots/06_tedavi_plani.png)
+![Tedavi Planı]<img width="1899" height="876" alt="image" src="https://github.com/user-attachments/assets/55407b4f-a6b7-4179-bc07-170dffd05dfd" />
+
+**Temel özellikler:**
+- 5 fazlı stepper: Teşhis (tamamlandı) → Görüntüleme (aktif) → Biyopsi → Tedavi → Takip
+- Genel ilerleme %40, Görüntüleme %100
+- Konsültasyon ekibi: Dr. Ahmet Yılmaz, Dr. Selin Bozkurt, Dr. Murat Özkan
+- Yaklaşan randevular: 02 Nis PET-CT, 05 Nis Bronkoskopi, 10 Nis Onkoloji Konsültasyonu
+
+### 5.2 İlaçlar ve Detay
+
+![Tedavi Planı (devam)]<img width="1893" height="844" alt="image" src="https://github.com/user-attachments/assets/1e7677ed-27c4-4838-a9ca-f21107a1e0b6" />
+
+**Temel özellikler:**
+- Sıralı 5 tedavi adımı (durum badge'leriyle: Tamamlandı / Planlandı / Bekliyor)
+- Mevcut ilaçlar: Acetylsalicylic Acid 100mg, Ambroxol HCl 30mg, Vitamin D3 1000IU
+
+---
+
+## 6. Hasta Profili
+
+Hastaya ait tüm klinik ve demografik bilgilerin yer aldığı kapsamlı profil ekranı.
+
+### 6.1 Genel Bilgiler ve Yaşamsal Bulgular
+
+![Hasta Profili]<img width="1898" height="878" alt="image" src="https://github.com/user-attachments/assets/02362bc7-6867-41c8-b94e-5957df346b79" />
+
+**Temel özellikler:**
+- Profil: Ahmet Yıldız, #P-2041, **Yüksek Risk**
+- Kişisel bilgiler: 48 yaş, Erkek, A Rh+, 178cm / 82kg
+- Yaşamsal bulgular: Tansiyon 138/88 (Yüksek), Nabız 78bpm (Normal), SpO2 %96 (Sınırda), Ateş 36.8°C (Normal)
+- Görüntüleme geçmişi: BT Toraks (Anormal), Akciğer Grafisi (Normal), BT Toraks (Normal), MRI Beyin (Normal)
+- Hastalık geçmişi: Hipertansiyon 2018, Tip 2 Diyabet 2021, KOAH 2023, Apendektomi 1998
+- Risk faktörleri: Sigara / Aile Öyküsü (Yüksek), Alkol / Meslek (Orta)
+- Aktif ilaçlar: Metformin 850mg, Lisinopril 10mg, Budesonid inhaler
+
+### 6.2 Laboratuvar Sonuçları
+
+![Hasta Profili (devam)]<img width="1895" height="512" alt="image" src="https://github.com/user-attachments/assets/ab9b851e-4187-449c-96a1-0f0362b5bd93" />
+
+**Temel özellikler:**
+- Laboratuvar sekmeleri: Hemogram / Biyokimya / Tümör Marker
+- Hemogram değerleri: WBC 8.2, RBC 4.6, Hemoglobin 13.8g/dL, Hematokrit 41.2%, PLT 310
+- **CEA: 8.4 ng/mL ↑** (referans <3.0 — anormal, kırmızıyla vurgulanmış)
+
+---
+
+## Tasarım Sistemi
+
+| Özellik | Değer |
+|---|---|
+| Kenar çubuğu genişliği | 220px |
+| Birincil renk | `#1a5fa8` |
+| Hata / Acil | `#e24b4a` |
+| Uyarı | `#ba7517` |
+| Başarı | `#0f6e56` |
+| Kenarlık | `0.5px solid` |
+| Kart köşe yarıçapı | `10px` |
+| Görüntüleyici arka plan | `#0d0d0d` |
+
+---
+
+
+
+
 
 
 
