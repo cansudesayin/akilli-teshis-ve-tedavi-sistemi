@@ -710,7 +710,7 @@ Tıbbi yapay zeka teşhis sistemine ait kullanıcı arayüzü tasarımları. Sis
 
 Klinik kimlik doğrulama ekranı. Doktor uzmanlık alanını seçerek (Oftalmoloji, Dermatoloji, Diğer) e-posta/şifre veya kurumsal SSO ile sisteme erişir. 256-bit TLS şifrelemesi ve KVKK uyumluluğu belirtilmiştir.
 
-<img width="1887" height="863" alt="image" src="https://github.com/user-attachments/assets/b4b74892-f146-45a2-8da6-faef3a5d9b47" />
+![Giriş Ekranı]<img width="1887" height="863" alt="image" src="https://github.com/user-attachments/assets/b4b74892-f146-45a2-8da6-faef3a5d9b47" />
 
 **Temel özellikler:**
 - Uzmanlık alanı seçimi (kart tabanlı)
@@ -725,7 +725,21 @@ Klinik kimlik doğrulama ekranı. Doktor uzmanlık alanını seçerek (Oftalmolo
 
 Sistemin genel bakış ekranı. Günlük analiz sayısı, bekleyen teşhisler, AI doğruluk oranı ve aktif hasta metrikleri anlık olarak izlenebilir.
 
-<img width="1913" height="875" alt="image" src="https://github.com/user-attachments/assets/02858e96-a2fa-4869-a520-1660494f54bb" />
+![Dashboard]<img width="1913" height="875" alt="image" src="https://github.com/user-attachments/assets/02858e96-a2fa-4869-a520-1660494f54bb" />
+
+**Temel özellikler:**
+- 4 metrik kartı: Bugünkü Analizler (24), Bekleyen Teşhis (7), Doğruluk Oranı (%94.2), Aktif Hastalar (142)
+- Haftalık analiz dağılımı çubuk grafiği (Akciğer BT / MRI Beyin / X-Ray)
+- Son aktivite akışı (5 kayıt)
+- Sistem durumu paneli (AI Motoru, DICOM Sunucusu, Görüntü İşleme, Yedekleme)
+- Bekleyen analizler listesi (Ahmet Yıldız, Fatma Demir, Mehmet Kaya — öncelik badge'leriyle)
+- Tanı dağılımı (Pnömoni %34, Normal %42, Tümör Şüphesi %18, Diğer %6)
+
+---
+
+## 3. Görüntü Analizi
+
+DICOM görüntü görüntüleyici ekranı. Karanlık temelli viewer, kesit navigasyonu ve AI analiz sonuçlarını içerir. Tespit edilen anomali görüntü üzerinde kırmızıyla işaretlenir.
 
 
 
