@@ -710,7 +710,7 @@ Tıbbi yapay zeka teşhis sistemine ait kullanıcı arayüzü tasarımları. Sis
 
 Klinik kimlik doğrulama ekranı. Doktor uzmanlık alanını seçerek (Oftalmoloji, Dermatoloji, Diğer) e-posta/şifre veya kurumsal SSO ile sisteme erişir. 256-bit TLS şifrelemesi ve KVKK uyumluluğu belirtilmiştir.
 
-![Giriş Ekranı] <img width="1887" height="863" alt="image" src="https://github.com/user-attachments/assets/b4b74892-f146-45a2-8da6-faef3a5d9b47" />
+<img width="1887" height="863" alt="image" src="https://github.com/user-attachments/assets/b4b74892-f146-45a2-8da6-faef3a5d9b47" />
 
 **Temel özellikler:**
 - Uzmanlık alanı seçimi (kart tabanlı)
@@ -724,6 +724,9 @@ Klinik kimlik doğrulama ekranı. Doktor uzmanlık alanını seçerek (Oftalmolo
 ## 2. Dashboard
 
 Sistemin genel bakış ekranı. Günlük analiz sayısı, bekleyen teşhisler, AI doğruluk oranı ve aktif hasta metrikleri anlık olarak izlenebilir.
+
+<img width="1913" height="875" alt="image" src="https://github.com/user-attachments/assets/02858e96-a2fa-4869-a520-1660494f54bb" />
+
 
 
 #### Sonuç
