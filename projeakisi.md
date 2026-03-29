@@ -763,7 +763,36 @@ AI tarafından üretilen teşhis bulgularının doktor tarafından incelendiği 
 ### 4.1 Birincil Teşhis ve Bulgular
 
 ![Teşhis Sonuçları]<img width="1896" height="875" alt="image" src="https://github.com/user-attachments/assets/689c3d1f-77a6-4d8f-8e45-60b691e0df09" />
-![Teşhis Sonuçları-2]<img width="1896" height="762" alt="image" src="https://github.com/user-attachments/assets/a382ca1e-91f2-42ef-8320-1b1c2f463619" />
+
+**Temel özellikler:**
+- Birincil teşhis: **Pulmoner Nodül — Malignite Şüphesi** (ICD-10: R91.1)
+- Badge'ler: Pirads 4, Biyopsi Gerekli, Yüksek Öncelik
+- AI güven skoru metresi (gradient ölçek, %87)
+- Tespit edilen bulgular:
+  - Solid Nodül — %87 güven (8.2mm × 7.6mm, SAL, Solid)
+  - Periferik İnfiltrasyon — %62 güven (SÜL, GGO, Diffüz)
+
+### 4.2 Ayırıcı Tanı ve Doktor Notu
+  
+![Teşhis Sonuçları (devam)]<img width="1896" height="762" alt="image" src="https://github.com/user-attachments/assets/a382ca1e-91f2-42ef-8320-1b1c2f463619" />
+
+**Temel özellikler:**
+- Ayırıcı tanı tablosu: Primer akciğer kanseri %72, Metastatik lezyon %18, Karsinoid tümör %7, Benign granülom %3
+- Doktor notu alanı (düzenlenebilir)
+- Teşhis geçmişi zaman çizelgesi (BT Analizi, Görüntü Yüklendi, Önceki BT, İlk Başvuru)
+- Önerilen adımlar: PET-CT Tetkiki (Acil), Bronkoskopik Biyopsi, Onkoloji Konsültasyonu, Kontrol BT
+- Aksiyonlar: **Teşhisi Onayla** / **Reddet**
+
+---
+
+## 5. Tedavi Planı
+
+Hasta için oluşturulan tedavi sürecinin adım adım izlendiği ekran.
+
+### 5.1 Fazlar ve Adımlar
+
+![Tedavi Planı](./screenshots/06_tedavi_plani.png)
+
 
 
 
