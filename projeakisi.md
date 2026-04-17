@@ -948,5 +948,4 @@ Projenin temel fonksiyonu olan hastalık teşhisini gerçekleştirecek yapay zek
 - Elde edilen ilk sonuçlar, sistemin hastalıkları yüksek güven oranıyla sınıflandırabildiğini göstermektedir.
 
 
-### Haftalık Görev Dağılımı (4. Hafta)
-- **Enes Zukra (Yazılım Mühendisi):** [TensorFlow ve Keras kütüphaneleri kullanılarak tıbbi görüntüleri analiz eden CNN tabanlı hastalık teşhis modeli geliştirildi ve validasyon testleri tamamlandı.]
+
