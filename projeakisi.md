@@ -899,3 +899,54 @@ Sistem RESTful mimari standartlarına uygun olarak tasarlanmış ve aşağıdaki
 * **Test:** Endpoint'lerin JSON veri alma ve servis etme süreçleri lokal ortamda test edilip doğrulandıktan sonra proje repozitorisine yüklenerek ana projeyle (main branch) başarıyla birleştirildi (Merge).
 
 
+
+
+## 4. Hafta
+
+### API Entegrasyonu ve Temel Uç Noktalarının (Endpoints) Geliştirilmesi
+**Sorumlu:** Ali İstanbullu **Tarih:** 6 Nisan 2026
+
+Projenin 4. haftasında, web arayüzü ile veritabanı ve yapay zeka modelleri arasındaki veri iletişimini sağlayacak merkezi API altyapısı Python Flask framework'ü kullanılarak kodlanmıştır.
+
+#### 1. Geliştirilen Temel Uç Noktalar (Endpoints)
+Sistem RESTful mimari standartlarına uygun olarak tasarlanmış ve aşağıdaki 3 temel kapı (route) `app.py` dosyası üzerinde ayağa kaldırılmıştır:
+- **POST /api/v1/hastalar (Hasta Kayıt Modülü):**
+  - **İşlev:** Frontend'den gelen hasta kimlik ve klinik verilerini (JSON formatında) karşılar.
+  - **Durum:** Arayüz testleri için "201 Created" başarılı yanıtı ve dummy (sahte) hasta ID'si döndürecek şekilde ayarlandı. İlerleyen fazlarda doğrudan MySQL veritabanına veri yazacak.
+- **POST /api/v1/analiz/baslat (Yapay Zeka Tetikleyici):**
+  - **İşlev:** Doktorun arayüzden yüklediği DICOM/Görsel dosyalarını ve hasta ID'sini alarak arka plan işlemlerini başlatır.
+  - **Durum:** Ön işleme ve CNN modelini tetikleyecek ana kapıdır. Şimdilik sistemin kilitlenmemesi için asenkron bir "İşleniyor (202 Accepted)" yanıtı dönmektedir.
+- **GET /api/v1/analiz/sonuc/<analiz_id> (Klinik Karar Destek Çıktısı):**
+  - **İşlev:** Veritabanında oluşan yapay zeka analiz sonuçlarını (Risk skoru, teşhis, ısı haritası URL'si) Frontend'e servis eder.
+  - **Durum:** UI/UX tasarımlarının (Dashboard ve Teşhis ekranları) veri ile test edilebilmesi adına, sahte bir "Malign Melanom" analiz sonucu (JSON) üretecek şekilde kodlandı.
+
+#### 2. Mimari ve Entegrasyon Notları
+- **Geliştirme Ortamı:** Flask kütüphanesi kullanılarak lokal sunucu (port 5000) yapılandırması tamamlandı ve veri trafiği loglaması aktif edildi.
+- **Ekip İletişimi:** Yazılan kod bloklarının içine, UI/UX ve Veritabanı geliştiricisi ekip arkadaşlarımın kendi kodlarını nereye entegre edeceklerini gösteren detaylı dokümantasyon yorumları eklendi.
+- **Test:** Endpoint'lerin JSON veri alma ve servis etme süreçleri lokal ortamda test edilip doğrulandıktan sonra proje repozitorisine yüklenerek ana projeyle (main branch) başarıyla birleştirildi (Merge).
+
+
+
+-------------------------------------------
+
+
+###  Temel Hastalık Teşhis Modeli Oluşturulması
+
+**Sorumlu:** Enes Zukra  
+**Tarih:** 17 Nisan 2026
+
+Projenin temel fonksiyonu olan hastalık teşhisini gerçekleştirecek yapay zeka modelinin mimarisi tasarlanmış ve ilk prototip model oluşturulmuştur.
+
+####  Teknik Mimari ve Derin Öğrenme Yapısı
+- **Model Tipi:** Tıbbi görüntü analizi (cilt lezyonları ve göz fundus fotoğrafları) için endüstri standardı olan **CNN (Convolutional Neural Network)** mimarisi kullanılmıştır.
+- **Kullanılan Teknolojiler:** Modelin geliştirilmesi, katmanlarının oluşturulması ve eğitilmesi süreçlerinde **TensorFlow** ve **Keras** kütüphanelerinden yararlanılmıştır.
+- **Katman Yapısı:** Görüntüdeki mikro değişimleri yakalayabilmek adına çok katmanlı (Conv2D ve MaxPooling) bir yapı kurgulanmış, aşırı öğrenmeyi (overfitting) önlemek için optimize edilmiştir.
+
+####  Model Performansı ve Validasyon
+- Oluşturulan model, eğitim seti dışında bırakılan **Validasyon Veri Seti** üzerinde test edilmiştir.
+- Modelin doğruluk (Accuracy) ve kayıp (Loss) değerleri analiz edilerek, klinik karar destek sistemi için gerekli olan temel başarı kriterlerini karşıladığı doğrulanmıştır.
+- Elde edilen ilk sonuçlar, sistemin hastalıkları yüksek güven oranıyla sınıflandırabildiğini göstermektedir.
+
+
+### Haftalık Görev Dağılımı (4. Hafta)
+- **Enes Zukra (Yazılım Mühendisi):** [TensorFlow ve Keras kütüphaneleri kullanılarak tıbbi görüntüleri analiz eden CNN tabanlı hastalık teşhis modeli geliştirildi ve validasyon testleri tamamlandı.]
