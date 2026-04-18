@@ -949,40 +949,57 @@ Projenin temel fonksiyonu olan hastalık teşhisini gerçekleştirecek yapay zek
 
 -------------------------------------------
 
-Web Arayüzü için Temel HTML ve CSS Şablonlarının Oluşturulması
-Sorumlu: Cansude Sayın
-Tarih: 18 Nisan 2026
+### **Web Arayüzü için Temel HTML ve CSS Şablonlarının Oluşturulması**
+
+**Sorumlu:** Cansude Sayın  
+**Tarih:** 6 Nisan 2026  
+
 Projenin 4. haftasında, doktorların kullanacağı web tabanlı kullanıcı arayüzü için temel HTML ve CSS şablonları oluşturulmuştur. Şablonlar; basit, kullanıcı dostu ve responsive (duyarlı) tasarım prensiplerine uygun olarak geliştirilmiştir.
-1. Oluşturulan Sayfalar
+
+---
+
+### **1. Oluşturulan Sayfalar**
+
 Sistem toplamda 6 ana sayfadan oluşmaktadır ve her sayfa kendi HTML dosyası olarak hazırlanmıştır:
 
-mediAI_login_responsive.html — Giriş Ekranı
-mediAI_dashboard_responsive.html — Dashboard
-mediAI_image_analysis_responsive.html — Görüntü Analizi
-mediAI_diagnosis_responsive.html — Teşhis Sonuçları
-mediAI_treatment_responsive.html — Tedavi Planı
-mediAI_patient_responsive.html — Hasta Profili
+- mediAI_login_responsive.html — Giriş Ekranı  
+- mediAI_dashboard_responsive.html — Dashboard  
+- mediAI_image_analysis_responsive.html — Görüntü Analizi  
+- mediAI_diagnosis_responsive.html — Teşhis Sonuçları  
+- mediAI_treatment_responsive.html — Tedavi Planı  
+- mediAI_patient_responsive.html — Hasta Profili  
 
-2. Responsive (Duyarlı) Tasarım
+---
+
+### **2. Responsive (Duyarlı) Tasarım**
+
 Tüm sayfalar farklı ekran boyutlarına uyum sağlayacak şekilde style.css adlı ortak bir CSS dosyasına bağlanmıştır. Üç kırılma noktası tanımlanmıştır:
 
-1024px altı (Tablet): Sidebar daralır, grid yapılar 2 sütuna iner.
-768px altı (Mobil): Sidebar gizlenir, hamburger menü aktif olur, içerik tek sütuna geçer.
-480px altı (Küçük Mobil): Tüm içerik tek sütun, gereksiz elemanlar gizlenir.
+- 1024px altı (Tablet): Sidebar daralır, grid yapılar 2 sütuna iner.  
+- 768px altı (Mobil): Sidebar gizlenir, hamburger menü aktif olur, içerik tek sütuna geçer.  
+- 480px altı (Küçük Mobil): Tüm içerik tek sütun, gereksiz elemanlar gizlenir.  
 
-3. API Bağlantıları
+---
+
+### **3. API Bağlantıları**
+
 Ali'nin geliştirdiği Flask API uç noktaları arayüze entegre edilmiştir:
 
-Hasta Profili sayfası: "Profili Düzenle" butonuna basıldığında modal form açılır, formdaki hasta bilgileri JSON formatında POST /api/v1/hastalar endpoint'ine gönderilir.
-Görüntü Analizi sayfası: Fotoğraf yükleme alanı eklendi. Doktor görüntüyü seçip "Analiz Başlat" butonuna bastığında dosya bilgileri POST /api/v1/analiz/baslat endpoint'ine iletilir.
-Teşhis Sonuçları sayfası: Sayfa açıldığında otomatik olarak GET /api/v1/analiz/sonuc/{id} endpoint'i çağrılır ve dönen teşhis, risk skoru ve AI açıklaması ilgili alanlara yazılır.
+- Hasta Profili sayfası: "Profili Düzenle" butonuna basıldığında modal form açılır, formdaki hasta bilgileri JSON formatında POST /api/v1/hastalar endpoint'ine gönderilir.  
+- Görüntü Analizi sayfası: Fotoğraf yükleme alanı eklendi. Doktor görüntüyü seçip "Analiz Başlat" butonuna bastığında dosya bilgileri POST /api/v1/analiz/baslat endpoint'ine iletilir.  
+- Teşhis Sonuçları sayfası: Sayfa açıldığında otomatik olarak GET /api/v1/analiz/sonuc/{id} endpoint'i çağrılır ve dönen teşhis, risk skoru ve AI açıklaması ilgili alanlara yazılır.  
 
-4. Sayfa Arası Navigasyon
+---
+
+### **4. Sayfa Arası Navigasyon**
+
 Tüm sayfalardaki sidebar linkleri birbirine bağlanmıştır. "Sisteme Giriş Yap" butonu Dashboard'a, "Teşhis Oluştur" butonu Teşhis Sonuçları sayfasına yönlendirmektedir.
-5. Mimari Notlar
 
-Ortak CSS değişkenleri style.css dosyasında tanımlanmış, tüm sayfalar bu dosyayı <link> ile kullanmaktadır.
-Flask sunucusu çalışmadığı durumlarda sayfalar Demo Mod ile çalışmaya devam etmekte, sahte verilerle arayüz test edilebilmektedir.
-Tüm dosyalar frontend/ klasörü altında düzenlenip proje repozitorisine yüklenerek ana dal (main branch) ile birleştirilmiştir.
+---
 
+### **5. Mimari Notlar**
+
+Ortak CSS değişkenleri style.css dosyasında tanımlanmış, tüm sayfalar bu dosyayı <link> ile kullanmaktadır.  
+Flask sunucusu çalışmadığı durumlarda sayfalar Demo Mod ile çalışmaya devam etmekte, sahte verilerle arayüz test edilebilmektedir.  
+Tüm dosyalar frontend/ klasörü altında düzenlenip proje repozitorisine yüklenerek ana dal (main branch) ile birleştirilmiştir.  
 
