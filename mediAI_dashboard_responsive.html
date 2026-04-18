@@ -1,0 +1,265 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.app { display: flex; height: 100vh; min-height: 640px; background: var(--color-background-tertiary); font-family: var(--font-sans); }
+.sidebar { width: 220px; background: var(--color-background-primary); border-right: 0.5px solid var(--color-border-tertiary); display: flex; flex-direction: column; flex-shrink: 0; }
+.logo { padding: 20px 20px 16px; border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; gap: 8px; }
+.logo-icon { width: 28px; height: 28px; background: #1a5fa8; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.logo-text { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+.logo-sub { font-size: 11px; color: var(--color-text-secondary); }
+.nav { padding: 12px 8px; flex: 1; }
+.nav-section { font-size: 10px; color: var(--color-text-tertiary); padding: 8px 12px 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 6px; cursor: pointer; margin-bottom: 1px; font-size: 13px; color: var(--color-text-secondary); }
+.nav-item.active { background: #e8f0fb; color: #1a5fa8; font-weight: 500; }
+.nav-item:hover:not(.active) { background: var(--color-background-secondary); }
+.nav-icon { width: 16px; height: 16px; flex-shrink: 0; }
+.nav-badge { margin-left: auto; background: #1a5fa8; color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 10px; }
+.sidebar-user { padding: 12px 16px; border-top: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; gap: 10px; }
+.u-av { width: 32px; height: 32px; border-radius: 50%; background: #e8f0fb; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: #1a5fa8; flex-shrink: 0; }
+.main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: var(--color-background-primary); border-bottom: 0.5px solid var(--color-border-tertiary); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.topbar h1 { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+.topbar p { font-size: 12px; color: var(--color-text-secondary); margin-top: 1px; }
+.search-box { display: flex; align-items: center; gap: 8px; background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: 6px; padding: 6px 12px; }
+.search-box input { border: none; background: transparent; font-size: 13px; color: var(--color-text-primary); outline: none; width: 180px; }
+.search-box input::placeholder { color: var(--color-text-tertiary); }
+.notif-btn { width: 32px; height: 32px; border-radius: 6px; border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-primary); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
+.notif-dot { width: 7px; height: 7px; background: #e24b4a; border-radius: 50%; position: absolute; top: 5px; right: 5px; border: 1.5px solid var(--color-background-primary); }
+.content { padding: 24px; flex: 1; }
+.metrics-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin-bottom: 20px; }
+.metric-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 10px; padding: 16px; }
+.metric-label { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 6px; }
+.metric-value { font-size: 26px; font-weight: 500; color: var(--color-text-primary); line-height: 1; }
+.metric-delta { font-size: 11px; margin-top: 5px; }
+.metric-bar { height: 3px; background: var(--color-border-tertiary); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+.metric-bar-fill { height: 100%; border-radius: 2px; }
+.mid-grid { display: grid; grid-template-columns: minmax(0,2fr) minmax(0,1.2fr); gap: 16px; margin-bottom: 20px; }
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 10px; padding: 18px; }
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.card-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.card-action { font-size: 11px; color: #1a5fa8; cursor: pointer; }
+.legend { display: flex; gap: 12px; margin-bottom: 12px; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--color-text-secondary); }
+.legend-dot { width: 7px; height: 7px; border-radius: 50%; }
+.chart-area { height: 140px; display: flex; align-items: flex-end; gap: 6px; padding: 0 4px; }
+.bar-group { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.bar-wrap { display: flex; align-items: flex-end; gap: 2px; height: 110px; width: 100%; justify-content: center; }
+.bar { border-radius: 3px 3px 0 0; width: 10px; }
+.bar-lbl { font-size: 9px; color: var(--color-text-tertiary); }
+.act-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.act-item:last-child { border-bottom: none; }
+.act-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.act-text { font-size: 12px; color: var(--color-text-primary); flex: 1; }
+.act-time { font-size: 11px; color: var(--color-text-tertiary); }
+.bottom-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; }
+.status-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.status-row:last-child { border-bottom: none; }
+.status-label { font-size: 12px; color: var(--color-text-secondary); }
+.badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+.bg { background: #eaf3de; color: #3b6d11; }
+.ba { background: #faeeda; color: #854f0b; }
+.bb { background: #e6f1fb; color: #185fa5; }
+.br { background: #fcebeb; color: #a32d2d; }
+.pt-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.pt-row:last-child { border-bottom: none; }
+.pt-av { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; flex-shrink: 0; }
+.prog-wrap { margin-bottom: 9px; }
+.prog-head { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; }
+.prog-bar { height: 5px; background: var(--color-border-tertiary); border-radius: 3px; }
+.prog-fill { height: 100%; border-radius: 3px; }
+</style>
+<div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+<div class="app">
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v4M8 10v4M2 8h4M10 8h4" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+      <div><div class="logo-text">MediAI</div><div class="logo-sub">Teşhis Sistemi</div></div>
+    </div>
+    <div class="nav">
+      <div class="nav-section">Ana Menü</div>
+      <div class="nav-item active">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="8" r="2" fill="currentColor"/></svg>
+        Görüntü Analizi <span class="nav-badge">3</span>
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Teşhis Sonuçları
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="3" y="2" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M6 6h4M6 9h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Tedavi Planı
+      </div>
+      <div class="nav-section">Hasta</div>
+      <div class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M3 13c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Hasta Profili
+      </div>
+    </div>
+    <div class="sidebar-user">
+      <div class="u-av">DA</div>
+      <div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Dr. Ahmet Yılmaz</div><div style="font-size:11px;color:var(--color-text-secondary)">Radyoloji Uzmanı</div></div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="topbar"><button class="hamburger" onclick="toggleSidebar()" aria-label="Menü">
+  <span></span><span></span><span></span>
+</button>
+      <div><h1>Dashboard</h1><p>29 Mart 2026, Pazar</p></div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="search-box">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4" stroke="var(--color-text-tertiary)" stroke-width="1.3"/><path d="M10.5 10.5L14 14" stroke="var(--color-text-tertiary)" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <input placeholder="Hasta veya görüntü ara..." />
+        </div>
+        <div class="notif-btn">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2a4 4 0 00-4 4v3l-1 2h10l-1-2V6a4 4 0 00-4-4z" stroke="var(--color-text-secondary)" stroke-width="1.2"/><path d="M6.5 13a1.5 1.5 0 003 0" stroke="var(--color-text-secondary)" stroke-width="1.2"/></svg>
+          <div class="notif-dot"></div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Bugünkü Analizler</div>
+          <div class="metric-value">24</div>
+          <div class="metric-delta" style="color:#0f6e56">↑ %18 dünden</div>
+          <div class="metric-bar"><div class="metric-bar-fill" style="width:72%;background:#1a5fa8"></div></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Bekleyen Teşhis</div>
+          <div class="metric-value">7</div>
+          <div class="metric-delta" style="color:#854f0b">↑ 3 yeni eklendi</div>
+          <div class="metric-bar"><div class="metric-bar-fill" style="width:35%;background:#ba7517"></div></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Doğruluk Oranı</div>
+          <div class="metric-value">94.2<span style="font-size:14px;color:var(--color-text-secondary)">%</span></div>
+          <div class="metric-delta" style="color:#0f6e56">↑ %1.3 bu ay</div>
+          <div class="metric-bar"><div class="metric-bar-fill" style="width:94%;background:#0f6e56"></div></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Aktif Hastalar</div>
+          <div class="metric-value">142</div>
+          <div class="metric-delta" style="color:#0f6e56">↑ 8 yeni bu hafta</div>
+          <div class="metric-bar"><div class="metric-bar-fill" style="width:58%;background:#534ab7"></div></div>
+        </div>
+      </div>
+      <div class="mid-grid">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Haftalık Analiz Dağılımı</span><span class="card-action">Raporu İndir</span></div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#1a5fa8"></div>Akciğer BT</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#0f6e56"></div>MRI Beyin</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#ba7517"></div>X-Ray</div>
+          </div>
+          <div class="chart-area">
+            <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:65px;background:#1a5fa8;opacity:.85"></div><div class="bar" style="height:45px;background:#0f6e56;opacity:.85"></div><div class="bar" style="height:30px;background:#ba7517;opacity:.85"></div></div><span class="bar-lbl">Pzt</span></div>
+            <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:80px;background:#1a5fa8;opacity:.85"></div><div class="bar" style="height:55px;background:#0f6e56;opacity:.85"></div><div class="bar" style="height:40px;background:#ba7517;opacity:.85"></div></div><span class="bar-lbl">Sal</span></div>
+            <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:55px;background:#1a5fa8;opacity:.85"></div><div class="bar" style="height:70px;background:#0f6e56;opacity:.85"></div><div class="bar" style="height:25px;background:#ba7517;opacity:.85"></div></div><span class="bar-lbl">Çar</span></div>
+            <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:90px;background:#1a5fa8;opacity:.85"></div><div class="bar" style="height:60px;background:#0f6e56;opacity:.85"></div><div class="bar" style="height:50px;background:#ba7517;opacity:.85"></div></div><span class="bar-lbl">Per</span></div>
+            <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:70px;background:#1a5fa8;opacity:.85"></div><div class="bar" style="height:80px;background:#0f6e56;opacity:.85"></div><div class="bar" style="height:35px;background:#ba7517;opacity:.85"></div></div><span class="bar-lbl">Cum</span></div>
+            <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:40px;background:#1a5fa8;opacity:.85"></div><div class="bar" style="height:30px;background:#0f6e56;opacity:.85"></div><div class="bar" style="height:20px;background:#ba7517;opacity:.85"></div></div><span class="bar-lbl">Cmt</span></div>
+            <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:50px;background:#1a5fa8;opacity:.85"></div><div class="bar" style="height:40px;background:#0f6e56;opacity:.85"></div><div class="bar" style="height:28px;background:#ba7517;opacity:.85"></div></div><span class="bar-lbl">Paz</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Son Aktivite</span><span class="card-action">Tümünü Gör</span></div>
+          <div class="act-item"><div class="act-dot" style="background:#1a5fa8"></div><span class="act-text">Akciğer BT analizi tamamlandı</span><span class="act-time">2d</span></div>
+          <div class="act-item"><div class="act-dot" style="background:#e24b4a"></div><span class="act-text">Yüksek öncelikli teşhis eklendi</span><span class="act-time">15d</span></div>
+          <div class="act-item"><div class="act-dot" style="background:#0f6e56"></div><span class="act-text">Tedavi planı güncellendi</span><span class="act-time">1s</span></div>
+          <div class="act-item"><div class="act-dot" style="background:#ba7517"></div><span class="act-text">Yeni hasta kaydı oluşturuldu</span><span class="act-time">2s</span></div>
+          <div class="act-item"><div class="act-dot" style="background:#534ab7"></div><span class="act-text">MRI raporu doktora iletildi</span><span class="act-time">3s</span></div>
+        </div>
+      </div>
+      <div class="bottom-grid">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Sistem Durumu</span></div>
+          <div class="status-row"><span class="status-label">AI Motoru</span><span class="badge bg">Aktif</span></div>
+          <div class="status-row"><span class="status-label">DICOM Sunucusu</span><span class="badge bg">Bağlı</span></div>
+          <div class="status-row"><span class="status-label">Görüntü İşleme</span><span class="badge ba">%78 Kapasite</span></div>
+          <div class="status-row"><span class="status-label">Yedekleme</span><span class="badge bb">Senkron</span></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Bekleyen Analizler</span><span class="card-action">Sıraya Git</span></div>
+          <div class="pt-row">
+            <div class="pt-av" style="background:#e8f0fb;color:#185fa5">AY</div>
+            <div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Ahmet Yıldız</div><div style="font-size:11px;color:var(--color-text-secondary)">Akciğer BT</div></div>
+            <span class="badge ba" style="margin-left:auto">Yüksek</span>
+          </div>
+          <div class="pt-row">
+            <div class="pt-av" style="background:#e1f5ee;color:#0f6e56">FD</div>
+            <div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Fatma Demir</div><div style="font-size:11px;color:var(--color-text-secondary)">MRI Beyin</div></div>
+            <span class="badge bg" style="margin-left:auto">Normal</span>
+          </div>
+          <div class="pt-row">
+            <div class="pt-av" style="background:#faeeda;color:#854f0b">MK</div>
+            <div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Mehmet Kaya</div><div style="font-size:11px;color:var(--color-text-secondary)">X-Ray</div></div>
+            <span class="badge br" style="margin-left:auto">Acil</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Tanı Dağılımı</span></div>
+          <div class="prog-wrap"><div class="prog-head"><span style="color:var(--color-text-secondary)">Pnömoni</span><span style="font-weight:500;color:var(--color-text-primary)">34%</span></div><div class="prog-bar"><div class="prog-fill" style="width:34%;background:#1a5fa8"></div></div></div>
+          <div class="prog-wrap"><div class="prog-head"><span style="color:var(--color-text-secondary)">Tümör Şüphesi</span><span style="font-weight:500;color:var(--color-text-primary)">18%</span></div><div class="prog-bar"><div class="prog-fill" style="width:18%;background:#e24b4a"></div></div></div>
+          <div class="prog-wrap"><div class="prog-head"><span style="color:var(--color-text-secondary)">Normal</span><span style="font-weight:500;color:var(--color-text-primary)">42%</span></div><div class="prog-bar"><div class="prog-fill" style="width:42%;background:#0f6e56"></div></div></div>
+          <div class="prog-wrap"><div class="prog-head"><span style="color:var(--color-text-secondary)">Diğer</span><span style="font-weight:500;color:var(--color-text-primary)">6%</span></div><div class="prog-bar"><div class="prog-fill" style="width:6%;background:#ba7517"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleSidebar() {
+  var sb = document.querySelector('.sidebar, .medi-sidebar');
+  var ov = document.getElementById('overlay');
+  if (!sb) return;
+  sb.classList.toggle('open');
+  if (ov) ov.classList.toggle('open');
+}
+function closeSidebar() {
+  var sb = document.querySelector('.sidebar, .medi-sidebar');
+  var ov = document.getElementById('overlay');
+  if (sb) sb.classList.remove('open');
+  if (ov) ov.classList.remove('open');
+}
+</script>
+
+<script>
+// Sidebar navigasyon
+document.addEventListener('DOMContentLoaded', function() {
+  var navMap = {
+    'Dashboard':        'mediAI_dashboard_responsive.html',
+    'Görüntü Analizi':  'mediAI_image_analysis_responsive.html',
+    'Teşhis Sonuçları': 'mediAI_diagnosis_responsive.html',
+    'Tedavi Planı':     'mediAI_treatment_responsive.html',
+    'Hasta Profili':    'mediAI_patient_responsive.html',
+    'Giriş Yap':        'mediAI_login_responsive.html',
+  };
+  document.querySelectorAll('.nav-item, .sidebar-item').forEach(function(item) {
+    var text = item.textContent.trim();
+    Object.keys(navMap).forEach(function(key) {
+      if (text.indexOf(key) !== -1) {
+        item.style.cursor = 'pointer';
+        item.onclick = function() { window.location.href = navMap[key]; };
+      }
+    });
+  });
+  // "Sisteme Giriş Yap" butonu → dashboard
+  var loginBtn = document.querySelector('.login-btn');
+  if (loginBtn) loginBtn.onclick = function() {
+    window.location.href = 'mediAI_dashboard_responsive.html';
+  };
+  // "Teşhis Oluştur" butonu → teşhis sonuçları
+  var teshisBtn = Array.from(document.querySelectorAll('.btn-primary'))
+    .find(b => b.textContent.trim() === 'Teşhis Oluştur');
+  if (teshisBtn) teshisBtn.onclick = function() {
+    window.location.href = 'mediAI_diagnosis_responsive.html';
+  };
+});
+</script>
