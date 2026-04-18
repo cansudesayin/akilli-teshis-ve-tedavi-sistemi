@@ -1,0 +1,285 @@
+/* ============================================================
+   MediAI — Ortak Responsive CSS
+   Tüm sayfalar bu dosyayı <link> ile kullanır.
+   ============================================================ */
+
+/* ---------- Genel Sıfırlama ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------- Hamburger Menü Butonu (mobilde görünür) ---------- */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 6px;
+  background: none;
+  border: none;
+}
+.hamburger span {
+  width: 20px;
+  height: 2px;
+  background: var(--color-text-secondary, #64748B);
+  border-radius: 2px;
+  display: block;
+  transition: all 0.2s;
+}
+
+/* ---------- Overlay (mobilde sidebar açıkken arka plan karartma) ---------- */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99;
+}
+.sidebar-overlay.open {
+  display: block;
+}
+
+/* ============================================================
+   TABLET (max-width: 1024px)
+   ============================================================ */
+@media (max-width: 1024px) {
+
+  /* Sidebar daralt */
+  .sidebar,
+  .medi-sidebar {
+    width: 180px !important;
+  }
+
+  /* Metrik kartlar 2 sütuna in */
+  .metrics-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+  }
+
+  /* Orta grid tek sütun */
+  .mid-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Alt grid 2 sütun */
+  .bottom-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+  }
+
+  /* Dashboard içerik padding azalt */
+  .content {
+    padding: 16px !important;
+  }
+
+  /* Teşhis / Tedavi / Hasta — 2 kolon layout'u tek kolona in */
+  .left-col,
+  .right-col,
+  .col-l,
+  .col-m,
+  .col-r,
+  .mid-col {
+    width: 100% !important;
+    flex-shrink: unset !important;
+  }
+
+  /* Flex içerikleri dikey diz */
+  .content,
+  .workspace {
+    flex-direction: column !important;
+  }
+
+  /* Viewer sağ paneli tam genişlik */
+  .right-panel {
+    width: 100% !important;
+    max-height: 320px;
+    overflow-y: auto;
+  }
+}
+
+/* ============================================================
+   MOBİL (max-width: 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* Sidebar gizle, hamburger göster */
+  .sidebar,
+  .medi-sidebar {
+    position: fixed !important;
+    left: -260px !important;
+    top: 0;
+    height: 100vh !important;
+    z-index: 100;
+    transition: left 0.25s ease;
+    width: 240px !important;
+    overflow-y: auto;
+  }
+
+  .sidebar.open,
+  .medi-sidebar.open {
+    left: 0 !important;
+  }
+
+  .hamburger {
+    display: flex !important;
+  }
+
+  /* Topbar düzenle */
+  .topbar {
+    padding: 12px 16px !important;
+    gap: 8px;
+  }
+
+  /* Arama kutusunu gizle, sadece ikon kalsın */
+  .search-box input {
+    width: 120px !important;
+  }
+
+  /* Metrik kartlar tek sütun */
+  .metrics-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  /* Alt grid tek sütun */
+  .bottom-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Login kartı tam genişlik */
+  .login-card {
+    width: 100% !important;
+    padding: 24px 20px !important;
+    border-radius: 12px !important;
+  }
+
+  .medi-main {
+    padding: 16px !important;
+    align-items: flex-start !important;
+  }
+
+  /* Uzmanlık butonları küçült */
+  .role-select {
+    gap: 6px !important;
+  }
+  .role-btn {
+    font-size: 11px !important;
+    padding: 8px 4px !important;
+  }
+
+  /* Teşhis sayfası — içerik dikey */
+  .content {
+    flex-direction: column !important;
+    padding: 12px !important;
+    gap: 12px !important;
+  }
+
+  /* Tüm kolonlar tam genişlik */
+  .left-col, .right-col,
+  .col-l, .col-m, .col-r, .mid-col {
+    width: 100% !important;
+  }
+
+  /* Tedavi fazları scroll edilebilir */
+  .phase-stepper {
+    overflow-x: auto !important;
+    padding-bottom: 8px;
+  }
+
+  /* DICOM viewer tam genişlik */
+  .viewer-panel {
+    min-height: 300px !important;
+  }
+
+  .viewer-main .ct-image {
+    width: 260px !important;
+    height: 260px !important;
+  }
+
+  /* Thumbnail strip scroll */
+  .thumb-strip {
+    overflow-x: auto !important;
+  }
+
+  /* Tabbar scroll */
+  .tab-row {
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+  }
+
+  /* Hasta profili vital grid tek sütun */
+  .vc-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Kart padding azalt */
+  .card {
+    padding: 12px !important;
+  }
+
+  /* Topbar başlık küçült */
+  .topbar h1 {
+    font-size: 14px !important;
+  }
+
+  /* Butonlar tam genişlik */
+  .topbar-actions {
+    gap: 6px !important;
+  }
+  .btn {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+  }
+}
+
+/* ============================================================
+   KÜÇÜK MOBİL (max-width: 480px)
+   ============================================================ */
+@media (max-width: 480px) {
+
+  /* Metrik kartlar tek sütun */
+  .metrics-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Arama kutusunu gizle */
+  .search-box {
+    display: none !important;
+  }
+
+  /* Login tam ekran */
+  .medi-main {
+    padding: 12px !important;
+  }
+
+  .login-card {
+    border-radius: 8px !important;
+    padding: 20px 16px !important;
+  }
+
+  /* Hasta profili bilgi grid tek sütun */
+  .ic {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Vital grid tek sütun */
+  .vc-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Tablolar scroll */
+  .diff-table {
+    font-size: 10px !important;
+  }
+
+  /* Fase stepper küçük */
+  .ph-dot {
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 9px !important;
+  }
+
+  .phase-stepper {
+    gap: 0 !important;
+  }
+}
