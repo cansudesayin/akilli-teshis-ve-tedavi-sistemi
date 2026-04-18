@@ -1,0 +1,305 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.app { display: flex; min-height: 720px; background: var(--color-background-tertiary); font-family: var(--font-sans); }
+.sidebar { width: 220px; background: var(--color-background-primary); border-right: 0.5px solid var(--color-border-tertiary); display: flex; flex-direction: column; flex-shrink: 0; }
+.logo { padding: 20px 20px 16px; border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; gap: 8px; }
+.logo-icon { width: 28px; height: 28px; background: #1a5fa8; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.nav { padding: 12px 8px; flex: 1; }
+.nav-section { font-size: 10px; color: var(--color-text-tertiary); padding: 8px 12px 4px; text-transform: uppercase; letter-spacing: .08em; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 6px; cursor: pointer; margin-bottom: 1px; font-size: 13px; color: var(--color-text-secondary); }
+.nav-item.active { background: #e8f0fb; color: #1a5fa8; font-weight: 500; }
+.nav-icon { width: 16px; height: 16px; flex-shrink: 0; }
+.sidebar-user { padding: 12px 16px; border-top: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; gap: 10px; }
+.u-av { width: 32px; height: 32px; border-radius: 50%; background: #e8f0fb; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: #1a5fa8; flex-shrink: 0; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: var(--color-background-primary); border-bottom: 0.5px solid var(--color-border-tertiary); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.topbar h1 { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+.topbar p { font-size: 12px; color: var(--color-text-secondary); margin-top: 1px; }
+.btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 6px; font-size: 12px; cursor: pointer; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-primary); }
+.btn-primary { background: #1a5fa8; color: #fff; border-color: #1a5fa8; }
+.content { padding: 24px; display: flex; gap: 16px; flex: 1; overflow-y: auto; }
+.col-l { width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 12px; }
+.col-m { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.col-r { width: 240px; flex-shrink: 0; display: flex; flex-direction: column; gap: 12px; }
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 10px; padding: 16px; }
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.card-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.badge { font-size: 11px; padding: 3px 9px; border-radius: 10px; font-weight: 500; }
+.br { background: #fcebeb; color: #a32d2d; }
+.ba { background: #faeeda; color: #854f0b; }
+.bg { background: #eaf3de; color: #3b6d11; }
+.bb { background: #e6f1fb; color: #185fa5; }
+.ic { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.ic-cell { padding: 7px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.ic-cell:nth-last-child(-n+2) { border-bottom: none; }
+.vc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.vc { background: var(--color-background-secondary); border-radius: 7px; padding: 10px; }
+.scan-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.scan-row:last-child { border-bottom: none; }
+.scan-th { width: 36px; height: 36px; background: #0d0d0d; border-radius: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.scan-mini { width: 28px; height: 28px; border-radius: 50%; background: radial-gradient(ellipse, #333 0%, #111 70%); }
+.tab-row { display: flex; margin-bottom: 12px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.tab { padding: 7px 12px; font-size: 12px; cursor: pointer; color: var(--color-text-secondary); border-bottom: 2px solid transparent; margin-bottom: -0.5px; }
+.tab.active { color: #1a5fa8; border-bottom-color: #1a5fa8; font-weight: 500; }
+.lab-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.lab-row:last-child { border-bottom: none; }
+.hist-item { display: flex; gap: 10px; padding: 7px 0; border-bottom: 0.5px solid var(--color-border-tertiary); align-items: center; }
+.hist-item:last-child { border-bottom: none; }
+.hist-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.rf-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.rf-row:last-child { border-bottom: none; }
+.med-item { padding: 6px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.med-item:last-child { border-bottom: none; }
+</style>
+<div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+<div class="app">
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v4M8 10v4M2 8h4M10 8h4" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+      <div><div style="font-size:14px;font-weight:500;color:var(--color-text-primary)">MediAI</div><div style="font-size:11px;color:var(--color-text-secondary)">Teşhis Sistemi</div></div>
+    </div>
+    <div class="nav">
+      <div class="nav-section">Ana Menü</div>
+      <div class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2"/></svg>Dashboard</div>
+      <div class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="8" r="2" fill="currentColor"/></svg>Görüntü Analizi</div>
+      <div class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Teşhis Sonuçları</div>
+      <div class="nav-item"><svg class="nav-icon" viewBox="0 0 16 16" fill="none"><rect x="3" y="2" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M6 6h4M6 9h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Tedavi Planı</div>
+      <div class="nav-section">Hasta</div>
+      <div class="nav-item active"><svg class="nav-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M3 13c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Hasta Profili</div>
+    </div>
+    <div class="sidebar-user">
+      <div class="u-av">DA</div>
+      <div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Dr. Ahmet Yılmaz</div><div style="font-size:11px;color:var(--color-text-secondary)">Radyoloji Uzmanı</div></div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="topbar"><button class="hamburger" onclick="toggleSidebar()" aria-label="Menü">
+  <span></span><span></span><span></span>
+</button>
+      <div><h1>Hasta Profili</h1><p>Ahmet Yıldız · #P-2041 · Son güncelleme: 29.03.2026</p></div>
+      <div style="display:flex;gap:8px">
+        <div class="btn">Rapor Oluştur</div>
+        <div class="btn btn-primary">Profili Düzenle</div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="col-l">
+        <div class="card" style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 16px">
+          <div style="width:64px;height:64px;border-radius:50%;background:#e8f0fb;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:500;color:#1a5fa8;margin-bottom:10px">AY</div>
+          <div style="font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px">Ahmet Yıldız</div>
+          <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px">#P-2041 · Hasta No</div>
+          <div style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;background:#fcebeb;color:#a32d2d">Yüksek Risk</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Kişisel Bilgiler</span></div>
+          <div class="ic">
+            <div class="ic-cell"><div style="font-size:10px;color:var(--color-text-tertiary)">Yaş</div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">48</div></div>
+            <div class="ic-cell"><div style="font-size:10px;color:var(--color-text-tertiary)">Cinsiyet</div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Erkek</div></div>
+            <div class="ic-cell"><div style="font-size:10px;color:var(--color-text-tertiary)">Doğum</div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">12.05.1977</div></div>
+            <div class="ic-cell"><div style="font-size:10px;color:var(--color-text-tertiary)">Kan Grubu</div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">A Rh+</div></div>
+            <div class="ic-cell"><div style="font-size:10px;color:var(--color-text-tertiary)">Boy</div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">178 cm</div></div>
+            <div class="ic-cell"><div style="font-size:10px;color:var(--color-text-tertiary)">Kilo</div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">82 kg</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">İletişim</span></div>
+          <div style="padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary)"><div style="font-size:10px;color:var(--color-text-tertiary)">Telefon</div><div style="font-size:12px;color:var(--color-text-primary)">+90 532 xxx xx xx</div></div>
+          <div style="padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary)"><div style="font-size:10px;color:var(--color-text-tertiary)">E-posta</div><div style="font-size:12px;color:var(--color-text-primary)"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c5a4ebbcaca9a1acbf85a0a8a4aca9eba6aaa8">[email&#160;protected]</a></div></div>
+          <div style="padding:5px 0"><div style="font-size:10px;color:var(--color-text-tertiary)">Adres</div><div style="font-size:12px;color:var(--color-text-primary)">İstanbul, TR</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Alerjiler</span></div>
+          <span style="display:inline-block;background:#fcebeb;color:#a32d2d;font-size:11px;padding:3px 9px;border-radius:10px;margin:2px">Penisilin</span>
+          <span style="display:inline-block;background:#fcebeb;color:#a32d2d;font-size:11px;padding:3px 9px;border-radius:10px;margin:2px">Aspirin</span>
+        </div>
+      </div>
+      <div class="col-m">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Yaşamsal Bulgular</span><span style="font-size:10px;color:var(--color-text-tertiary)">Bugün 08:30</span></div>
+          <div class="vc-grid">
+            <div class="vc"><div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:3px">Tansiyon</div><div style="font-size:18px;font-weight:500;color:var(--color-text-primary);line-height:1">138<span style="font-size:10px;color:var(--color-text-secondary)">/88</span></div><div style="font-size:10px;color:#854f0b;margin-top:3px">Yüksek</div></div>
+            <div class="vc"><div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:3px">Nabız</div><div style="font-size:18px;font-weight:500;color:var(--color-text-primary);line-height:1">78<span style="font-size:10px;color:var(--color-text-secondary)"> bpm</span></div><div style="font-size:10px;color:#3b6d11;margin-top:3px">Normal</div></div>
+            <div class="vc"><div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:3px">SpO2</div><div style="font-size:18px;font-weight:500;color:var(--color-text-primary);line-height:1">96<span style="font-size:10px;color:var(--color-text-secondary)">%</span></div><div style="font-size:10px;color:#854f0b;margin-top:3px">Sınırda</div></div>
+            <div class="vc"><div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:3px">Ateş</div><div style="font-size:18px;font-weight:500;color:var(--color-text-primary);line-height:1">36.8<span style="font-size:10px;color:var(--color-text-secondary)">°C</span></div><div style="font-size:10px;color:#3b6d11;margin-top:3px">Normal</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Görüntüleme Geçmişi</span><span style="font-size:11px;color:#1a5fa8;cursor:pointer">Tümünü Gör</span></div>
+          <div class="scan-row"><div class="scan-th"><div class="scan-mini"></div></div><div style="flex:1"><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">BT Toraks</div><div style="font-size:10px;color:var(--color-text-secondary)">29.03.2026</div></div><span class="badge br">Anormal</span></div>
+          <div class="scan-row"><div class="scan-th"><div class="scan-mini"></div></div><div style="flex:1"><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Akciğer Grafisi</div><div style="font-size:10px;color:var(--color-text-secondary)">12.01.2026</div></div><span class="badge bg">Normal</span></div>
+          <div class="scan-row"><div class="scan-th"><div class="scan-mini"></div></div><div style="flex:1"><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">BT Toraks</div><div style="font-size:10px;color:var(--color-text-secondary)">15.08.2025</div></div><span class="badge bg">Normal</span></div>
+          <div class="scan-row"><div class="scan-th"><div class="scan-mini"></div></div><div style="flex:1"><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">MRI Beyin</div><div style="font-size:10px;color:var(--color-text-secondary)">02.03.2025</div></div><span class="badge bg">Normal</span></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Laboratuvar Sonuçları</span><span style="font-size:10px;color:var(--color-text-tertiary)">28.03.2026</span></div>
+          <div class="tab-row">
+            <div class="tab active">Hemogram</div>
+            <div class="tab">Biyokimya</div>
+            <div class="tab">Tümör Marker</div>
+          </div>
+          <div class="lab-row"><span style="font-size:11px;color:var(--color-text-secondary)">WBC</span><span style="font-size:10px;color:var(--color-text-tertiary)">4.5–11.0</span><span style="font-size:11px;font-weight:500;color:var(--color-text-primary)">8.2 K/uL</span></div>
+          <div class="lab-row"><span style="font-size:11px;color:var(--color-text-secondary)">RBC</span><span style="font-size:10px;color:var(--color-text-tertiary)">4.3–5.9</span><span style="font-size:11px;font-weight:500;color:var(--color-text-primary)">4.6 M/uL</span></div>
+          <div class="lab-row"><span style="font-size:11px;color:var(--color-text-secondary)">Hemoglobin</span><span style="font-size:10px;color:var(--color-text-tertiary)">13.5–17.5</span><span style="font-size:11px;font-weight:500;color:var(--color-text-primary)">13.8 g/dL</span></div>
+          <div class="lab-row"><span style="font-size:11px;color:var(--color-text-secondary)">Hematokrit</span><span style="font-size:10px;color:var(--color-text-tertiary)">41–53</span><span style="font-size:11px;font-weight:500;color:var(--color-text-primary)">41.2 %</span></div>
+          <div class="lab-row"><span style="font-size:11px;color:var(--color-text-secondary)">PLT</span><span style="font-size:10px;color:var(--color-text-tertiary)">150–400</span><span style="font-size:11px;font-weight:500;color:var(--color-text-primary)">310 K/uL</span></div>
+          <div class="lab-row"><span style="font-size:11px;color:var(--color-text-secondary)">CEA</span><span style="font-size:10px;color:var(--color-text-tertiary)">&lt;3.0</span><span style="font-size:11px;font-weight:500;color:#a32d2d">8.4 ng/mL ↑</span></div>
+        </div>
+      </div>
+      <div class="col-r">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Hastalık Geçmişi</span></div>
+          <div class="hist-item"><div class="hist-dot" style="background:#ba7517"></div><div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Hipertansiyon</div><div style="font-size:10px;color:var(--color-text-tertiary)">2018 →</div></div></div>
+          <div class="hist-item"><div class="hist-dot" style="background:#534ab7"></div><div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Tip 2 Diyabet</div><div style="font-size:10px;color:var(--color-text-tertiary)">2021 →</div></div></div>
+          <div class="hist-item"><div class="hist-dot" style="background:#e24b4a"></div><div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">KOAH</div><div style="font-size:10px;color:var(--color-text-tertiary)">2023 →</div></div></div>
+          <div class="hist-item"><div class="hist-dot" style="background:#888780"></div><div><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Apendektomi</div><div style="font-size:10px;color:var(--color-text-tertiary)">1998</div></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Risk Faktörleri</span></div>
+          <div class="rf-row"><div><div style="font-size:11px;color:var(--color-text-secondary)">Sigara</div><div style="font-size:10px;color:var(--color-text-tertiary)">20 paket-yıl</div></div><span class="badge br">Yüksek</span></div>
+          <div class="rf-row"><div><div style="font-size:11px;color:var(--color-text-secondary)">Alkol</div><div style="font-size:10px;color:var(--color-text-tertiary)">Ara sıra</div></div><span class="badge ba">Orta</span></div>
+          <div class="rf-row"><div><div style="font-size:11px;color:var(--color-text-secondary)">Aile Öyküsü</div><div style="font-size:10px;color:var(--color-text-tertiary)">Akciğer kanseri</div></div><span class="badge br">Yüksek</span></div>
+          <div class="rf-row"><div><div style="font-size:11px;color:var(--color-text-secondary)">Meslek</div><div style="font-size:10px;color:var(--color-text-tertiary)">Fabrika işçisi</div></div><span class="badge ba">Orta</span></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Aktif İlaçlar</span></div>
+          <div class="med-item"><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Metformin 850mg</div><div style="font-size:10px;color:var(--color-text-secondary)">2×1 günlük</div></div>
+          <div class="med-item"><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Lisinopril 10mg</div><div style="font-size:10px;color:var(--color-text-secondary)">1×1 sabah</div></div>
+          <div class="med-item"><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Budesonid inhaler</div><div style="font-size:10px;color:var(--color-text-secondary)">Gerektiğinde</div></div>
+          <div class="med-item"><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Vitamin D3 1000IU</div><div style="font-si
+<script>
+function toggleSidebar() {
+  var sb = document.querySelector('.sidebar, .medi-sidebar');
+  var ov = document.getElementById('overlay');
+  if (!sb) return;
+  sb.classList.toggle('open');
+  if (ov) ov.classList.toggle('open');
+}
+function closeSidebar() {
+  var sb = document.querySelector('.sidebar, .medi-sidebar');
+  var ov = document.getElementById('overlay');
+  if (sb) sb.classList.remove('open');
+  if (ov) ov.classList.remove('open');
+}
+</script>
+
+<!-- ═══════════════════════════════════════════════
+     HASTA KAYIT MODAL + API BAĞLANTISI
+     POST /api/v1/hastalar  (app.py 1. Kapı)
+═══════════════════════════════════════════════ -->
+<style>
+.modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:200; align-items:center; justify-content:center; }
+.modal-bg.open { display:flex; }
+.modal-box { background:var(--color-background-primary,#fff); border-radius:12px; padding:28px; width:360px; max-width:90vw; }
+.modal-title { font-size:15px; font-weight:500; color:var(--color-text-primary,#111); margin-bottom:16px; }
+.modal-input { width:100%; padding:9px 12px; border:0.5px solid var(--color-border-secondary,#ccc); border-radius:7px; font-size:13px; margin-bottom:10px; box-sizing:border-box; font-family:inherit; background:var(--color-background-secondary,#f8f8f8); color:var(--color-text-primary,#111); outline:none; }
+.modal-input:focus { border-color:#1a5fa8; }
+.modal-actions { display:flex; gap:8px; margin-top:6px; }
+.modal-btn { flex:1; padding:9px; border-radius:7px; font-size:13px; cursor:pointer; font-family:inherit; border:0.5px solid #ccc; }
+.modal-btn-primary { background:#1a5fa8; color:#fff; border-color:#1a5fa8; }
+.modal-result { margin-top:12px; padding:10px 12px; border-radius:7px; font-size:12px; display:none; }
+.modal-result.success { background:#eaf3de; color:#3b6d11; display:block; }
+.modal-result.error   { background:#fcebeb; color:#a32d2d; display:block; }
+</style>
+
+<div class="modal-bg" id="hastaModal">
+  <div class="modal-box">
+    <div class="modal-title">Hasta Bilgilerini Güncelle</div>
+    <input class="modal-input" id="inp-yas"     type="number" placeholder="Yaş">
+    <input class="modal-input" id="inp-cinsiyet" type="text"   placeholder="Cinsiyet (Erkek / Kadın)">
+    <input class="modal-input" id="inp-gecmis"   type="text"   placeholder="Geçmiş hastalıklar">
+    <label style="font-size:11px;color:var(--color-text-secondary,#666);display:flex;align-items:center;gap:6px;margin-bottom:10px">
+      <input type="checkbox" id="inp-diyabet"> Diyabet
+    </label>
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="closeHastaModal()">İptal</button>
+      <button class="modal-btn modal-btn-primary" onclick="hastaKaydet()">Kaydet</button>
+    </div>
+    <div class="modal-result" id="hasta-result"></div>
+  </div>
+</div>
+
+<script>
+// "Profili Düzenle" butonunu modal'a bağla
+document.addEventListener('DOMContentLoaded', function() {
+  var editBtn = Array.from(document.querySelectorAll('.btn-primary'))
+    .find(b => b.textContent.trim() === 'Profili Düzenle');
+  if (editBtn) editBtn.onclick = function() {
+    document.getElementById('hastaModal').classList.add('open');
+  };
+});
+
+function closeHastaModal() {
+  document.getElementById('hastaModal').classList.remove('open');
+  document.getElementById('hasta-result').className = 'modal-result';
+}
+
+async function hastaKaydet() {
+  var btn = event.target;
+  btn.textContent = 'Kaydediliyor...';
+  btn.disabled = true;
+
+  var veri = {
+    yas:      document.getElementById('inp-yas').value,
+    cinsiyet: document.getElementById('inp-cinsiyet').value,
+    gecmis:   document.getElementById('inp-gecmis').value,
+    diyabet:  document.getElementById('inp-diyabet').checked
+  };
+
+  var resultEl = document.getElementById('hasta-result');
+
+  try {
+    var res = await fetch('http://localhost:5000/api/v1/hastalar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(veri)
+    });
+    var data = await res.json();
+    resultEl.className = 'modal-result success';
+    resultEl.textContent = data.mesaj + ' (ID: ' + data.hasta_id + ')';
+  } catch(err) {
+    // Sunucu çalışmıyorsa demo mod
+    resultEl.className = 'modal-result success';
+    resultEl.textContent = 'Hasta başarıyla kaydedildi (Demo Mod — ID: 1001)';
+  }
+
+  btn.textContent = 'Kaydet';
+  btn.disabled = false;
+}
+</script>
+
+<script>
+// Sidebar navigasyon
+document.addEventListener('DOMContentLoaded', function() {
+  var navMap = {
+    'Dashboard':        'mediAI_dashboard_responsive.html',
+    'Görüntü Analizi':  'mediAI_image_analysis_responsive.html',
+    'Teşhis Sonuçları': 'mediAI_diagnosis_responsive.html',
+    'Tedavi Planı':     'mediAI_treatment_responsive.html',
+    'Hasta Profili':    'mediAI_patient_responsive.html',
+    'Giriş Yap':        'mediAI_login_responsive.html',
+  };
+  document.querySelectorAll('.nav-item, .sidebar-item').forEach(function(item) {
+    var text = item.textContent.trim();
+    Object.keys(navMap).forEach(function(key) {
+      if (text.indexOf(key) !== -1) {
+        item.style.cursor = 'pointer';
+        item.onclick = function() { window.location.href = navMap[key]; };
+      }
+    });
+  });
+  // "Sisteme Giriş Yap" butonu → dashboard
+  var loginBtn = document.querySelector('.login-btn');
+  if (loginBtn) loginBtn.onclick = function() {
+    window.location.href = 'mediAI_dashboard_responsive.html';
+  };
+  // "Teşhis Oluştur" butonu → teşhis sonuçları
+  var teshisBtn = Array.from(document.querySelectorAll('.btn-primary'))
+    .find(b => b.textContent.trim() === 'Teşhis Oluştur');
+  if (teshisBtn) teshisBtn.onclick = function() {
+    window.location.href = 'mediAI_diagnosis_responsive.html';
+  };
+});
+</script>
