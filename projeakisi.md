@@ -1009,15 +1009,17 @@ Tüm dosyalar frontend/ klasörü altında düzenlenip proje repozitorisine yük
 ## 5. Hafta
 
 ### 🚀 Makine Öğrenimi Modelini Eğitme ve Doğrulama
-**Sorumlu:** Enes Zukra  
-**Tarih:** 23 Nisan 2026
+Sorumlu: Enes Zukra  
+Tarih: 23 Nisan 2026
 
-Hafta 4'te mimarisi kurulan CNN modeli, tıbbi görüntü veri seti (eğitim ve validasyon) kullanılarak eğitilmiştir.
-- **Eğitim Süreci (Training):** Model, 10 epoch boyunca eğitilmiş ve loss (kayıp) değerlerindeki düşüş gözlemlenmiştir.
-- **Performans Değerlendirmesi:** İlk eğitim sonucunda modelin doğruluk (accuracy) oranı ortalama **%85** seviyesine ulaşmıştır. 
-- **Sonuç:** Modelin hastalık belirtilerini tanımaya başladığı doğrulanmış, ancak aşırı öğrenme (overfitting) riskine karşı iyileştirmelere ihtiyaç duyulduğu tespit edilmiştir.
+Projenin 5. haftası kapsamında, bir önceki aşamada temel mimarisi tasarlanan Evrişimli Sinir Ağı (CNN) modelinin tıbbi görüntü veri setleri üzerinde eğitim (training) ve doğrulama (validation) süreçleri kapsamlı bir şekilde gerçekleştirilmiştir.
 
----
+#### 📊 Eğitim Süreci ve Parametreler (Training Process)
+- **Veri Seti Hazırlığı:** Eğitim sürecine geçilmeden önce tıbbi görüntü veri seti; eğitim (%80) ve doğrulama (%20) olmak üzere iki ana gruba ayrılmıştır. Görüntü matrisleri normalize edilerek modelin öğrenme hızı ve verimliliği artırılmıştır.
+- **Konfigürasyon:** Model eğitimi, sınıflandırma problemlerinde yüksek başarı gösteren `Adam` optimizasyon algoritması ve `Binary Crossentropy` kayıp fonksiyonu (loss function) kullanılarak başlatılmıştır.
+- **İterasyon:** Eğitim süreci, `Batch Size: 32` ayarı ile toplam **10 Epoch** boyunca sürdürülmüş ve her bir adımda modelin ağırlıkları güncellenmiştir.
 
-
-
+#### 📈 Performans Değerlendirmesi ve Çıktılar
+- **Başarı Oranı:** İlk eğitim fazının tamamlanmasının ardından, modelin daha önce hiç görmediği doğrulama (validation) veri seti üzerinde ortalama **%85 doğruluk (accuracy)** oranına ulaştığı ölçülmüştür.
+- **Kayıp (Loss) Analizi:** Eğitim ve doğrulama kayıp değerleri (loss values) karşılaştırmalı olarak incelendiğinde, modelin hastalık özelliklerini başarıyla öğrenmeye başladığı görülmüştür. 
+- **Sonuç ve Gelecek Adım:** Elde edilen %85'lik oran tatmin edici bir başlangıç noktası olsa da, modelin eğitim verisini ezberleme (overfitting) eğiliminde olduğu tespit edilmiştir. Bu durum, bir sonraki hafta gerçekleştirilecek olan "Hiperparametre Optimizasyonu (Tuning)" aşamasının gerekliliğini ortaya koymuştur.
