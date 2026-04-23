@@ -1019,15 +1019,5 @@ Hafta 4'te mimarisi kurulan CNN modeli, tıbbi görüntü veri seti (eğitim ve 
 
 ---
 
-## 6. Hafta
 
-### ⚙️ Proje Toparlama ve İyileştirme: Makine Öğrenimi Modelinin Hassasiyet Ayarı
-Sorumlu: Enes Zukra  
-Tarih: 23 Nisan 2026
-
-Modelin teşhis oranını ve genel performansını artırmak amacıyla hiperparametre optimizasyonu (Hyperparameter Tuning) gerçekleştirilmiştir.
-- **Yapılan Optimizasyonlar:** - Öğrenme oranı (Learning Rate) daha hassas sonuçlar için `0.001` olarak güncellenmiştir.
-  - Modelin ezberlemesini (Overfitting) önlemek amacıyla katmanlar arasına **%50 Dropout** eklenmiştir.
-- **Nihai Başarı Oranı:** Yapılan hassasiyet ayarları sonucunda modelin validasyon doğruluk oranı **%92** seviyesine başarıyla yükseltilmiştir.
-- **Entegrasyon:** İyileştirilen bu final model mimarisi, takımın API ve Arayüz (UI) testlerinde kullanılması için sisteme entegre edilmeye hazır hale getirilmiştir.
 
