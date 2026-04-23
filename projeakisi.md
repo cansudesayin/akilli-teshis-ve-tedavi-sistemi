@@ -1003,3 +1003,31 @@ Ortak CSS değişkenleri style.css dosyasında tanımlanmış, tüm sayfalar bu 
 Flask sunucusu çalışmadığı durumlarda sayfalar Demo Mod ile çalışmaya devam etmekte, sahte verilerle arayüz test edilebilmektedir.  
 Tüm dosyalar frontend/ klasörü altında düzenlenip proje repozitorisine yüklenerek ana dal (main branch) ile birleştirilmiştir.  
 
+
+---
+
+## 5. Hafta
+
+### 🚀 Makine Öğrenimi Modelini Eğitme ve Doğrulama
+**Sorumlu:** Enes Zukra  
+**Tarih:** 23 Nisan 2026
+
+Hafta 4'te mimarisi kurulan CNN modeli, tıbbi görüntü veri seti (eğitim ve validasyon) kullanılarak eğitilmiştir.
+- **Eğitim Süreci (Training):** Model, 10 epoch boyunca eğitilmiş ve loss (kayıp) değerlerindeki düşüş gözlemlenmiştir.
+- **Performans Değerlendirmesi:** İlk eğitim sonucunda modelin doğruluk (accuracy) oranı ortalama **%85** seviyesine ulaşmıştır. 
+- **Sonuç:** Modelin hastalık belirtilerini tanımaya başladığı doğrulanmış, ancak aşırı öğrenme (overfitting) riskine karşı iyileştirmelere ihtiyaç duyulduğu tespit edilmiştir.
+
+---
+
+## 6. Hafta
+
+### ⚙️ Proje Toparlama ve İyileştirme: Makine Öğrenimi Modelinin Hassasiyet Ayarı
+Sorumlu: Enes Zukra  
+Tarih: 23 Nisan 2026
+
+Modelin teşhis oranını ve genel performansını artırmak amacıyla hiperparametre optimizasyonu (Hyperparameter Tuning) gerçekleştirilmiştir.
+- **Yapılan Optimizasyonlar:** - Öğrenme oranı (Learning Rate) daha hassas sonuçlar için `0.001` olarak güncellenmiştir.
+  - Modelin ezberlemesini (Overfitting) önlemek amacıyla katmanlar arasına **%50 Dropout** eklenmiştir.
+- **Nihai Başarı Oranı:** Yapılan hassasiyet ayarları sonucunda modelin validasyon doğruluk oranı **%92** seviyesine başarıyla yükseltilmiştir.
+- **Entegrasyon:** İyileştirilen bu final model mimarisi, takımın API ve Arayüz (UI) testlerinde kullanılması için sisteme entegre edilmeye hazır hale getirilmiştir.
+
