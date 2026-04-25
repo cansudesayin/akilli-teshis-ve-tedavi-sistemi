@@ -1008,18 +1008,53 @@ Tüm dosyalar frontend/ klasörü altında düzenlenip proje repozitorisine yük
 
 ## 5. Hafta
 
-### 🚀 Makine Öğrenimi Modelini Eğitme ve Doğrulama
+###  Makine Öğrenimi Modelini Eğitme ve Doğrulama
 Sorumlu: Enes Zukra  
 Tarih: 23 Nisan 2026
 
 Projenin 5. haftası kapsamında, bir önceki aşamada temel mimarisi tasarlanan Evrişimli Sinir Ağı (CNN) modelinin tıbbi görüntü veri setleri üzerinde eğitim (training) ve doğrulama (validation) süreçleri kapsamlı bir şekilde gerçekleştirilmiştir.
 
-#### 📊 Eğitim Süreci ve Parametreler (Training Process)
+####  Eğitim Süreci ve Parametreler (Training Process)
 - **Veri Seti Hazırlığı:** Eğitim sürecine geçilmeden önce tıbbi görüntü veri seti; eğitim (%80) ve doğrulama (%20) olmak üzere iki ana gruba ayrılmıştır. Görüntü matrisleri normalize edilerek modelin öğrenme hızı ve verimliliği artırılmıştır.
 - **Konfigürasyon:** Model eğitimi, sınıflandırma problemlerinde yüksek başarı gösteren `Adam` optimizasyon algoritması ve `Binary Crossentropy` kayıp fonksiyonu (loss function) kullanılarak başlatılmıştır.
 - **İterasyon:** Eğitim süreci, `Batch Size: 32` ayarı ile toplam **10 Epoch** boyunca sürdürülmüş ve her bir adımda modelin ağırlıkları güncellenmiştir.
 
-#### 📈 Performans Değerlendirmesi ve Çıktılar
+####  Performans Değerlendirmesi ve Çıktılar
 - **Başarı Oranı:** İlk eğitim fazının tamamlanmasının ardından, modelin daha önce hiç görmediği doğrulama (validation) veri seti üzerinde ortalama **%85 doğruluk (accuracy)** oranına ulaştığı ölçülmüştür.
 - **Kayıp (Loss) Analizi:** Eğitim ve doğrulama kayıp değerleri (loss values) karşılaştırmalı olarak incelendiğinde, modelin hastalık özelliklerini başarıyla öğrenmeye başladığı görülmüştür. 
 - **Sonuç ve Gelecek Adım:** Elde edilen %85'lik oran tatmin edici bir başlangıç noktası olsa da, modelin eğitim verisini ezberleme (overfitting) eğiliminde olduğu tespit edilmiştir. Bu durum, bir sonraki hafta gerçekleştirilecek olan "Hiperparametre Optimizasyonu (Tuning)" aşamasının gerekliliğini ortaya koymuştur.
+
+ ---
+
+
+ ### **Eksik Giderme ve Dokümantasyon: API Entegrasyonu ve Teknik Dokümantasyon**
+
+**Sorumlu:** Cansude Sayın  
+**Tarih:** 25 Nisan 2026  
+
+Projenin 5. haftasında, daha önce geliştirilen Flask API altyapısı kapsamlı biçimde gözden geçirilmiş, eksikler giderilmiş ve teknik dokümantasyon hazırlanmıştır.
+
+---
+
+### **Yapılan Çalışmalar**
+
+- Mevcut app.py dosyası incelenmiş, CORS desteği eklenerek HTML arayüzlerinin API'ye sorunsuz istek atması sağlanmıştır.  
+
+- Tüm endpoint'lere gelen veri doğrulama (validation) mekanizması eklenmiştir. Eksik alan, geçersiz yaş değeri ve desteklenmeyen görüntü türü gibi hatalar artık anlamlı hata mesajlarıyla döndürülmektedir.  
+
+- Standart yanıt formatı oluşturulmuştur. Her yanıtta hata, mesaj ve zaman alanları bulunmaktadır.  
+
+- Ekip görev dağılımı güncellenerek kod içi notlar doğru kişilere yönlendirilmiştir:  
+
+  - Veritabanı entegrasyonu → Ali İstanbullu (5. Hafta görevi)  
+  - Görüntü ön işleme entegrasyonu → Selim Yağbasan (5. Hafta görevi)  
+  - CNN model entegrasyonu → Enes Zukra (5. Hafta görevi)  
+
+- 2 yeni endpoint eklenmiştir:  
+
+  - GET /api/v1/hastalar/<hasta_id> — Hasta bilgisi görüntüleme  
+  - GET /api/v1/tedavi/plan/<analiz_id> — Kişiselleştirilmiş tedavi planı  
+
+- 404, 405 ve 500 HTTP hata kodları için merkezi hata yönetimi tanımlanmıştır.  
+
+- Tüm endpoint'lerin nasıl çalıştığını, request/response örneklerini, hata kodları tablosunu ve entegrasyon kontrol listesini içeren api_teknik_dokumantasyon.md dosyası hazırlanarak repoya eklenmiştir.  
