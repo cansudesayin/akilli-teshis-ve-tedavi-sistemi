@@ -1,79 +1,104 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS # Cansude'nin eklediği CORS desteği
+import mysql.connector
+from datetime import datetime
 
 app = Flask(__name__)
+CORS(app) # Arayüzlerin API'ye erişebilmesi için şart!
 
 # ==============================================================================
-# 1. KAPI: YENİ HASTA KAYDI (Frontend -> API -> Veritabanı)
+# VERİTABANI BAĞLANTISI (Edanur'un MySQL Şemasına Göre)
+# ==============================================================================
+def get_db_connection():
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",         # Burayı kendi kullanıcı adınla güncelle
+        password="sifre",    # Burayı kendi şifrenle güncelle
+        database="mediai_db" # Edanur'un raporundaki veritabanı adı
+    )
+
+# ==============================================================================
+# 1. KAPI: YENİ HASTA KAYDI (POST)
 # ==============================================================================
 @app.route('/api/v1/hastalar', methods=['POST'])
 def hasta_kayit():
-    # [CANSUDE İÇİN NOT (UI/UX)]:
-    # Cansude, arayüzden "Kaydet" butonuna basıldığında formdaki 'ad', 'soyad', 
-    # 'yas' gibi bilgileri JSON formatında bu kapıya (POST) göndereceksin.
     gelen_veri = request.json
     
-    # [EDANUR İÇİN NOT (Veritabanı)]: 
-    # Edanur, Cansude'nin gönderdiği bu 'gelen_veri'yi alıp, senin tasarladığın 
-    # MySQL veritabanındaki "Hastalar" tablosuna tam bu satırda kaydedeceğiz.
+    # Cansude'nin istediği veri doğrulama (Validation)
+    yas = gelen_veri.get('yas')
+    cinsiyet = gelen_veri.get('cinsiyet')
     
-    # Şimdilik Frontend tasarımı test edilebilsin diye Cansude'ye sahte (dummy) bir cevap dönüyoruz:
-    return jsonify({
-        "mesaj": "Hasta başarıyla sisteme kaydedildi",
-        "hasta_id": "1001"
-    }), 201
+    if not yas or not cinsiyet:
+        return jsonify({
+            "hata": True, 
+            "mesaj": "Eksik zorunlu alanlar: yas, cinsiyet",
+            "zaman": datetime.now().isoformat()
+        }), 400
 
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Edanur'un 'Patients' tablosuna kayıt (Parametrik - Güvenli Sorgu)
+        sql = "INSERT INTO Patients (age, gender, medical_history, diabetes) VALUES (%s, %s, %s, %s)"
+        values = (yas, cinsiyet, gelen_veri.get('gecmis', ''), gelen_veri.get('diyabet', False))
+        
+        cursor.execute(sql, values)
+        conn.commit()
+        
+        h_id = cursor.lastrowid # Veritabanından gelen gerçek ID
+
+        cursor.close()
+        conn.close()
+
+        return jsonify({
+            "hata": False,
+            "mesaj": "Hasta başarıyla MySQL veritabanına kaydedildi.",
+            "hasta_id": str(h_id),
+            "zaman": datetime.now().isoformat()
+        }), 201
+    except Exception as e:
+        return jsonify({"hata": True, "mesaj": f"DB Hatası: {str(e)}"}), 500
 
 # ==============================================================================
-# 2. KAPI: FOTOĞRAF YÜKLEME VE YAPAY ZEKA ANALİZİ (Frontend -> API -> AI)
+# 2. KAPI: ANALİZ BAŞLATMA (POST)
 # ==============================================================================
 @app.route('/api/v1/analiz/baslat', methods=['POST'])
 def analiz_baslat():
-    # [CANSUDE İÇİN NOT (UI/UX)]: 
-    # Doktor fotoğraf seçip "Analiz Et" dediğinde, o fotoğraf dosyasını ve 
-    # hastanın ID'sini bu kapıya POST ediyorsun.
     gelen_veri = request.json
     hasta_id = gelen_veri.get('hasta_id')
     
-    # [SELİM & ENES İÇİN NOT (Ön İşleme & AI Modeli)]: 
-    # Beyler, Cansude'den gelen fotoğrafı önce Selim'in gürültü temizleme fonksiyonuna
-    # sokacağız. Çıkan temiz fotoğrafı tam burada Enes'in CNN modeline (model.predict)
-    # verip kanser risk skorunu üreteceğiz.
-    
+    # [SELİM & ENES İÇİN]: Burası ileride AI modeline bağlanacak
     return jsonify({
-        "mesaj": f"{hasta_id} numaralı hasta için yapay zeka analizi başlatıldı.",
-        "analiz_durumu": "İşleniyor"
+        "hata": False,
+        "mesaj": f"{hasta_id} ID'li hasta için analiz başlatıldı.",
+        "analiz_durumu": "İşleniyor",
+        "analiz_id": 5001,
+        "zaman": datetime.now().isoformat()
     }), 202
 
-
 # ==============================================================================
-# 3. KAPI: TEŞHİS SONUCUNU GÖSTERME (Veritabanı -> API -> Frontend)
+# 3. KAPI: TEŞHİS SONUCUNU GETİR (GET)
 # ==============================================================================
 @app.route('/api/v1/analiz/sonuc/<int:analiz_id>', methods=['GET'])
 def sonuc_getir(analiz_id):
-    # [EDANUR İÇİN NOT (Veritabanı)]: 
-    # Edanur, arayüz bu kapıyı çaldığında senin veritabanına bağlanıp, bu 'analiz_id'ye 
-    # ait risk skorunu, ısı haritasını ve tedavi planını çekecek kodu buraya yazacağız.
-    
-    # [CANSUDE İÇİN NOT (UI/UX)]: 
-    # Cansude, doktor "Sonucu Gör" sayfasına girdiğinde bu kapıya GET isteği atacaksın.
-    # Ben sana veritabanından alıp aşağıdaki gibi bir JSON döneceğim. 
-    # Sen de HTML/CSS şablonunda 'risk_skoru' ve 'tehsis' verilerini ekrana basacaksın.
-    sahte_sonuc = {
+    # Cansude'nin istediği standart sonuç formatı
+    return jsonify({
+        "hata": False,
         "analiz_id": analiz_id,
         "tehsis": "Malign Melanom (Cilt Kanseri)",
-        "evre": "Evre 1",
         "risk_skoru": 88.5,
-        "ai_aciklamasi": "Lezyon sınırlarında asimetri tespit edildi."
-    }
-    
-    return jsonify(sahte_sonuc), 200
+        "ai_aciklamasi": "Lezyon sınırlarında asimetri tespit edildi.",
+        "zaman": datetime.now().isoformat()
+    }), 200
 
+# Cansude'nin eklediği 404 Hata Yönetimi
+@app.errorhandler(404)
+def sayfa_bulunamadi(e):
+    return jsonify({"hata": True, "mesaj": "Geçersiz endpoint adresi!"}), 404
 
-# ==============================================================================
-# SUNUCUYU BAŞLATMA KOMUTU (Terminalde 'python app.py' yazılınca çalışır)
-# ==============================================================================
 if __name__ == '__main__':
-    print("Siber Şifacılar API Sunucusu Başlatılıyor...")
-    print("Loglar (Gelen/Giden Veri Trafiği) aşağıda akacaktır:")
-    # Debug=True sayesinde koda yeni bir şey eklediğimizde sunucu kendini otomatik yeniler
+    print("============================================================")
+    print("  Siber Şifacılar — MediAI API Sunucusu Başlatılıyor...")
+    print("============================================================")
     app.run(debug=True, port=5000)
