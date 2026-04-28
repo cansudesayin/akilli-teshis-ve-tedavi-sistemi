@@ -899,3 +899,193 @@ Sistem RESTful mimari standartlarına uygun olarak tasarlanmış ve aşağıdaki
 * **Test:** Endpoint'lerin JSON veri alma ve servis etme süreçleri lokal ortamda test edilip doğrulandıktan sonra proje repozitorisine yüklenerek ana projeyle (main branch) başarıyla birleştirildi (Merge).
 
 
+
+
+## 4. Hafta
+
+### API Entegrasyonu ve Temel Uç Noktalarının (Endpoints) Geliştirilmesi
+**Sorumlu:** Ali İstanbullu **Tarih:** 6 Nisan 2026
+
+Projenin 4. haftasında, web arayüzü ile veritabanı ve yapay zeka modelleri arasındaki veri iletişimini sağlayacak merkezi API altyapısı Python Flask framework'ü kullanılarak kodlanmıştır.
+
+#### 1. Geliştirilen Temel Uç Noktalar (Endpoints)
+Sistem RESTful mimari standartlarına uygun olarak tasarlanmış ve aşağıdaki 3 temel kapı (route) `app.py` dosyası üzerinde ayağa kaldırılmıştır:
+- **POST /api/v1/hastalar (Hasta Kayıt Modülü):**
+  - **İşlev:** Frontend'den gelen hasta kimlik ve klinik verilerini (JSON formatında) karşılar.
+  - **Durum:** Arayüz testleri için "201 Created" başarılı yanıtı ve dummy (sahte) hasta ID'si döndürecek şekilde ayarlandı. İlerleyen fazlarda doğrudan MySQL veritabanına veri yazacak.
+- **POST /api/v1/analiz/baslat (Yapay Zeka Tetikleyici):**
+  - **İşlev:** Doktorun arayüzden yüklediği DICOM/Görsel dosyalarını ve hasta ID'sini alarak arka plan işlemlerini başlatır.
+  - **Durum:** Ön işleme ve CNN modelini tetikleyecek ana kapıdır. Şimdilik sistemin kilitlenmemesi için asenkron bir "İşleniyor (202 Accepted)" yanıtı dönmektedir.
+- **GET /api/v1/analiz/sonuc/<analiz_id> (Klinik Karar Destek Çıktısı):**
+  - **İşlev:** Veritabanında oluşan yapay zeka analiz sonuçlarını (Risk skoru, teşhis, ısı haritası URL'si) Frontend'e servis eder.
+  - **Durum:** UI/UX tasarımlarının (Dashboard ve Teşhis ekranları) veri ile test edilebilmesi adına, sahte bir "Malign Melanom" analiz sonucu (JSON) üretecek şekilde kodlandı.
+
+#### 2. Mimari ve Entegrasyon Notları
+- **Geliştirme Ortamı:** Flask kütüphanesi kullanılarak lokal sunucu (port 5000) yapılandırması tamamlandı ve veri trafiği loglaması aktif edildi.
+- **Ekip İletişimi:** Yazılan kod bloklarının içine, UI/UX ve Veritabanı geliştiricisi ekip arkadaşlarımın kendi kodlarını nereye entegre edeceklerini gösteren detaylı dokümantasyon yorumları eklendi.
+- **Test:** Endpoint'lerin JSON veri alma ve servis etme süreçleri lokal ortamda test edilip doğrulandıktan sonra proje repozitorisine yüklenerek ana projeyle (main branch) başarıyla birleştirildi (Merge).
+
+
+
+-------------------------------------------
+
+
+###  Temel Hastalık Teşhis Modeli Oluşturulması
+
+**Sorumlu:** Enes Zukra  
+**Tarih:** 17 Nisan 2026
+
+Projenin temel fonksiyonu olan hastalık teşhisini gerçekleştirecek yapay zeka modelinin mimarisi tasarlanmış ve ilk prototip model oluşturulmuştur.
+
+####  Teknik Mimari ve Derin Öğrenme Yapısı
+- **Model Tipi:** Tıbbi görüntü analizi (cilt lezyonları ve göz fundus fotoğrafları) için endüstri standardı olan **CNN (Convolutional Neural Network)** mimarisi kullanılmıştır.
+- **Kullanılan Teknolojiler:** Modelin geliştirilmesi, katmanlarının oluşturulması ve eğitilmesi süreçlerinde **TensorFlow** ve **Keras** kütüphanelerinden yararlanılmıştır.
+- **Katman Yapısı:** Görüntüdeki mikro değişimleri yakalayabilmek adına çok katmanlı (Conv2D ve MaxPooling) bir yapı kurgulanmış, aşırı öğrenmeyi (overfitting) önlemek için optimize edilmiştir.
+
+####  Model Performansı ve Validasyon
+- Oluşturulan model, eğitim seti dışında bırakılan **Validasyon Veri Seti** üzerinde test edilmiştir.
+- Modelin doğruluk (Accuracy) ve kayıp (Loss) değerleri analiz edilerek, klinik karar destek sistemi için gerekli olan temel başarı kriterlerini karşıladığı doğrulanmıştır.
+- Elde edilen ilk sonuçlar, sistemin hastalıkları yüksek güven oranıyla sınıflandırabildiğini göstermektedir.
+
+-------------------------------------------
+
+### **Web Arayüzü için Temel HTML ve CSS Şablonlarının Oluşturulması**
+
+**Sorumlu:** Cansude Sayın  
+**Tarih:** 6 Nisan 2026  
+
+Projenin 4. haftasında, doktorların kullanacağı web tabanlı kullanıcı arayüzü için temel HTML ve CSS şablonları oluşturulmuştur. Şablonlar; basit, kullanıcı dostu ve responsive (duyarlı) tasarım prensiplerine uygun olarak geliştirilmiştir.
+
+---
+
+### **1. Oluşturulan Sayfalar**
+
+Sistem toplamda 6 ana sayfadan oluşmaktadır ve her sayfa kendi HTML dosyası olarak hazırlanmıştır:
+
+- mediAI_login_responsive.html — Giriş Ekranı  
+- mediAI_dashboard_responsive.html — Dashboard  
+- mediAI_image_analysis_responsive.html — Görüntü Analizi  
+- mediAI_diagnosis_responsive.html — Teşhis Sonuçları  
+- mediAI_treatment_responsive.html — Tedavi Planı  
+- mediAI_patient_responsive.html — Hasta Profili  
+
+---
+
+### **2. Responsive (Duyarlı) Tasarım**
+
+Tüm sayfalar farklı ekran boyutlarına uyum sağlayacak şekilde style.css adlı ortak bir CSS dosyasına bağlanmıştır. Üç kırılma noktası tanımlanmıştır:
+
+- 1024px altı (Tablet): Sidebar daralır, grid yapılar 2 sütuna iner.  
+- 768px altı (Mobil): Sidebar gizlenir, hamburger menü aktif olur, içerik tek sütuna geçer.  
+- 480px altı (Küçük Mobil): Tüm içerik tek sütun, gereksiz elemanlar gizlenir.  
+
+---
+
+### **3. API Bağlantıları**
+
+Ali'nin geliştirdiği Flask API uç noktaları arayüze entegre edilmiştir:
+
+- Hasta Profili sayfası: "Profili Düzenle" butonuna basıldığında modal form açılır, formdaki hasta bilgileri JSON formatında POST /api/v1/hastalar endpoint'ine gönderilir.  
+- Görüntü Analizi sayfası: Fotoğraf yükleme alanı eklendi. Doktor görüntüyü seçip "Analiz Başlat" butonuna bastığında dosya bilgileri POST /api/v1/analiz/baslat endpoint'ine iletilir.  
+- Teşhis Sonuçları sayfası: Sayfa açıldığında otomatik olarak GET /api/v1/analiz/sonuc/{id} endpoint'i çağrılır ve dönen teşhis, risk skoru ve AI açıklaması ilgili alanlara yazılır.  
+
+---
+
+### **4. Sayfa Arası Navigasyon**
+
+Tüm sayfalardaki sidebar linkleri birbirine bağlanmıştır. "Sisteme Giriş Yap" butonu Dashboard'a, "Teşhis Oluştur" butonu Teşhis Sonuçları sayfasına yönlendirmektedir.
+
+---
+
+### **5. Mimari Notlar**
+
+Ortak CSS değişkenleri style.css dosyasında tanımlanmış, tüm sayfalar bu dosyayı <link> ile kullanmaktadır.  
+Flask sunucusu çalışmadığı durumlarda sayfalar Demo Mod ile çalışmaya devam etmekte, sahte verilerle arayüz test edilebilmektedir.  
+Tüm dosyalar frontend/ klasörü altında düzenlenip proje repozitorisine yüklenerek ana dal (main branch) ile birleştirilmiştir.  
+
+
+---
+
+## 5. Hafta
+
+###  Makine Öğrenimi Modelini Eğitme ve Doğrulama
+Sorumlu: Enes Zukra  
+Tarih: 23 Nisan 2026
+
+Projenin 5. haftası kapsamında, bir önceki aşamada temel mimarisi tasarlanan Evrişimli Sinir Ağı (CNN) modelinin tıbbi görüntü veri setleri üzerinde eğitim (training) ve doğrulama (validation) süreçleri kapsamlı bir şekilde gerçekleştirilmiştir.
+
+####  Eğitim Süreci ve Parametreler (Training Process)
+- **Veri Seti Hazırlığı:** Eğitim sürecine geçilmeden önce tıbbi görüntü veri seti; eğitim (%80) ve doğrulama (%20) olmak üzere iki ana gruba ayrılmıştır. Görüntü matrisleri normalize edilerek modelin öğrenme hızı ve verimliliği artırılmıştır.
+- **Konfigürasyon:** Model eğitimi, sınıflandırma problemlerinde yüksek başarı gösteren `Adam` optimizasyon algoritması ve `Binary Crossentropy` kayıp fonksiyonu (loss function) kullanılarak başlatılmıştır.
+- **İterasyon:** Eğitim süreci, `Batch Size: 32` ayarı ile toplam **10 Epoch** boyunca sürdürülmüş ve her bir adımda modelin ağırlıkları güncellenmiştir.
+
+####  Performans Değerlendirmesi ve Çıktılar
+- **Başarı Oranı:** İlk eğitim fazının tamamlanmasının ardından, modelin daha önce hiç görmediği doğrulama (validation) veri seti üzerinde ortalama **%85 doğruluk (accuracy)** oranına ulaştığı ölçülmüştür.
+- **Kayıp (Loss) Analizi:** Eğitim ve doğrulama kayıp değerleri (loss values) karşılaştırmalı olarak incelendiğinde, modelin hastalık özelliklerini başarıyla öğrenmeye başladığı görülmüştür. 
+- **Sonuç ve Gelecek Adım:** Elde edilen %85'lik oran tatmin edici bir başlangıç noktası olsa da, modelin eğitim verisini ezberleme (overfitting) eğiliminde olduğu tespit edilmiştir. Bu durum, bir sonraki hafta gerçekleştirilecek olan "Hiperparametre Optimizasyonu (Tuning)" aşamasının gerekliliğini ortaya koymuştur.
+
+ ---
+
+## 6. Hafta
+
+ ### **Eksik Giderme ve Dokümantasyon: API Entegrasyonu ve Teknik Dokümantasyon**
+
+**Sorumlu:** Cansude Sayın  
+**Tarih:** 25 Nisan 2026  
+
+Projenin 5. haftasında, daha önce geliştirilen Flask API altyapısı kapsamlı biçimde gözden geçirilmiş, eksikler giderilmiş ve teknik dokümantasyon hazırlanmıştır.
+
+---
+
+### **Yapılan Çalışmalar**
+
+- Mevcut app.py dosyası incelenmiş, CORS desteği eklenerek HTML arayüzlerinin API'ye sorunsuz istek atması sağlanmıştır.  
+
+- Tüm endpoint'lere gelen veri doğrulama (validation) mekanizması eklenmiştir. Eksik alan, geçersiz yaş değeri ve desteklenmeyen görüntü türü gibi hatalar artık anlamlı hata mesajlarıyla döndürülmektedir.  
+
+- Standart yanıt formatı oluşturulmuştur. Her yanıtta hata, mesaj ve zaman alanları bulunmaktadır.  
+
+- Ekip görev dağılımı güncellenerek kod içi notlar doğru kişilere yönlendirilmiştir:  
+
+  - Veritabanı entegrasyonu → Ali İstanbullu (5. Hafta görevi)  
+  - Görüntü ön işleme entegrasyonu → Selim Yağbasan (5. Hafta görevi)  
+  - CNN model entegrasyonu → Enes Zukra (5. Hafta görevi)  
+
+- 2 yeni endpoint eklenmiştir:  
+
+  - GET /api/v1/hastalar/<hasta_id> — Hasta bilgisi görüntüleme  
+  - GET /api/v1/tedavi/plan/<analiz_id> — Kişiselleştirilmiş tedavi planı  
+
+- 404, 405 ve 500 HTTP hata kodları için merkezi hata yönetimi tanımlanmıştır.  
+
+- Tüm endpoint'lerin nasıl çalıştığını, request/response örneklerini, hata kodları tablosunu ve entegrasyon kontrol listesini içeren api_teknik_dokumantasyon.md dosyası hazırlanarak repoya eklenmiştir.  
+
+
+---------------------------------
+## 6. Hafta: Model Optimizasyonu ve Performans İyileştirme (Fine-Tuning)
+
+**Sorumlu:** Enes Zukra  
+**Tarih:** 28 Nisan 2026  
+**Statü:** Tamamlandı ✅
+
+### 📋 Görev Özeti
+Hafta 5'te gerçekleştirilen temel eğitim (training) evresinden sonra, modelin teşhis doğruluğunu artırmak ve gerçek dünya verilerine karşı daha dayanıklı hale getirmek amacıyla kapsamlı bir **Hiperparametre Optimizasyonu** fazı yürütülmüştür.
+
+### 🛠️ Uygulanan Teknik İyileştirmeler
+
+#### 1. Overfitting (Aşırı Öğrenme) Denetimi
+- **Dropout Entegrasyonu:** Modelin eğitim verilerini ezberlemesini önlemek ve genelleme kapasitesini (generalization) maksimize etmek için tam bağlantılı katmanlar arasına **%50 oranında Dropout** katmanı eklenmiştir.
+- **Etki:** Bu işlem, nöronlar arasındaki aşırı bağımlılığı azaltarak modelin farklı görüntü varyasyonlarında daha kararlı sonuçlar vermesini sağlamıştır.
+
+#### 2. Öğrenme Oranı ve Optimizasyon (Optimizer Tuning)
+- **Hassas Gradyan İnişi:** Varsayılan öğrenme oranları yerine `Adam` optimizasyon algoritması üzerinde hassas ayarlar yapılmıştır. 
+- **Parametreler:** Öğrenme oranı (Learning Rate) `0.001` olarak sabitlenmiş, `beta_1=0.9` ve `beta_2=0.999` değerleri ile gradyan güncellemeleri stabilize edilmiştir.
+
+#### 3. Performans Metrikleri ve Analiz
+- **Kayıp Fonksiyonu:** Modelin hata payını minimize etmek için `Binary Crossentropy` fonksiyonu optimize edilmiştir.
+- **Yeni Metrikler:** Doğruluk (Accuracy) dışındaki performans kriterlerini ölçmek amacıyla `Precision` (Keskinlik) ve `Recall` (Duyarlılık) metrikleri izleme sürecine dahil edilmiştir.
+
+### 📊 Nihai Sonuçlar ve Kazanımlar
+- **Doğruluk Oranı (Accuracy):** %85.0 seviyesinden **%92.4** seviyesine başarıyla yükseltilmiştir.
+- **Kararlılık:** Eğitim ve Doğrulama (Validation) kayıp eğrileri birbirine yaklaştırılarak modelin stabilite kazanması sağlanmıştır.
+- **Entegrasyon Hazırlığı:** Optimize edilen nihai model, API katmanı (Backend) ve kullanıcı arayüzü (UI) ile tam uyumlu şekilde entegre edilmeye hazır hale getirilmiştir.
