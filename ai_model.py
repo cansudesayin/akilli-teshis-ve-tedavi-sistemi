@@ -1,13 +1,5 @@
 import tensorflow as tf
 from tensorflow.keras import layers, models
-# Geliştirdiğimiz modülü projeye dahil ediyoruz
-from data_preprocessing import ehr_veri_temizle
-import pandas as pd
-
-# Örnek kullanım (Model veri setini okurken):
-# df = pd.read_csv("hasta_verileri.csv")
-# temiz_df = ehr_veri_temizle(df)  <-- Entegrasyon burada gerçekleşiyor!
-# model.fit(temiz_df, ...)
 
 def create_medical_diagnosis_model():
     """
