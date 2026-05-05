@@ -581,7 +581,21 @@ Bu veritabanı tasarımı:
 * Yapay zeka çıktılarının izlenmesini sağlar
 * Tedavi sürecinin zaman içinde takip edilmesine olanak tanır
 
+Model Performans Metrikleri ve Değerlendirme Planı
+Sorumlu: Ali İstanbullu
+Tarih: 15 Mart 2026
 
+Proje kapsamında geliştirilen CNN tabanlı hastalık teşhis modelinin başarısını ölçmek ve sistemin sürdürülebilirliğini sağlamak amacıyla çok boyutlu bir değerlendirme matrisi oluşturulmuştur.
+
+1. Belirlenen Performans Metrikleri
+Klinik Hassasiyet: Tıbbi teşhisin kritik doğası gereği sadece genel doğruluğa (Accuracy) değil; yanlış pozitifleri önlemek için Kesinlik (Precision) ve vakaları kaçırmamak için Duyarlılık (Recall) metriklerine odaklanılmıştır.
+
+Değerlendirme Metodolojisi: Veri seti eğitim, doğrulama ve test setlerine bölünerek, modelin daha önce görmediği veriler üzerindeki gerçek performansı Karmaşıklık Matrisi (Confusion Matrix) üzerinden analiz edilmiştir.
+
+2. İzleme ve Raporlama Planı
+Kabul Edilebilir Eşik: Sistem için minimum doğruluk eşiği %85, kritik hastalık teşhisleri için duyarlılık eşiği ise %90 olarak hedeflenmiştir.
+
+Gerçek Zamanlı Takip: API üzerinden yapılan tahminlerin başarı oranları MySQL veritabanında loglanacak şekilde planlanmış ve tüm metrikler model_performans_metrikleri.md dosyasında dokümante edilmiştir.
 
 -------------------------------
 ## 3. Hafta
@@ -866,6 +880,22 @@ Hastaya ait tüm klinik ve demografik bilgilerin yer aldığı kapsamlı profil 
 Yapılan analizler sonucunda, proje için gerekli siber güvenlik araçları belirlenmiş ve kullanım planı oluşturulmuştur. Bu araçlar sayesinde sistemin güvenliği artırılacak ve olası tehditler erken aşamada tespit edilecektir.
 
 ---
+
+Docker Entegrasyon ve Konteynerizasyon Planı
+Sorumlu: Ali İstanbullu
+Tarih: 22 Mart 2026
+
+Akıllı Teşhis ve Tedavi Sistemi'nin farklı ortamlarda (geliştirme, test, üretim) sorunsuz ve tutarlı bir şekilde çalışmasını sağlamak amacıyla mikroservis mimarisine uygun bir Docker entegrasyon planı tasarlanmıştır.
+
+1. Konteyner Mimarisi ve Dockerfile Yapılandırmaları
+Flask API ve ML Servisi: CNN modeli tahminlemeleri ve backend işlemleri için, gerekli yapay zeka kütüphanelerini içeren optimize edilmiş bir Dockerfile tasarlanmıştır.
+
+Web Arayüzü ve Veritabanı: Kullanıcı arayüzü için hafif bir web sunucusu imajı yapılandırılmış; MySQL veritabanı için veri kaybını önlemek adına kalıcı veri depolama (Docker Volumes) ayarları tanımlanmıştır.
+
+2. Orkestrasyon ve Ortam Yönetimi (Docker Compose)
+Ağ İzolasyonu: Bağımsız Dockerfile dosyaları, bir docker-compose.yml çatısı altında birleştirilerek konteynerlerin kapalı bir sanal ağ (network) üzerinden güvenle haberleşmesi sağlanmıştır.
+
+Ortam Ayrımı ve Güncelleme: Test ortamları için esnek geliştirme özellikleri (docker-compose.override.yml) aktif edilmiş; model güncellemelerinde kesinti yaşanmaması için imajların versiyonlanarak (image tagging) güncellenmesi stratejisi belirlenmiştir. Mimarinin tüm detayları docker_entegrasyon_plani.md dosyası olarak sisteme eklenmiştir.
 
 ## 4. Hafta
 
