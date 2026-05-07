@@ -922,8 +922,7 @@ Ortam Ayrımı ve Güncelleme: Test ortamları için esnek geliştirme özellikl
 * **Kişiselleştirilmiş Tedavi Paneli:** Algoritma çıktısına göre hastaya özel tedavi protokollerini listeleyen ve doktor onayına sunan "Karar Destek Sistemi" arayüz prototipi geliştirildi.
 * **UX/UI Optimizasyonu:** Kullanıcı dostu, sade ve profesyonel standartlara uygun bir tasarım dili kullanılarak sistemin kullanılabilirlik testleri için hazır hale getirilmesi sağlandı.
 
-
-![Siber Şifacılar Arayüz Tasarımı](https://raw.githubusercontent.com/enes-zukra/Siber-Sifacilar/enes/User%20Interface.png)
+https://raw.githubusercontent.com/cansudesayin/akilli-teshis-ve-tedavi-sistemi/refs/heads/enes/User%20Interface.png
 
 
 
