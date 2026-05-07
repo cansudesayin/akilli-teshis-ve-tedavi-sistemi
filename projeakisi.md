@@ -914,6 +914,8 @@ Ortam Ayrımı ve Güncelleme: Test ortamları için esnek geliştirme özellikl
 **Tedavi Öneri Algoritması Arayüz Tasarımı**
 
 **Sorumlu:** ENES ZUKRA
+
+
 **Tarih** : 07.05.2026
 
 
@@ -923,9 +925,6 @@ Ortam Ayrımı ve Güncelleme: Test ortamları için esnek geliştirme özellikl
 * **UX/UI Optimizasyonu:** Kullanıcı dostu, sade ve profesyonel standartlara uygun bir tasarım dili kullanılarak sistemin kullanılabilirlik testleri için hazır hale getirilmesi sağlandı.
 
 <img width="1701" height="978" alt="User Interface" src="https://github.com/user-attachments/assets/9b77fdba-f3a6-4637-9db6-7afd7de61130" />
-
-
-
 
 
 
