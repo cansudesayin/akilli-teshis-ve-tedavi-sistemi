@@ -923,7 +923,7 @@ Ortam Ayrımı ve Güncelleme: Test ortamları için esnek geliştirme özellikl
 * **UX/UI Optimizasyonu:** Kullanıcı dostu, sade ve profesyonel standartlara uygun bir tasarım dili kullanılarak sistemin kullanılabilirlik testleri için hazır hale getirilmesi sağlandı.
 
 
-![Siber Şifacılar Arayüz Tasarımı](https://raw.githubusercontent.com/enes-zukra/Siber_Sifacilar/enes/User%20Interface.png)
+![Siber Şifacılar Arayüz Tasarımı](https://raw.githubusercontent.com/enes-zukra/Siber-Sifacilar/enes/User%20Interface.png)
 
 
 
