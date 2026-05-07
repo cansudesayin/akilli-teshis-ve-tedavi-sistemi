@@ -916,7 +916,7 @@ Ortam Ayrımı ve Güncelleme: Test ortamları için esnek geliştirme özellikl
 **Sorumlu:** ENES ZUKRA
 **Tarih** : 07.05.2026
 
-**Yapılan Çalışmalar (Ne Yapıldı?):**
+
 * **Siber Şifacılar Dashboard Tasarımı:** Hekimlerin hasta verilerini (Ad-Soyad, Yaş, Semptom Belirtileri) dijital ortama aktarabileceği profesyonel bir kullanıcı arayüzü tasarlandı.
 * **Algoritma Görselleştirme:** Yapay zeka analiz sonuçlarının ve hastalık olasılık oranlarının anlık olarak görüntülenebildiği dinamik grafik ve bar panelleri oluşturuldu.
 * **Kişiselleştirilmiş Tedavi Paneli:** Algoritma çıktısına göre hastaya özel tedavi protokollerini listeleyen ve doktor onayına sunan "Karar Destek Sistemi" arayüz prototipi geliştirildi.
