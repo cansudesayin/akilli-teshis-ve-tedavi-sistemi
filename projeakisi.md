@@ -943,6 +943,39 @@ Ortam Ayrımı ve Güncelleme: Test ortamları için esnek geliştirme özellikl
 
 --------------------------
 
+### Web Arayüzü Mimari Tasarımı
+
+**Sorumlu:** Cansude Sayın  
+**Tarih:** 12 Mayıs 2026  
+**Not:** Bu görev 3. hafta kapsamında tanımlanmış olup tamamlanarak akışa eklenmiştir.
+
+Akıllı Teşhis ve Tedavi Sistemi için web tabanlı kullanıcı arayüzünün mimarisi tasarlanmış, bileşenler ve etkileşimleri tanımlanmış, framework değerlendirmesi yapılmış ve veri akış şemaları oluşturulmuştur.
+
+#### Framework Değerlendirmesi
+
+- **React:** Bileşen tabanlı yapı, geniş ekosistem, yüksek performans. Öğrenme eğrisi yüksek.
+- **Angular:** Tam kapsamlı framework, kurumsal projeler için güçlü yapı. Küçük projeler için fazla karmaşık.
+- **Vue.js:** Öğrenmesi kolay, mevcut HTML projelerine kolayca entegre edilir. Ekosistemi daha küçük.
+- **Mevcut Yaklaşım (Vanilla HTML/CSS/JS):** Kurulum gerektirmez, Flask ile doğrudan entegrasyon sağlar. İlerleyen versiyonda React kullanımı önerilmektedir.
+
+#### Belirlenen Bileşenler ve Sorumluluklar
+
+- Login — Kullanıcı kimlik doğrulama, uzmanlık seçimi
+- Dashboard — Sistem geneli özet metrikler, haftalık grafik, aktivite akışı
+- Görüntü Analizi — DICOM viewer, dosya yükleme, AI analiz tetikleyici
+- Teşhis Sonuçları — AI bulgularını görüntüleme, doktor onayı
+- Tedavi Planı — Faz takibi, ilaç listesi, randevu takvimi
+- Hasta Profili — Demografik bilgiler, lab sonuçları, görüntüleme geçmişi
+
+#### Bileşenler Arası Etkileşimler
+
+- Login → Dashboard → Görüntü Analizi → Teşhis Sonuçları → Tedavi Planı → Hasta Profili akışı tanımlanmıştır.
+- Her bileşenin ilgili API endpoint'leriyle bağlantısı kurulmuştur.
+- Detaylı bileşen diyagramı ve veri akış şemaları `ui_mimari_ve_bilesen_tasarimi.md` dosyasında yer almaktadır.
+
+---
+
+
 **Tedavi Öneri Algoritması Arayüz Tasarımı**
 
 **Sorumlu:** ENES ZUKRA
