@@ -294,7 +294,7 @@ Diyabetik Retinopati için Fundus fotoğrafları, Yaşa Bağlı Makula Dejeneras
 
 ####  Veri Erişimi ve Entegrasyon Planı
 
-- ⬇️ **Veri Çekme:** Veri setleri çok büyük (GB'larca) olduğu için manuel indirme yapılmayacaktır. Python ortamında Kaggle API kullanılarak veriler doğrudan geliştirme sunucusuna otomatik çekilecektir.
+-  **Veri Çekme:** Veri setleri çok büyük (GB'larca) olduğu için manuel indirme yapılmayacaktır. Python ortamında Kaggle API kullanılarak veriler doğrudan geliştirme sunucusuna otomatik çekilecektir.
 -  **Veri Ön İşleme:** Görüntü boyutları (örn. 224×224 piksel) standardize edilecek ve gürültü azaltma (noise reduction) filtreleri uygulanacaktır.
 -  **Veritabanı (SQL) Entegrasyonu:** Hastaların EHR verileri (yaş, cinsiyet, diyabet geçmişi) ilişkisel SQL veritabanına aktarılacak; görüntülerin dosya yolları bu demografik tablolarla eşleştirilecektir.
 
@@ -455,7 +455,7 @@ Hastaya ait temel bilgiler tutulur.
 | medical_history | TEXT     | Geçmiş hastalıklar |
 | diabetes        | BOOLEAN  | Diyabet durumu     |
 
-📌 Not: KVKK gereği isim/TC gibi bilgiler tutulmayabilir (anonimleştirme).
+ Not: KVKK gereği isim/TC gibi bilgiler tutulmayabilir (anonimleştirme).
 
 ---
 
@@ -607,6 +607,38 @@ Kabul Edilebilir Eşik: Sistem için minimum doğruluk eşiği %85, kritik hasta
 
 Gerçek Zamanlı Takip: API üzerinden yapılan tahminlerin başarı oranları MySQL veritabanında loglanacak şekilde planlanmış ve tüm metrikler model_performans_metrikleri.md dosyasında dokümante edilmiştir.
 
+---
+
+### API Dokümantasyonu Standardı ve Araç Seçimi
+
+**Sorumlu:** Cansude Sayın  
+**Tarih:** 12 Mayıs 2026  
+**Not:** Bu görev 2. hafta kapsamında tanımlanmış olup tamamlanarak akışa eklenmiştir.
+
+Sistemde kullanılacak API'lerin dokümantasyonu için standart belirlenmiş, uygun araçlar değerlendirilmiş ve dokümantasyon sürecini sürdürülebilir kılacak bir strateji oluşturulmuştur.
+
+#### Dokümantasyon Standardı
+
+- Her endpoint için endpoint adı, HTTP metodu, parametreler, istek/cevap formatları ve hata kodları zorunlu olarak belgelenmiştir.
+- Standart yanıt formatı belirlenmiş; her yanıtta hata, mesaj ve zaman alanları bulunmaktadır.
+
+#### Araç Seçimi ve Değerlendirme
+
+- **Swagger (OpenAPI):** Flask ile `flask-swagger-ui` üzerinden entegre edilebilir. Otomatik interaktif arayüz üretir, endpoint'leri tarayıcıdan test etmeye olanak tanır. Kurulum ve YAML şema yazımı zaman alabilir.
+- **Postman:** Kullanımı kolay, ekip içi test için koleksiyon paylaşımı sağlar. Ücretsiz sürümde takım özellikleri kısıtlıdır.
+- **Seçim:** Resmi dokümantasyon için Swagger, geliştirme aşamasında hızlı test için Postman kullanılmasına karar verilmiştir.
+
+#### Sürüm Kontrolü ve Güncelleme Planı
+
+- API sürümleri URL üzerinden yönetilmektedir: `/api/v1/`, `/api/v2/`
+- Yeni endpoint eklendiğinde `api_teknik_dokumantasyon.md` aynı commit içinde güncellenir.
+- Kırıcı değişiklikler yeni sürüm numarasıyla yayınlanır.
+
+#### Otomatikleştirme Stratejisi
+
+- `app.py` içindeki endpoint'lere OpenAPI şema yorumları eklenerek Swagger dokümantasyonu otomatik üretilmektedir.
+- Tüm endpoint'ler Postman koleksiyonu olarak `mediAI_api.postman_collection.json` dosyasına aktarılmıştır.
+- Detaylı dokümantasyon `api_teknik_dokumantasyon.md` dosyasında yer almaktadır.
 
 -----------------------------------------
 
