@@ -1,7 +1,7 @@
 # MediAI — API Teknik Dokümantasyonu
 
 **Sorumlu:** Cansude Sayın
-**Tarih:** 10 Nisan 2026
+**Tarih:** 12 Nisan 2026
 **Proje:** Akıllı Teşhis ve Tedavi Sistemi — Siber Şifacılar
 
 ---
