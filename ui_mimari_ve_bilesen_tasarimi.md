@@ -1,7 +1,7 @@
 # MediAI — Web Arayüzü Mimarisi ve Bileşen Tasarımı
 
 **Sorumlu:** Cansude Sayın
-**Tarih:** 28 Nisan 2026
+**Tarih:** 12 Mayıs 2026
 **Proje:** Akıllı Teşhis ve Tedavi Sistemi — Siber Şifacılar
 
 ---
