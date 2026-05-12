@@ -986,6 +986,7 @@ Akıllı Teşhis ve Tedavi Sistemi için web tabanlı kullanıcı arayüzünün 
 * **Kişiselleştirilmiş Tedavi Paneli:** Algoritma çıktısına göre hastaya özel tedavi protokollerini listeleyen ve doktor onayına sunan "Karar Destek Sistemi" arayüz prototipi geliştirildi.
 * **UX/UI Optimizasyonu:** Kullanıcı dostu, sade ve profesyonel standartlara uygun bir tasarım dili kullanılarak sistemin kullanılabilirlik testleri için hazır hale getirilmesi sağlandı.
 
+<img width="2559" height="1302" alt="arayuz" src="https://github.com/user-attachments/assets/61e7805b-dc50-49af-97e7-75c88c04b274" />
 
 
 
