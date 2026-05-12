@@ -979,10 +979,7 @@ Akıllı Teşhis ve Tedavi Sistemi için web tabanlı kullanıcı arayüzünün 
 **Tedavi Öneri Algoritması Arayüz Tasarımı**
 
 **Sorumlu:** ENES ZUKRA
-
-
-**Tarih** : 07.05.2026
-
+**Tarih** : 7.05.2026
 
 * **Siber Şifacılar Dashboard Tasarımı:** Hekimlerin hasta verilerini (Ad-Soyad, Yaş, Semptom Belirtileri) dijital ortama aktarabileceği profesyonel bir kullanıcı arayüzü tasarlandı.
 * **Algoritma Görselleştirme:** Yapay zeka analiz sonuçlarının ve hastalık olasılık oranlarının anlık olarak görüntülenebildiği dinamik grafik ve bar panelleri oluşturuldu.
