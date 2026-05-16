@@ -5,7 +5,7 @@ Bu dosya, **Siber Şifacılar** takımının haftalık proje ilerlemesini ve gö
 
 ---
 
-## 1. Hafta (5–12 Mart)----------------------------
+## 1. Hafta (5–12 Mart)------------------------
 
 ###  Proje Tanımı ve Hedef Belirleme
 
@@ -377,7 +377,8 @@ Risk analizindeki bulguları bertaraf etmek için uygulanacak teknik ve operasyo
 | **Faz 4** | Tüm sistemin Penetration Test (PenTest) sürecinden geçirilmesi ve KVKK raporunun hazırlanması. | **Tüm Ekip** | 6. Hafta |
 
 
--------------------------------
+
+-----------------------------
 
 
 
