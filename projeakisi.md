@@ -1272,3 +1272,16 @@ Projenin 6. haftasında, Enes Zukra tarafından geliştirilen ve optimize edilen
 - Ortalama Precision %96.15 ile sağlıklı bireylere yanlış teşhis koyma oranı oldukça düşük tutulmuştur.
 - Projenin klinik hedefi olan %95 doğruluğa ulaşmak için veri artırma (data augmentation) ve ek eğitim önerilmektedir.
 - Detaylı analiz ve çalıştırma kılavuzu `model_performans_raporu.md` dosyasında yer almaktadır.
+
+## Bu Hafta — API Tasarımı ve Swagger Dokümantasyonu
+
+**Sorumlu:** edanur yasak
+**Tarih:** 16 Mayıs 2026
+
+- ML modeli ile entegre RESTful API tasarlandı (5 endpoint)
+- `static/swagger.json` OpenAPI 3.0 formatında oluşturuldu
+- Flask'a Swagger UI entegre edildi
+- `http://localhost:5000/api/docs` adresinde dokümantasyon yayına alındı
+- Pull Request açıldı: `ali-api-tasarimi` → `main`
+
+![Swagger UI](images/swagger_ekran.png) 
