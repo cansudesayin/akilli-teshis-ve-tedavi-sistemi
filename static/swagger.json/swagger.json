@@ -1,0 +1,453 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "MediAI — Akıllı Teşhis ve Tedavi Sistemi API",
+    "description": "Siber Şifacılar ekibinin geliştirdiği tıbbi yapay zeka sisteminin RESTful API dokümantasyonu. Bu API; tıbbi görüntüleri (Dermoskopik, Fundus, OCT) alır, TensorFlow/Keras CNN modeline iletir ve teşhis sonuçlarını, risk skorlarını ile kişiselleştirilmiş tedavi önerilerini döndürür.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Ali İstanbullu — Siber Şifacılar"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "Geliştirme Sunucusu (Lokal)"
+    },
+    {
+      "url": "https://api.sibersifacilar.com/v1",
+      "description": "Üretim Sunucusu"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Hasta Yönetimi",
+      "description": "Hasta kayıt ve sorgulama işlemleri (EHR)"
+    },
+    {
+      "name": "Görüntü Analizi",
+      "description": "ML modeli ile tıbbi görüntü analizi"
+    },
+    {
+      "name": "Tedavi Planı",
+      "description": "Kişiselleştirilmiş tedavi önerileri"
+    }
+  ],
+  "paths": {
+    "/api/v1/hastalar": {
+      "post": {
+        "tags": [
+          "Hasta Yönetimi"
+        ],
+        "summary": "Yeni Hasta Kaydı",
+        "description": "Doktorun arayüzden gönderdiği hasta bilgilerini (EHR verileriyle birlikte) MySQL Patients tablosuna kaydeder. KVKK gereği isim/TC saklanmaz.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HastaKayitIstegi"
+              },
+              "example": {
+                "yas": 48,
+                "cinsiyet": "Erkek",
+                "gecmis": "Hipertansiyon, Tip 2 Diyabet",
+                "diyabet": true,
+                "kan_degerleri": {
+                  "hba1c": 7.2,
+                  "seker": 145
+                },
+                "genetik_yatkinlik": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Hasta başarıyla kaydedildi",
+            "content": {
+              "application/json": {
+                "example": {
+                  "hata": false,
+                  "mesaj": "Hasta başarıyla MySQL veritabanına kaydedildi.",
+                  "hasta_id": "2041",
+                  "zaman": "2026-05-16T10:15:00"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/GecersizIstek"
+          },
+          "500": {
+            "$ref": "#/components/responses/SunucuHatasi"
+          }
+        }
+      }
+    },
+    "/api/v1/hastalar/{hasta_id}": {
+      "get": {
+        "tags": [
+          "Hasta Yönetimi"
+        ],
+        "summary": "Hasta Bilgisi ve Geçmiş Analizler",
+        "description": "Belirtilen hasta_id'ye ait demografik bilgileri, geçmiş teşhisleri ve tedavi planlarını döndürür.",
+        "parameters": [
+          {
+            "name": "hasta_id",
+            "in": "path",
+            "required": true,
+            "description": "MySQL Patients tablosundaki hasta ID'si",
+            "schema": {
+              "type": "integer",
+              "example": 2041
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hasta bilgileri getirildi",
+            "content": {
+              "application/json": {
+                "example": {
+                  "hata": false,
+                  "hasta_id": 2041,
+                  "yas": 48,
+                  "cinsiyet": "Erkek",
+                  "diyabet": true,
+                  "gecmis_teshisler": [
+                    {
+                      "analiz_id": 5001,
+                      "teshis": "Diyabetik Retinopati",
+                      "tarih": "2026-03-15T08:30:00"
+                    }
+                  ],
+                  "zaman": "2026-05-16T10:20:00"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/BulunamadiHatasi"
+          }
+        }
+      }
+    },
+    "/api/v1/analiz/baslat": {
+      "post": {
+        "tags": [
+          "Görüntü Analizi"
+        ],
+        "summary": "Tıbbi Görüntü Yükleme ve Analiz Başlatma",
+        "description": "Doktorun yüklediği tıbbi görüntüyü (Dermoskopik / Fundus / OCT) ve hasta ID'sini alır. data_preprocessing.py üzerinden ön işleme tabi tutulur, ardından TensorFlow/Keras CNN modeline (model.predict) iletilir. Model asenkron çalıştığından 202 Accepted döner; sonuç için GET /api/v1/analiz/sonuc/{analiz_id} sorgulanmalıdır.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalizBaslatIstegi"
+              },
+              "example": {
+                "hasta_id": "2041",
+                "goruntu_turu": "Fundus",
+                "goruntu_base64": "iVBORw0KGgoAAAANSUhEUgAA..."
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "hasta_id": {
+                    "type": "string"
+                  },
+                  "goruntu_turu": {
+                    "type": "string",
+                    "enum": [
+                      "Dermoskopik",
+                      "Fundus",
+                      "OCT"
+                    ]
+                  },
+                  "goruntu_dosyasi": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Analiz kuyruğa alındı, işleniyor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "hata": false,
+                  "mesaj": "2041 ID'li hasta için analiz başlatıldı.",
+                  "analiz_durumu": "İşleniyor",
+                  "analiz_id": 5005,
+                  "tahmini_sure_saniye": 8,
+                  "zaman": "2026-05-16T10:25:00"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/GecersizIstek"
+          },
+          "415": {
+            "description": "Desteklenmeyen dosya formatı",
+            "content": {
+              "application/json": {
+                "example": {
+                  "hata": true,
+                  "mesaj": "Desteklenmeyen görüntü türü. Kabul edilenler: Dermoskopik, Fundus, OCT",
+                  "zaman": "2026-05-16T10:25:01"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/analiz/sonuc/{analiz_id}": {
+      "get": {
+        "tags": [
+          "Görüntü Analizi"
+        ],
+        "summary": "Teşhis Sonucunu Alma",
+        "description": "CNN modelinin tamamladığı görüntü analizinin teşhis sonucunu, risk skorunu, hastalık evresini ve Grad-CAM ısı haritası URL'sini döndürür. durum alanı: processing (devam ediyor), completed (hazır), failed (hata).",
+        "parameters": [
+          {
+            "name": "analiz_id",
+            "in": "path",
+            "required": true,
+            "description": "Analiz başlatma yanıtından dönen ID",
+            "schema": {
+              "type": "integer",
+              "example": 5005
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Analiz sonucu başarıyla getirildi",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "tamamlandi": {
+                    "summary": "Analiz tamamlandı",
+                    "value": {
+                      "hata": false,
+                      "analiz_id": 5005,
+                      "durum": "completed",
+                      "teshis": "Diyabetik Retinopati",
+                      "evre": "Orta",
+                      "risk_skoru": 85.4,
+                      "guvenskor": 91.2,
+                      "isi_haritasi_url": "/medya/analiz/heatmap_5005.png",
+                      "ai_aciklamasi": "Retina alt bölgede 3 adet mikroanevrizma tespit edildi.",
+                      "zaman": "2026-05-16T10:25:09"
+                    }
+                  },
+                  "isleniyor": {
+                    "summary": "Hâlâ işleniyor",
+                    "value": {
+                      "hata": false,
+                      "analiz_id": 5005,
+                      "durum": "processing",
+                      "mesaj": "Model analiz devam ediyor, lütfen bekleyin.",
+                      "zaman": "2026-05-16T10:25:03"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/BulunamadiHatasi"
+          }
+        }
+      }
+    },
+    "/api/v1/tedavi/plan/{analiz_id}": {
+      "get": {
+        "tags": [
+          "Tedavi Planı"
+        ],
+        "summary": "Kişiselleştirilmiş Tedavi Önerisi",
+        "description": "Tamamlanan analize ve hastanın EHR verilerine göre dinamik tedavi planı döndürür. Göz hastalıklarında Treat-and-Extend protokolü ile iğne zamanlaması optimize edilir.",
+        "parameters": [
+          {
+            "name": "analiz_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 5005
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tedavi planı başarıyla getirildi",
+            "content": {
+              "application/json": {
+                "example": {
+                  "hata": false,
+                  "analiz_id": 5005,
+                  "onerilen_tedavi": "Anti-VEGF Enjeksiyonu",
+                  "zamanlama_protokolu": "Treat-and-Extend",
+                  "sonraki_randevu_hedefi": "8 Hafta Sonra",
+                  "alternatif_ilaclar": [
+                    "Ranibizumab (Lucentis)",
+                    "Bevacizumab (Avastin)"
+                  ],
+                  "dozaj_notu": "Hastanın diyabet geçmişi göz önünde bulundurulmuştur.",
+                  "zaman": "2026-05-16T10:30:00"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/BulunamadiHatasi"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HastaKayitIstegi": {
+        "type": "object",
+        "required": [
+          "yas",
+          "cinsiyet"
+        ],
+        "properties": {
+          "yas": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 130
+          },
+          "cinsiyet": {
+            "type": "string",
+            "enum": [
+              "Erkek",
+              "Kadın",
+              "Diğer"
+            ]
+          },
+          "gecmis": {
+            "type": "string"
+          },
+          "diyabet": {
+            "type": "boolean",
+            "default": false
+          },
+          "kan_degerleri": {
+            "type": "object",
+            "properties": {
+              "hba1c": {
+                "type": "number"
+              },
+              "seker": {
+                "type": "number"
+              }
+            }
+          },
+          "genetik_yatkinlik": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "AnalizBaslatIstegi": {
+        "type": "object",
+        "required": [
+          "hasta_id",
+          "goruntu_turu"
+        ],
+        "properties": {
+          "hasta_id": {
+            "type": "string"
+          },
+          "goruntu_turu": {
+            "type": "string",
+            "enum": [
+              "Dermoskopik",
+              "Fundus",
+              "OCT"
+            ]
+          },
+          "goruntu_base64": {
+            "type": "string"
+          }
+        }
+      },
+      "HataYaniti": {
+        "type": "object",
+        "properties": {
+          "hata": {
+            "type": "boolean",
+            "example": true
+          },
+          "mesaj": {
+            "type": "string"
+          },
+          "zaman": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "responses": {
+      "GecersizIstek": {
+        "description": "Eksik veya hatalı istek verisi (400)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/HataYaniti"
+            },
+            "example": {
+              "hata": true,
+              "mesaj": "Eksik zorunlu alanlar: yas, cinsiyet",
+              "zaman": "2026-05-16T10:00:00"
+            }
+          }
+        }
+      },
+      "BulunamadiHatasi": {
+        "description": "İstenen kaynak bulunamadı (404)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/HataYaniti"
+            },
+            "example": {
+              "hata": true,
+              "mesaj": "Belirtilen ID'ye ait kayıt bulunamadı.",
+              "zaman": "2026-05-16T10:00:00"
+            }
+          }
+        }
+      },
+      "SunucuHatasi": {
+        "description": "Sunucu veya veritabanı hatası (500)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/HataYaniti"
+            },
+            "example": {
+              "hata": true,
+              "mesaj": "DB Hatası: Veritabanı bağlantısı kurulamadı.",
+              "zaman": "2026-05-16T10:00:00"
+            }
+          }
+        }
+      }
+    }
+  }
+}
