@@ -1,9 +1,14 @@
+from flask_swagger_ui import get_swaggerui_blueprint
 from flask import Flask, request, jsonify
 from flask_cors import CORS # Cansude'nin eklediği CORS desteği
 import mysql.connector
 from datetime import datetime
 
 app = Flask(__name__)
+SWAGGER_URL = '/api/docs'
+API_URL = '/static/swagger.json'
+swaggerui_blueprint = get_swaggerui_blueprint(SWAGGER_URL, API_URL)
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 CORS(app) # Arayüzlerin API'ye erişebilmesi için şart!
 
 # ==============================================================================
