@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MediAI — Dashboard</title>
+<meta name="description" content="MediAI Klinik Dashboard — Günlük analiz ve hasta takibi">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode:"class",
+    theme:{extend:{
+      colors:{
+        "primary":"#0058bc","primary-container":"#0070eb","on-primary":"#ffffff","on-primary-container":"#fefcff",
+        "on-primary-fixed-variant":"#004493","surface":"#f8f9ff","surface-container":"#e5eeff",
+        "surface-container-low":"#eff4ff","on-surface":"#0b1c30","on-surface-variant":"#414755",
+        "outline":"#717786","outline-variant":"#c1c6d7","background":"#f8f9ff","on-background":"#0b1c30",
+        "tertiary":"#9e3d00","tertiary-container":"#c64f00","error":"#ba1a1a","error-container":"#ffdad6",
+        "on-error":"#ffffff","on-error-container":"#93000a","secondary":"#535f74","secondary-container":"#d4e0f9",
+        "inverse-surface":"#213145",
+      },
+      fontFamily:{"body-md":["Inter"],"button":["Inter"],"h2":["Inter"],"body-sm":["Inter"],"label-caps":["Inter"],"h3":["Inter"],"h1":["Inter"]},
+      fontSize:{
+        "body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"button":["15px",{"lineHeight":"20px","fontWeight":"600"}],
+        "h2":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],
+        "body-sm":["14px",{"lineHeight":"20px","fontWeight":"400"}],
+        "label-caps":["12px",{"lineHeight":"16px","letterSpacing":"0.05em","fontWeight":"600"}],
+        "h3":["20px",{"lineHeight":"28px","fontWeight":"600"}],"h1":["30px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"700"}]
+      }
+    }}
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { font-family: 'Inter', sans-serif; min-height: 100dvh; }
+  .nav-link { transition: all 0.15s ease; }
+  .nav-link:hover { background: rgba(255,255,255,0.08); }
+  .nav-link.active { background: #007AFF; color: white !important; border-radius: 8px; }
+  .card-shadow { box-shadow: 0px 4px 20px rgba(10,22,40,0.05); }
+</style>
+</head>
+<body class="bg-surface font-body-md text-on-surface">
+
+<!-- Sol Navigasyon -->
+<aside class="fixed left-0 h-full w-64 border-r border-slate-800 bg-[#0A1628] font-['Inter'] antialiased flex flex-col py-6 z-50">
+  <div class="px-6 mb-8 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+      <span class="material-symbols-outlined text-white" style="font-variation-settings:'FILL' 1;">biotech</span>
+    </div>
+    <span class="text-xl font-bold text-white">MediAI</span>
+  </div>
+  <nav class="flex-1 px-2 space-y-1">
+    <a href="/dashboard" class="nav-link active text-white flex items-center px-4 py-3 gap-3 rounded-lg">
+      <span class="material-symbols-outlined">dashboard</span>
+      <span class="font-medium">Dashboard</span>
+    </a>
+    <a href="/analiz" class="nav-link text-slate-400 flex items-center px-4 py-3 gap-3 rounded-lg hover:text-white">
+      <span class="material-symbols-outlined">biotech</span>
+      <span class="font-medium">Görüntü Analizi</span>
+    </a>
+    <a href="/teshis" class="nav-link text-slate-400 flex items-center px-4 py-3 gap-3 rounded-lg hover:text-white">
+      <span class="material-symbols-outlined">clinical_notes</span>
+      <span class="font-medium">Teşhis Sonuçları</span>
+    </a>
+    <a href="/tedavi" class="nav-link text-slate-400 flex items-center px-4 py-3 gap-3 rounded-lg hover:text-white">
+      <span class="material-symbols-outlined">medical_services</span>
+      <span class="font-medium">Tedavi Planı</span>
+    </a>
+    <a href="#" class="nav-link text-slate-400 flex items-center px-4 py-3 gap-3 rounded-lg hover:text-white">
+      <span class="material-symbols-outlined">groups</span>
+      <span class="font-medium">Hastalar</span>
+    </a>
+    <a href="#" class="nav-link text-slate-400 flex items-center px-4 py-3 gap-3 rounded-lg hover:text-white">
+      <span class="material-symbols-outlined">settings</span>
+      <span class="font-medium">Ayarlar</span>
+    </a>
+  </nav>
+  <div class="px-6 mt-auto pt-6 border-t border-slate-800">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
+        {{ doktor.ad[0] if doktor else 'D' }}
+      </div>
+      <div>
+        <p class="text-sm font-semibold text-white">{{ doktor.ad if doktor else 'Dr. MediAI' }}</p>
+        <p class="text-xs text-slate-400 capitalize">{{ doktor.uzmanlik if doktor else 'Klinisyen' }}</p>
+      </div>
+    </div>
+    <a href="/cikis" class="flex items-center gap-2 text-slate-400 hover:text-white text-sm transition-colors">
+      <span class="material-symbols-outlined text-base">logout</span>
+      <span>Çıkış Yap</span>
+    </a>
+  </div>
+</aside>
+
+<!-- Üst Bar -->
+<header class="fixed top-0 right-0 left-64 h-16 bg-white border-b border-slate-200 card-shadow z-40 flex items-center justify-between px-8">
+  <div class="flex items-center gap-4">
+    <h1 class="text-base font-semibold text-slate-900">Hoş geldiniz, {{ doktor.ad if doktor else 'Doktor' }}</h1>
+  </div>
+  <div class="flex items-center gap-4">
+    <div class="flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full border border-outline-variant">
+      <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+      <span class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Sistem Aktif</span>
+    </div>
+    <button class="hover:bg-slate-50 rounded-full p-2">
+      <span class="material-symbols-outlined text-slate-500">notifications</span>
+    </button>
+  </div>
+</header>
+
+<!-- Ana İçerik -->
+<main class="ml-64 mt-16 p-10 overflow-y-auto min-h-screen bg-surface">
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <!-- Sistem Durumu -->
+    <section class="flex flex-wrap gap-3">
+      <div class="flex-1 min-w-[160px] bg-white p-3 rounded-lg flex items-center justify-between card-shadow border border-slate-100">
+        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">AI Motoru</span>
+        <span class="material-symbols-outlined text-green-500 text-lg" style="font-variation-settings:'FILL' 1;">check_circle</span>
+      </div>
+      <div class="flex-1 min-w-[160px] bg-white p-3 rounded-lg flex items-center justify-between card-shadow border border-slate-100">
+        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">DICOM Sunucu</span>
+        <span class="material-symbols-outlined text-green-500 text-lg" style="font-variation-settings:'FILL' 1;">check_circle</span>
+      </div>
+      <div class="flex-1 min-w-[160px] bg-white p-3 rounded-lg flex items-center justify-between card-shadow border border-slate-100">
+        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Görüntü İşleme</span>
+        <span class="material-symbols-outlined text-green-500 text-lg" style="font-variation-settings:'FILL' 1;">check_circle</span>
+      </div>
+      <div class="flex-1 min-w-[160px] bg-white p-3 rounded-lg flex items-center justify-between card-shadow border border-slate-100">
+        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Yedekleme</span>
+        <span class="material-symbols-outlined text-green-500 text-lg" style="font-variation-settings:'FILL' 1;">check_circle</span>
+      </div>
+    </section>
+
+    <div class="grid grid-cols-12 gap-6">
+      <!-- Metrik Kartlar -->
+      <div class="col-span-12 lg:col-span-4 grid grid-cols-2 gap-4">
+        <div class="bg-white p-5 rounded-xl card-shadow border border-slate-50">
+          <div class="flex justify-between items-start mb-3">
+            <div class="p-2 bg-blue-50 rounded-lg">
+              <span class="material-symbols-outlined text-blue-600">analytics</span>
+            </div>
+            <span class="text-green-500 text-xs font-bold">+12%</span>
+          </div>
+          <p class="text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">Bugünkü Analizler</p>
+          <h3 class="text-2xl font-bold text-on-surface">24</h3>
+        </div>
+        <div class="bg-white p-5 rounded-xl card-shadow border border-slate-50">
+          <div class="flex justify-between items-start mb-3">
+            <div class="p-2 bg-orange-50 rounded-lg">
+              <span class="material-symbols-outlined text-orange-600">pending_actions</span>
+            </div>
+            <span class="text-orange-500 text-xs font-bold">-2%</span>
+          </div>
+          <p class="text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">Bekleyen Teşhis</p>
+          <h3 class="text-2xl font-bold text-on-surface">7</h3>
+        </div>
+        <div class="bg-white p-5 rounded-xl card-shadow border border-slate-50">
+          <div class="flex justify-between items-start mb-3">
+            <div class="p-2 bg-blue-50 rounded-lg">
+              <span class="material-symbols-outlined text-primary">precision_manufacturing</span>
+            </div>
+            <span class="text-green-500 text-xs font-bold">+0.4%</span>
+          </div>
+          <p class="text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">AI Doğruluğu</p>
+          <h3 class="text-2xl font-bold text-on-surface">94.2%</h3>
+        </div>
+        <div class="bg-white p-5 rounded-xl card-shadow border border-slate-50">
+          <div class="flex justify-between items-start mb-3">
+            <div class="p-2 bg-green-50 rounded-lg">
+              <span class="material-symbols-outlined text-green-600">patient_list</span>
+            </div>
+            <span class="text-green-500 text-xs font-bold">+8</span>
+          </div>
+          <p class="text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">Aktif Hastalar</p>
+          <h3 class="text-2xl font-bold text-on-surface">142</h3>
+        </div>
+      </div>
+
+      <!-- Haftalık Grafik -->
+      <div class="col-span-12 lg:col-span-8 bg-white p-6 rounded-xl card-shadow border border-slate-50">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-lg font-semibold text-on-surface">Haftalık Analiz Dağılımı</h3>
+          <div class="flex gap-4">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-primary"></span>
+              <span class="text-sm text-slate-500">Dermatoloji</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-secondary-container"></span>
+              <span class="text-sm text-slate-500">Oftalmoloji</span>
+            </div>
+          </div>
+        </div>
+        <div class="relative h-56 w-full flex items-end justify-between px-4 pb-6 border-l border-b border-slate-100">
+          {% set bars = [
+            {'day': 'Pzt', 'derm': 60, 'oftal': 40},
+            {'day': 'Sal', 'derm': 75, 'oftal': 30},
+            {'day': 'Çar', 'derm': 45, 'oftal': 65},
+            {'day': 'Per', 'derm': 80, 'oftal': 50},
+            {'day': 'Cum', 'derm': 65, 'oftal': 55},
+            {'day': 'Cmt', 'derm': 30, 'oftal': 20},
+            {'day': 'Paz', 'derm': 20, 'oftal': 15},
+          ] %}
+          {% for bar in bars %}
+          <div class="flex-1 flex flex-col items-center gap-1 group">
+            <div class="w-full flex justify-center gap-1 h-full items-end">
+              <div class="w-4 bg-primary rounded-t-sm hover:bg-on-primary-fixed-variant transition-colors" style="height:{{ bar.derm }}%"></div>
+              <div class="w-4 bg-secondary-container rounded-t-sm hover:bg-secondary transition-colors" style="height:{{ bar.oftal }}%"></div>
+            </div>
+            <span class="text-xs text-slate-400 font-bold uppercase mt-2">{{ bar.day }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Bekleyen Analizler Tablosu -->
+      <div class="col-span-12 lg:col-span-7 bg-white rounded-xl card-shadow border border-slate-50 overflow-hidden">
+        <div class="p-5 border-b border-slate-100 flex justify-between items-center">
+          <h3 class="text-lg font-semibold text-on-surface">Bekleyen Analizler</h3>
+          <a href="/analiz" class="text-primary text-xs font-bold hover:underline uppercase tracking-wider">Tümünü Gör</a>
+        </div>
+        <table class="w-full text-left">
+          <thead class="bg-surface-container-low">
+            <tr>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Hasta ID</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Tür</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Öncelik</th>
+              <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">İşlem</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            {% for hasta in hastalar %}
+            <tr class="hover:bg-blue-50 transition-colors cursor-pointer" onclick="window.location='/analiz'">
+              <td class="px-5 py-4 font-semibold text-slate-700">{{ hasta.hasta_id }}</td>
+              <td class="px-5 py-4 text-slate-600">{{ hasta.tip }}</td>
+              <td class="px-5 py-4">
+                {% if hasta.oncelik == 'Yüksek' %}
+                <span class="px-2 py-1 bg-error-container text-error rounded-full text-xs font-bold">{{ hasta.oncelik }}</span>
+                {% else %}
+                <span class="px-2 py-1 bg-secondary-container text-primary rounded-full text-xs font-bold">{{ hasta.oncelik }}</span>
+                {% endif %}
+              </td>
+              <td class="px-5 py-4">
+                <a href="/analiz" class="material-symbols-outlined text-slate-400 hover:text-primary transition-colors">visibility</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Teşhis Dağılımı -->
+      <div class="col-span-12 lg:col-span-5 bg-white p-6 rounded-xl card-shadow border border-slate-50">
+        <h3 class="text-lg font-semibold text-on-surface mb-6">Teşhis Dağılımı</h3>
+        <div class="flex items-center gap-8">
+          <div class="relative w-40 h-40 flex-shrink-0">
+            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+              <circle cx="18" cy="18" fill="transparent" r="16" stroke="#E2E8F0" stroke-width="4"></circle>
+              <circle cx="18" cy="18" fill="transparent" r="16" stroke="#007AFF" stroke-dasharray="35 100" stroke-dashoffset="0" stroke-width="4"></circle>
+              <circle cx="18" cy="18" fill="transparent" r="16" stroke="#7C2E00" stroke-dasharray="25 100" stroke-dashoffset="-35" stroke-width="4"></circle>
+              <circle cx="18" cy="18" fill="transparent" r="16" stroke="#0058bc" stroke-dasharray="20 100" stroke-dashoffset="-60" stroke-width="4"></circle>
+              <circle cx="18" cy="18" fill="transparent" r="16" stroke="#535f74" stroke-dasharray="20 100" stroke-dashoffset="-80" stroke-width="4"></circle>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span class="text-xl font-bold">100%</span>
+              <span class="text-xs text-slate-400 font-bold uppercase">Toplam</span>
+            </div>
+          </div>
+          <div class="flex-1 space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-[#007AFF]"></span>
+                <span class="text-sm text-slate-600">Melanom</span>
+              </div>
+              <span class="text-sm font-bold">35%</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-[#7C2E00]"></span>
+                <span class="text-sm text-slate-600">Retinopati</span>
+              </div>
+              <span class="text-sm font-bold">25%</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-[#0058bc]"></span>
+                <span class="text-sm text-slate-600">Psoriasis</span>
+              </div>
+              <span class="text-sm font-bold">20%</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-[#535f74]"></span>
+                <span class="text-sm text-slate-600">Normal</span>
+              </div>
+              <span class="text-sm font-bold">20%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Insight -->
+    <section class="bg-white p-6 rounded-xl card-shadow border-l-4 border-primary">
+      <div class="flex items-start gap-5">
+        <div class="p-3 bg-blue-50 rounded-full flex-shrink-0">
+          <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">auto_awesome</span>
+        </div>
+        <div>
+          <h4 class="font-bold text-on-surface mb-1">AI Performans Özeti</h4>
+          <p class="text-base text-slate-600 max-w-2xl">Son 24 saatte yapılan Dermatoloji taramalarında AI motoru, acil klinik inceleme gerektiren 3 yüksek riskli vaka tespit etti. İşlem gecikmesi şu anda optimum seviyede (42ms/dilim).</p>
+          <a href="/teshis" class="inline-block mt-4 px-5 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-on-primary-fixed-variant transition-colors text-sm">Vakaları İncele</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+</body>
+</html>

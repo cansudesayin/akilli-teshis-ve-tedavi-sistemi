@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MediAI — Tedavi Planı</title>
+<meta name="description" content="MediAI Kişiselleştirilmiş Tedavi Planı — AI Destekli Klinik Protokol">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode:"class",
+    theme:{extend:{
+      colors:{
+        "primary":"#0058bc","primary-container":"#0070eb","on-primary":"#ffffff","on-primary-container":"#fefcff",
+        "on-primary-fixed-variant":"#004493","surface":"#f8f9ff","surface-container":"#e5eeff",
+        "surface-container-low":"#eff4ff","on-surface":"#0b1c30","on-surface-variant":"#414755",
+        "outline":"#717786","outline-variant":"#c1c6d7","tertiary":"#9e3d00","tertiary-container":"#c64f00",
+        "tertiary-fixed":"#ffdbcc","tertiary-fixed-dim":"#ffb595",
+        "error":"#ba1a1a","error-container":"#ffdad6","on-error-container":"#93000a",
+        "secondary":"#535f74","secondary-container":"#d4e0f9","secondary-fixed":"#d7e3fc",
+        "inverse-surface":"#213145",
+      },
+      fontFamily:{"body-md":["Inter"],"button":["Inter"],"h2":["Inter"],"body-sm":["Inter"],"label-caps":["Inter"],"h3":["Inter"],"h1":["Inter"]},
+      fontSize:{
+        "body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"button":["15px",{"lineHeight":"20px","fontWeight":"600"}],
+        "h2":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],
+        "body-sm":["14px",{"lineHeight":"20px","fontWeight":"400"}],
+        "label-caps":["12px",{"lineHeight":"16px","letterSpacing":"0.05em","fontWeight":"600"}],
+        "h3":["20px",{"lineHeight":"28px","fontWeight":"600"}],"h1":["30px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"700"}]
+      }
+    }}
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { font-family: 'Inter', sans-serif; min-height: 100dvh; background: #f8f9ff; }
+  .card-shadow { box-shadow: 0px 4px 20px rgba(10,22,40,0.05); }
+  .nav-link { transition: all 0.15s ease; }
+  .nav-link.active { background: #007AFF; color: white !important; border-radius: 8px; }
+  .nav-link:hover:not(.active) { background: rgba(255,255,255,0.08); }
+</style>
+</head>
+<body class="bg-background text-on-background">
+
+<!-- Sol Navigasyon -->
+<aside class="fixed left-0 h-full w-64 border-r border-slate-800 bg-[#0A1628] flex flex-col py-6 z-50">
+  <div class="px-6 mb-8 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+      <span class="material-symbols-outlined text-white" style="font-variation-settings:'FILL' 1;">biotech</span>
+    </div>
+    <span class="text-xl font-bold text-white">MediAI</span>
+  </div>
+  <nav class="flex-1 px-2 space-y-1">
+    <a href="/dashboard" class="nav-link text-slate-400 flex items-center px-4 py-3 gap-3 rounded-lg hover:text-white">
+      <span class="material-symbols-outlined">dashboard</span><span class="font-medium">Dashboard</span>
+    </a>
+    <a href="/analiz" class="nav-link text-slate-400 flex items-center px-4 py-3 gap-3 rounded-lg hover:text-white">
+      <span class="material-symbols-outlined">biotech</span><span class="font-medium">Görüntü Analizi</span>
+    </a>
+    <a href="/teshis" class="nav-link text-slate-400 flex items-center px-4 py-3 gap-3 rounded-lg hover:text-white">
+      <span class="material-symbols-outlined">clinical_notes</span><span class="font-medium">Teşhis Sonuçları</span>
+    </a>
+    <a href="/tedavi" class="nav-link active text-white flex items-center px-4 py-3 gap-3 rounded-lg">
+      <span class="material-symbols-outlined">medical_services</span><span class="font-medium">Tedavi Planı</span>
+    </a>
+    <a href="#" class="nav-link text-slate-400 flex items-center px-4 py-3 gap-3 rounded-lg hover:text-white">
+      <span class="material-symbols-outlined">groups</span><span class="font-medium">Hastalar</span>
+    </a>
+    <a href="#" class="nav-link text-slate-400 flex items-center px-4 py-3 gap-3 rounded-lg hover:text-white">
+      <span class="material-symbols-outlined">settings</span><span class="font-medium">Ayarlar</span>
+    </a>
+  </nav>
+  <div class="px-6 mt-auto pt-6 border-t border-slate-800">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
+        {{ doktor.ad[0] if doktor else 'D' }}
+      </div>
+      <div>
+        <p class="text-sm font-semibold text-white">{{ doktor.ad if doktor else 'Dr. MediAI' }}</p>
+        <p class="text-xs text-slate-400 capitalize">{{ doktor.uzmanlik if doktor else 'Klinisyen' }}</p>
+      </div>
+    </div>
+    <a href="/cikis" class="flex items-center gap-2 text-slate-400 hover:text-white text-sm transition-colors">
+      <span class="material-symbols-outlined text-base">logout</span>Çıkış Yap
+    </a>
+  </div>
+</aside>
+
+<!-- Üst Bar -->
+<header class="fixed top-0 right-0 left-64 h-16 bg-white border-b border-slate-200 card-shadow z-40 flex items-center justify-between px-8">
+  <div class="flex items-center gap-3">
+    <span class="material-symbols-outlined text-primary">medical_services</span>
+    <h1 class="text-base font-semibold text-on-surface">Tedavi Planı</h1>
+    {% if hasta_id %}
+    <span class="text-sm text-on-surface-variant ml-2">Hasta: <span class="font-semibold">{{ hasta_id }}</span></span>
+    {% endif %}
+  </div>
+  <div class="flex items-center gap-4">
+    <div class="flex gap-4 text-sm">
+      <a href="/dashboard" class="text-slate-500 hover:bg-slate-50 transition-colors px-2 py-1 rounded">Genel Bakış</a>
+      <span class="text-primary font-bold border-b-2 border-primary px-2 py-1">Plan Detayları</span>
+    </div>
+  </div>
+</header>
+
+<!-- Ana İçerik -->
+<main class="ml-64 pt-20 px-10 pb-10 grid grid-cols-12 gap-6">
+
+  <!-- Tedavi Özet Kartı -->
+  <section class="col-span-12 lg:col-span-8 bg-white p-6 rounded-xl card-shadow border border-outline-variant/30">
+    <div class="flex justify-between items-start mb-4">
+      <div>
+        <span class="text-xs font-semibold text-secondary block mb-1 uppercase tracking-wider">MEVCUT HASTA</span>
+        <h2 class="text-3xl font-bold text-on-surface">{{ tedavi.teshis if tedavi else 'Malignant Melanoma' }}</h2>
+        <p class="text-base text-secondary">{{ tedavi.evre if tedavi else 'Stage II Clinical Protocol' }}</p>
+      </div>
+      <div class="text-right">
+        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">{{ tedavi.protokol if tedavi else 'Aktif Protokol' }}</span>
+        <p class="text-sm text-on-surface-variant mt-2">Hasta ID: <span class="font-bold">{{ hasta_id or '#PX-8821' }}</span></p>
+      </div>
+    </div>
+    <div class="grid grid-cols-3 gap-4 mt-6 border-t border-slate-100 pt-6">
+      <div>
+        <p class="text-xs font-semibold text-secondary uppercase tracking-wider">BAŞLANGIÇ TARİHİ</p>
+        <p class="text-xl font-bold mt-1">{{ tedavi.baslangic if tedavi else '12 Ekim 2026' }}</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-secondary uppercase tracking-wider">TAHMİNİ SÜRE</p>
+        <p class="text-xl font-bold mt-1">{{ tedavi.sure if tedavi else '12 Hafta' }}</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-secondary uppercase tracking-wider">UYUM SKORU</p>
+        <p class="text-xl font-bold text-primary mt-1">{{ tedavi.uyum_skoru if tedavi else '%98.4' }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Klinik Öneri -->
+  <section class="col-span-12 lg:col-span-4 bg-primary-container p-6 rounded-xl flex flex-col justify-between border-l-4 border-primary card-shadow">
+    <div>
+      <div class="flex items-center gap-2 mb-3 text-on-primary-container">
+        <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">auto_awesome</span>
+        <span class="text-xs font-semibold uppercase tracking-widest">AI Klinik Önerisi</span>
+      </div>
+      <p class="text-base text-on-primary-container leading-relaxed">
+        AI, 3. hafta görüntülerine göre doz ayarlaması öneriyor. Metabolik markerlar öngörülenden daha yüksek emilim gösteriyor. Onaylanacak mı?
+      </p>
+    </div>
+    <div class="flex gap-3 mt-6">
+      <button onclick="aiOnaylaClick(this)" class="flex-1 bg-white text-primary font-semibold py-2 rounded-lg hover:bg-slate-50 transition-colors text-sm">Onayla</button>
+      <button class="flex-1 border border-white/40 text-white font-semibold py-2 rounded-lg hover:bg-white/10 transition-colors text-sm">Reddet</button>
+    </div>
+  </section>
+
+  <!-- Tedavi Fazları (Timeline) -->
+  <aside class="col-span-12 lg:col-span-4 bg-white p-6 rounded-xl card-shadow border border-outline-variant/30">
+    <h3 class="text-lg font-semibold mb-6">Tedavi Fazları</h3>
+    <div class="relative space-y-8">
+      <div class="absolute left-[15px] top-4 h-[calc(100%-2rem)] w-[2px] bg-slate-100"></div>
+      <!-- Faz 1 - Tamamlandı -->
+      <div class="relative flex items-start gap-4 opacity-60">
+        <div class="z-10 bg-slate-400 text-white rounded-full p-1 h-8 w-8 flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-sm">check</span>
+        </div>
+        <div>
+          <p class="text-xs font-semibold text-secondary uppercase">FAZ 1</p>
+          <p class="text-base font-semibold">İlk Değerlendirme</p>
+          <p class="text-xs text-secondary">Tamamlandı — 11 Ekim 2026</p>
+        </div>
+      </div>
+      <!-- Faz 2 - Aktif -->
+      <div class="relative flex items-start gap-4">
+        <div class="z-10 bg-primary ring-4 ring-primary-container/30 text-white rounded-full p-1 h-8 w-8 flex items-center justify-center flex-shrink-0">
+          <div class="h-2 w-2 bg-white rounded-full animate-pulse"></div>
+        </div>
+        <div class="p-3 bg-primary-container/10 border border-primary/20 rounded-xl w-full">
+          <p class="text-xs font-semibold text-primary uppercase">FAZ 2 — AKTİF</p>
+          <p class="text-base font-bold text-on-surface">İlaç Başlatma</p>
+          <p class="text-xs text-secondary">8 gün sonra bitiyor</p>
+        </div>
+        <div class="absolute left-[15px] top-8 h-20 w-[2px] bg-primary"></div>
+      </div>
+      <!-- Faz 3 -->
+      <div class="relative flex items-start gap-4">
+        <div class="z-10 border-2 border-dashed border-slate-300 bg-white rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0"></div>
+        <div>
+          <p class="text-xs font-semibold text-secondary uppercase">FAZ 3</p>
+          <p class="text-base font-semibold text-on-surface-variant">Ara Kontrol</p>
+          <p class="text-xs text-secondary">Planlandı — 14 Kasım 2026</p>
+        </div>
+      </div>
+      <!-- Faz 4 -->
+      <div class="relative flex items-start gap-4">
+        <div class="z-10 border-2 border-dashed border-slate-300 bg-white rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0"></div>
+        <div>
+          <p class="text-xs font-semibold text-secondary uppercase">FAZ 4</p>
+          <p class="text-base font-semibold text-on-surface-variant">Tedavi Sonrası Değerlendirme</p>
+          <p class="text-xs text-secondary">Tamamlanma bekleniyor</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- İlaç ve Randevu Detayları -->
+  <section class="col-span-12 lg:col-span-8 flex flex-col gap-6">
+    <div class="grid grid-cols-2 gap-6">
+      <!-- Aktif İlaç -->
+      <div class="bg-white p-6 rounded-xl card-shadow border border-outline-variant/30">
+        <div class="flex justify-between items-center mb-4">
+          <h4 class="text-xs font-semibold text-secondary uppercase tracking-widest">AKTİF İLAÇ</h4>
+          <span class="material-symbols-outlined text-primary">medication</span>
+        </div>
+        <p class="text-2xl font-bold text-on-surface">{{ tedavi.ilac if tedavi else 'Nivolumab' }}</p>
+        <div class="mt-5 space-y-3">
+          <div class="flex justify-between border-b border-slate-50 pb-2">
+            <span class="text-sm text-secondary">Dozaj</span>
+            <span class="text-sm font-semibold">{{ tedavi.dozaj if tedavi else '240mg' }}</span>
+          </div>
+          <div class="flex justify-between border-b border-slate-50 pb-2">
+            <span class="text-sm text-secondary">Uygulama</span>
+            <span class="text-sm font-semibold">{{ tedavi.uygulama if tedavi else 'IV Infusion' }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-sm text-secondary">Sıklık</span>
+            <span class="text-sm font-semibold">{{ tedavi.sikluk if tedavi else 'Her 2 haftada bir' }}</span>
+          </div>
+        </div>
+        <div class="mt-5 bg-error-container/40 p-3 rounded-lg flex items-center gap-2">
+          <span class="material-symbols-outlined text-error text-base">warning</span>
+          <span class="text-xs font-semibold text-on-error-container">Potansiyel deri tahrişi</span>
+        </div>
+      </div>
+
+      <!-- Sonraki Randevu -->
+      <div class="bg-white p-6 rounded-xl card-shadow border border-outline-variant/30 flex flex-col justify-between">
+        <div>
+          <div class="flex justify-between items-center mb-4">
+            <h4 class="text-xs font-semibold text-secondary uppercase tracking-widest">SONRAKİ RANDEVU</h4>
+            <span class="material-symbols-outlined text-tertiary-container">event</span>
+          </div>
+          <p class="text-2xl font-bold text-on-surface">{{ tedavi.sonraki_randevu if tedavi else '26 Ekim 2026' }}</p>
+          <p class="text-sm text-secondary mt-1">09:15 — Medical Center East</p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-50">
+          <button class="w-full bg-slate-900 text-white font-semibold py-2 rounded-lg hover:bg-black transition-colors flex items-center justify-center gap-2 text-sm">
+            <span class="material-symbols-outlined text-base">event_available</span>
+            Randevuyu Yönet
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Haftalık Takvim -->
+    <div class="bg-white p-6 rounded-xl card-shadow border border-outline-variant/30">
+      <div class="flex justify-between items-center mb-5">
+        <h4 class="text-lg font-semibold">Haftalık Takvim</h4>
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-1">
+            <span class="h-2 w-2 rounded-full bg-primary"></span>
+            <span class="text-xs font-semibold text-secondary uppercase">İlaç</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="h-2 w-2 rounded-full bg-tertiary-container"></span>
+            <span class="text-xs font-semibold text-secondary uppercase">Kontrol</span>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-7 gap-2">
+        {% set days = [
+          {'day':'Pzt','num':23,'event':'ilac'},
+          {'day':'Sal','num':24,'event':None},
+          {'day':'Çar','num':25,'event':None},
+          {'day':'Per','num':26,'event':'kontrol'},
+          {'day':'Cum','num':27,'event':None},
+          {'day':'Cmt','num':28,'event':None},
+          {'day':'Paz','num':29,'event':None},
+        ] %}
+        {% for day in days %}
+        <div class="flex flex-col items-center gap-2">
+          <span class="text-xs font-semibold text-secondary uppercase">{{ day.day }}</span>
+          {% if day.event == 'ilac' %}
+          <div class="w-full h-24 bg-primary-container/10 rounded-lg flex flex-col items-center justify-center gap-2 border border-primary/20">
+            <p class="font-bold text-on-surface">{{ day.num }}</p>
+            <span class="h-2 w-2 rounded-full bg-primary ring-4 ring-primary-container/20"></span>
+          </div>
+          {% elif day.event == 'kontrol' %}
+          <div class="w-full h-24 bg-tertiary-fixed rounded-lg flex flex-col items-center justify-center gap-2 border border-tertiary-container/20">
+            <p class="font-bold text-on-surface">{{ day.num }}</p>
+            <span class="h-2 w-2 rounded-full bg-tertiary-container ring-4 ring-tertiary-fixed-dim"></span>
+          </div>
+          {% else %}
+          <div class="w-full h-24 bg-slate-50 rounded-lg flex flex-col items-center justify-center">
+            <p class="font-bold text-slate-400">{{ day.num }}</p>
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+function aiOnaylaClick(btn) {
+  btn.disabled = true;
+  btn.textContent = 'Onaylandı ✓';
+  btn.classList.replace('bg-white', 'bg-green-500');
+  btn.classList.replace('text-primary', 'text-white');
+}
+</script>
+</body>
+</html>

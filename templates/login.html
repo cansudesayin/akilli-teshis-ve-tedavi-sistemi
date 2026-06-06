@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MediAI — Klinik Giriş</title>
+<meta name="description" content="MediAI Yapay Zeka Destekli Klinik Görüntü Analiz Sistemi — Güvenli Doktor Girişi">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#0058bc",
+          "primary-container": "#0070eb",
+          "on-primary": "#ffffff",
+          "on-primary-container": "#fefcff",
+          "on-primary-fixed-variant": "#004493",
+          "surface": "#f8f9ff",
+          "surface-container": "#e5eeff",
+          "surface-container-low": "#eff4ff",
+          "on-surface": "#0b1c30",
+          "on-surface-variant": "#414755",
+          "outline": "#717786",
+          "outline-variant": "#c1c6d7",
+          "background": "#f8f9ff",
+          "on-background": "#0b1c30",
+          "tertiary": "#9e3d00",
+          "tertiary-container": "#c64f00",
+          "error": "#ba1a1a",
+          "error-container": "#ffdad6",
+          "on-error": "#ffffff",
+          "secondary": "#535f74",
+          "secondary-container": "#d4e0f9",
+          "inverse-surface": "#213145",
+          "inverse-on-surface": "#eaf1ff",
+        },
+        fontFamily: {
+          "body-md": ["Inter"], "button": ["Inter"], "h2": ["Inter"],
+          "body-sm": ["Inter"], "label-caps": ["Inter"], "h3": ["Inter"], "h1": ["Inter"]
+        },
+        fontSize: {
+          "body-md": ["16px", {"lineHeight":"24px","fontWeight":"400"}],
+          "button": ["15px", {"lineHeight":"20px","fontWeight":"600"}],
+          "h2": ["24px", {"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],
+          "body-sm": ["14px", {"lineHeight":"20px","fontWeight":"400"}],
+          "label-caps": ["12px", {"lineHeight":"16px","letterSpacing":"0.05em","fontWeight":"600"}],
+          "h3": ["20px", {"lineHeight":"28px","fontWeight":"600"}],
+          "h1": ["30px", {"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"700"}]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .ai-accent { border-left: 4px solid #0058bc; }
+  body { min-height: 100dvh; font-family: 'Inter', sans-serif; }
+  .spec-btn { transition: all 0.2s ease; }
+  .spec-btn.active { border-color: #0058bc !important; background: #eff4ff !important; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+
+<!-- Sol Panel / Hero -->
+<aside class="bg-[#0A1628] w-full md:w-[40%] min-h-[280px] md:min-h-screen flex flex-col justify-between p-10 text-white relative overflow-hidden">
+  <div class="absolute inset-0 opacity-10 pointer-events-none">
+    <div class="absolute top-0 right-0 w-96 h-96 bg-[#0070eb] rounded-full blur-[100px] -mr-48 -mt-48"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 bg-[#c64f00] rounded-full blur-[80px] -ml-32 -mb-32"></div>
+  </div>
+  <div class="relative z-10">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+        <span class="material-symbols-outlined text-white" style="font-variation-settings:'FILL' 1;">biotech</span>
+      </div>
+      <h1 class="text-3xl font-bold text-white tracking-tight">MediAI</h1>
+    </div>
+    <p class="text-slate-300 text-base max-w-sm leading-relaxed">Yapay Zeka Destekli Klinik Görüntü Analiz ve Karar Destek Sistemi</p>
+  </div>
+  <div class="relative z-10 flex flex-col gap-4">
+    <div class="bg-white/5 backdrop-blur-md p-4 rounded-xl border border-white/10 flex items-center gap-4">
+      <div class="w-12 h-12 bg-[#0070eb] rounded-lg flex items-center justify-center">
+        <span class="material-symbols-outlined text-white" style="font-variation-settings:'FILL' 1;">analytics</span>
+      </div>
+      <div>
+        <div class="text-2xl font-bold text-white">%95.4</div>
+        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Teşhis Doğruluğu</div>
+      </div>
+    </div>
+    <div class="bg-white/5 backdrop-blur-md p-4 rounded-xl border border-white/10 flex items-center gap-4">
+      <div class="w-12 h-12 bg-[#c64f00] rounded-lg flex items-center justify-center">
+        <span class="material-symbols-outlined text-white" style="font-variation-settings:'FILL' 1;">speed</span>
+      </div>
+      <div>
+        <div class="text-2xl font-bold text-white">%60</div>
+        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Daha Hızlı Raporlama</div>
+      </div>
+    </div>
+  </div>
+  <div class="relative z-10 mt-6">
+    <div class="flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Sistem Çevrimiçi</span>
+    </div>
+  </div>
+</aside>
+
+<!-- Ana Giriş -->
+<main class="flex-1 bg-white flex flex-col items-center justify-center p-10 pb-24">
+  <div class="w-full max-w-md">
+    <header class="mb-8">
+      <h2 class="text-3xl font-bold text-on-surface mb-1">Klinik Girişi</h2>
+      <p class="text-sm text-on-surface-variant">Devam etmek için uzmanlık alanınızı seçin ve giriş yapın.</p>
+    </header>
+
+    {% if hata %}
+    <div class="mb-6 p-4 bg-error-container text-error rounded-xl text-sm font-medium flex items-center gap-2">
+      <span class="material-symbols-outlined text-lg">error</span>
+      {{ hata }}
+    </div>
+    {% endif %}
+
+    <!-- Uzmanlık Seçimi -->
+    <div class="grid grid-cols-3 gap-2 mb-8" id="uzmanlikGrubu">
+      <button type="button" onclick="secUzmanlik(this, 'dermatoloji')" class="spec-btn active flex flex-col items-center gap-2 p-4 border-2 border-primary bg-surface-container-low rounded-xl">
+        <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">dermatology</span>
+        <span class="text-xs font-semibold text-on-surface uppercase tracking-wider">Dermatoloji</span>
+      </button>
+      <button type="button" onclick="secUzmanlik(this, 'oftalmoloji')" class="spec-btn flex flex-col items-center gap-2 p-4 border border-outline-variant bg-white rounded-xl hover:border-primary">
+        <span class="material-symbols-outlined text-outline" style="font-variation-settings:'FILL' 0;">visibility</span>
+        <span class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Oftalmoloji</span>
+      </button>
+      <button type="button" onclick="secUzmanlik(this, 'diger')" class="spec-btn flex flex-col items-center gap-2 p-4 border border-outline-variant bg-white rounded-xl hover:border-primary">
+        <span class="material-symbols-outlined text-outline" style="font-variation-settings:'FILL' 0;">more_horiz</span>
+        <span class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Diğer</span>
+      </button>
+    </div>
+
+    <!-- Giriş Formu -->
+    <form method="POST" action="/login" class="space-y-5">
+      <input type="hidden" name="uzmanlik" id="uzmanlikInput" value="dermatoloji">
+      <div>
+        <label class="text-xs font-semibold text-on-surface block mb-1 uppercase tracking-wider">E-POSTA / DOKTOR ID</label>
+        <input id="email" name="email" class="w-full h-12 px-4 border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-base" placeholder="dr.isim@hastane.com" type="email" required/>
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-on-surface block mb-1 uppercase tracking-wider">ŞİFRE</label>
+        <div class="relative">
+          <input id="sifre" name="sifre" class="w-full h-12 px-4 pr-12 border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-base" placeholder="••••••••" type="password" required/>
+          <button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-primary" type="button" onclick="toggleSifre()">
+            <span class="material-symbols-outlined" id="sifreIcon">visibility</span>
+          </button>
+        </div>
+        <div class="flex justify-end mt-1">
+          <a class="text-xs font-semibold text-primary hover:underline" href="#">Şifremi Unuttum</a>
+        </div>
+      </div>
+      <div class="flex flex-col gap-3 pt-2">
+        <button id="loginBtn" class="w-full h-12 bg-primary text-white font-semibold rounded-xl hover:bg-on-primary-fixed-variant transition-all active:scale-[0.98] flex items-center justify-center gap-2" type="submit">
+          <span class="material-symbols-outlined text-xl" style="font-variation-settings:'FILL' 1;">login</span>
+          Giriş Yap
+        </button>
+        <button class="w-full h-12 border border-outline-variant bg-white text-on-surface font-semibold rounded-xl hover:bg-surface-container transition-all flex items-center justify-center gap-2" type="button">
+          <span class="material-symbols-outlined text-xl">corporate_fare</span>
+          Kurumsal SSO ile Giriş
+        </button>
+      </div>
+    </form>
+
+    <div class="mt-8 p-4 bg-surface-container rounded-xl ai-accent">
+      <p class="text-sm text-on-surface-variant italic">
+        "AI modellerimiz en son klinik verilerle güncellendi. Güvenli oturum açma işlemi 256-bit şifreleme ile korunmaktadır."
+      </p>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="fixed bottom-0 right-0 w-full md:w-[60%] bg-white border-t border-outline-variant flex flex-col md:flex-row justify-between items-center px-10 py-3 z-20">
+  <div class="flex flex-wrap justify-center gap-6 order-2 md:order-1">
+    <span class="text-xs font-semibold text-slate-500 flex items-center gap-1">
+      <span class="material-symbols-outlined text-base">verified_user</span>KVKK UYUMLU
+    </span>
+    <span class="text-xs font-semibold text-slate-500 flex items-center gap-1">
+      <span class="material-symbols-outlined text-base">lock</span>TLS 1.3 ŞİFRELEME
+    </span>
+    <span class="text-xs font-semibold text-slate-500 flex items-center gap-1">
+      <span class="material-symbols-outlined text-base">medical_information</span>MEDICAL DEVICE DIRECTIVE
+    </span>
+  </div>
+  <div class="mb-2 md:mb-0 order-1 md:order-2">
+    <p class="text-xs font-semibold text-slate-400">© 2026 MEDİAİ. TÜM HAKLARI SAKLIDIR.</p>
+  </div>
+</footer>
+
+<script>
+function secUzmanlik(btn, deger) {
+  document.querySelectorAll('.spec-btn').forEach(b => {
+    b.classList.remove('active');
+    b.style.borderColor = '';
+    b.style.background = '';
+  });
+  btn.classList.add('active');
+  document.getElementById('uzmanlikInput').value = deger;
+}
+
+function toggleSifre() {
+  const input = document.getElementById('sifre');
+  const icon = document.getElementById('sifreIcon');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.textContent = 'visibility_off';
+  } else {
+    input.type = 'password';
+    icon.textContent = 'visibility';
+  }
+}
+</script>
+</body>
+</html>

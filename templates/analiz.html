@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MediAI — Görüntü Analizi</title>
+<meta name="description" content="MediAI Tıbbi Görüntü Analiz Motoru — AI Destekli Dermoskopik ve Fundus Analizi">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode:"class",
+    theme:{extend:{
+      colors:{
+        "primary":"#0058bc","primary-container":"#0070eb","on-primary":"#ffffff","on-primary-container":"#fefcff",
+        "on-primary-fixed-variant":"#004493","surface":"#f8f9ff","surface-container":"#e5eeff",
+        "surface-container-low":"#eff4ff","on-surface":"#0b1c30","on-surface-variant":"#414755",
+        "outline":"#717786","outline-variant":"#c1c6d7","tertiary":"#9e3d00","tertiary-container":"#c64f00",
+        "error":"#ba1a1a","error-container":"#ffdad6","on-error-container":"#93000a",
+        "secondary":"#535f74","secondary-container":"#d4e0f9","inverse-surface":"#213145",
+      },
+      fontFamily:{"body-md":["Inter"],"button":["Inter"],"h2":["Inter"],"body-sm":["Inter"],"label-caps":["Inter"],"h3":["Inter"],"h1":["Inter"]},
+      fontSize:{
+        "body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"button":["15px",{"lineHeight":"20px","fontWeight":"600"}],
+        "h2":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],
+        "body-sm":["14px",{"lineHeight":"20px","fontWeight":"400"}],
+        "label-caps":["12px",{"lineHeight":"16px","letterSpacing":"0.05em","fontWeight":"600"}],
+        "h3":["20px",{"lineHeight":"28px","fontWeight":"600"}],"h1":["30px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"700"}]
+      }
+    }}
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { font-family: 'Inter', sans-serif; min-height: 100dvh; background: #f8f9ff; }
+  .nav-link { transition: all 0.15s ease; }
+  .nav-link:hover { background: rgba(255,255,255,0.08); }
+  .nav-link.active { background: #007AFF; color: white !important; border-radius: 8px; }
+  .card-shadow { box-shadow: 0px 4px 20px rgba(10,22,40,0.05); }
+  .ai-accent-bar { border-left: 4px solid #0070eb; }
+  .img-type-btn { transition: all 0.2s ease; }
+  .img-type-btn.active { background: #0070eb; color: white; }
+  #dropzone { transition: border-color 0.2s ease; }
+  #dropzone.dragover { border-color: #0070eb; background: rgba(0,112,235,0.05); }
+  #progressSection { display: none; }
+  #resultSection { display: none; }
+</style>
+</head>
+<body class="text-on-surface">
+
+<!-- Sol Navigasyon -->
+<aside class="fixed left-0 h-full w-64 border-r border-slate-800 bg-[#0A1628] flex flex-col py-6 z-50">
+  <div class="px-6 mb-8 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+      <span class="material-symbols-outlined text-white" style="font-variation-settings:'FILL' 1;">biotech</span>
+    </div>
+    <span class="text-xl font-bold text-white">MediAI</span>
+  </div>
+  <nav class="flex-1 px-2 space-y-1">
+    <a href="/dashboard" class="nav-link text-slate-400 flex items-center px-4 py-3 gap-3 rounded-lg hover:text-white">
+      <span class="material-symbols-outlined">dashboard</span>
+      <span class="font-medium">Dashboard</span>
+    </a>
+    <a href="/analiz" class="nav-link active text-white flex items-center px-4 py-3 gap-3 rounded-lg">
+      <span class="material-symbols-outlined">biotech</span>
+      <span class="font-medium">Görüntü Analizi</span>
+    </a>
+    <a href="/teshis" class="nav-link text-slate-400 flex items-center px-4 py-3 gap-3 rounded-lg hover:text-white">
+      <span class="material-symbols-outlined">clinical_notes</span>
+      <span class="font-medium">Teşhis Sonuçları</span>
+    </a>
+    <a href="/tedavi" class="nav-link text-slate-400 flex items-center px-4 py-3 gap-3 rounded-lg hover:text-white">
+      <span class="material-symbols-outlined">medical_services</span>
+      <span class="font-medium">Tedavi Planı</span>
+    </a>
+    <a href="#" class="nav-link text-slate-400 flex items-center px-4 py-3 gap-3 rounded-lg hover:text-white">
+      <span class="material-symbols-outlined">groups</span>
+      <span class="font-medium">Hastalar</span>
+    </a>
+    <a href="#" class="nav-link text-slate-400 flex items-center px-4 py-3 gap-3 rounded-lg hover:text-white">
+      <span class="material-symbols-outlined">settings</span>
+      <span class="font-medium">Ayarlar</span>
+    </a>
+  </nav>
+  <div class="px-6 mt-auto pt-6 border-t border-slate-800">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
+        {{ doktor.ad[0] if doktor else 'D' }}
+      </div>
+      <div>
+        <p class="text-sm font-semibold text-white">{{ doktor.ad if doktor else 'Dr. MediAI' }}</p>
+        <p class="text-xs text-slate-400 capitalize">{{ doktor.uzmanlik if doktor else 'Klinisyen' }}</p>
+      </div>
+    </div>
+    <a href="/cikis" class="flex items-center gap-2 text-slate-400 hover:text-white text-sm transition-colors">
+      <span class="material-symbols-outlined text-base">logout</span>Çıkış Yap
+    </a>
+  </div>
+</aside>
+
+<!-- Üst Bar -->
+<header class="fixed top-0 right-0 left-64 h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 card-shadow z-40 flex items-center justify-between px-8">
+  <div class="flex items-center gap-3">
+    <span class="text-lg font-black text-[#0A1628] uppercase tracking-tight">MediAI — Analiz Motoru</span>
+  </div>
+  <div class="flex items-center gap-4">
+    <span class="material-symbols-outlined text-slate-500 hover:text-primary transition-colors cursor-pointer">notifications</span>
+    <div class="flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full border border-outline-variant">
+      <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+      <span class="text-xs font-semibold text-on-surface-variant uppercase">Sistem Aktif</span>
+    </div>
+  </div>
+</header>
+
+<!-- Ana İçerik -->
+<main class="pt-16 md:pl-64 min-h-screen">
+  <div class="max-w-4xl mx-auto px-4 py-8 md:px-8 md:py-10">
+
+    <!-- Karanlık Görüntü Viewer -->
+    <section class="mb-8 rounded-xl overflow-hidden card-shadow bg-[#111827]">
+      <div class="p-6 md:p-8 flex flex-col items-center">
+        <!-- Görüntü Tipi Seçimi -->
+        <div class="w-full flex p-1 bg-slate-800 rounded-lg mb-8">
+          <button onclick="secGoruntu(this, 'Dermoskopik')" class="img-type-btn active flex-1 py-2 px-4 rounded-md text-xs font-semibold uppercase tracking-widest text-white transition-all">Dermoskopik</button>
+          <button onclick="secGoruntu(this, 'Fundus')" class="img-type-btn flex-1 py-2 px-4 rounded-md text-xs font-semibold uppercase tracking-widest text-slate-400 hover:text-white transition-all">Fundus Fotoğrafı</button>
+          <button onclick="secGoruntu(this, 'OCT')" class="img-type-btn flex-1 py-2 px-4 rounded-md text-xs font-semibold uppercase tracking-widest text-slate-400 hover:text-white transition-all">OCT Taraması</button>
+        </div>
+        <input type="hidden" id="goruntetipi" value="Dermoskopik">
+
+        <!-- Yükleme Alanı -->
+        <div id="dropzone" class="relative w-full aspect-[4/3] max-h-[400px] border-2 border-dashed border-slate-700 rounded-xl flex flex-col items-center justify-center cursor-pointer overflow-hidden hover:border-[#0070eb] transition-colors" onclick="document.getElementById('fileInput').click()">
+          <input type="file" id="fileInput" class="hidden" accept="image/*,.dcm" onchange="onFileSelected(this)">
+          <div id="uploadPlaceholder" class="flex flex-col items-center text-center p-6 bg-slate-900/60 backdrop-blur-sm rounded-lg border border-slate-700">
+            <span class="material-symbols-outlined text-5xl text-slate-400 mb-4" style="font-variation-settings:'FILL' 0;">cloud_upload</span>
+            <p class="text-white font-medium mb-1">Görüntü sürükle veya tıkla</p>
+            <p class="text-slate-500 text-sm">JPEG, PNG, DICOM (maks. 50MB)</p>
+          </div>
+          <img id="previewImg" class="hidden absolute inset-0 w-full h-full object-cover opacity-80 grayscale" src="" alt="Yüklenen görüntü">
+        </div>
+
+        <div class="w-full mt-4 flex justify-between items-center text-slate-400 text-xs uppercase tracking-tighter">
+          <span>Viewport: 800x600 DICOM Standard</span>
+          <div class="flex gap-4">
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">zoom_in</span> Zoom</span>
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">contrast</span> Kontrast</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Analiz Kontrol -->
+    <section class="bg-white rounded-xl card-shadow p-6 md:p-8 mb-8 border border-slate-100">
+      <div class="grid grid-cols-1 gap-5 mb-8">
+        <div>
+          <label class="block text-xs font-semibold text-on-surface mb-2 uppercase tracking-wider">HASTA ID</label>
+          <input id="hastaId" class="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 text-base focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Örn: PX-9821" type="text"/>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-on-surface mb-2 uppercase tracking-wider">ANAMNEZİS NOTLARI</label>
+          <textarea id="notlar" class="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 text-base focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all resize-none" placeholder="Hastanın şikayetleri, aile geçmişi, mevcut semptomlar..." rows="4"></textarea>
+        </div>
+      </div>
+
+      <!-- İlerleme Çubuğu -->
+      <div id="progressSection" class="mb-6">
+        <div class="flex justify-between items-end mb-2">
+          <span class="text-sm font-semibold text-primary" id="progressLabel">AI Analiz ediliyor...</span>
+          <span class="text-xl font-bold text-primary" id="progressPct">0%</span>
+        </div>
+        <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+          <div id="progressBar" class="h-full bg-primary-container transition-all duration-300 ease-in-out" style="width: 0%"></div>
+        </div>
+        <p class="text-xs text-slate-500 mt-2" id="progressStep">CNN modeli görüntüyü işliyor...</p>
+      </div>
+
+      <button id="analizBtn" onclick="baslatAnaliz()" class="w-full bg-primary-container hover:bg-primary text-white font-semibold text-base py-4 rounded-xl card-shadow active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+        <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">bolt</span>
+        AI ANALİZİ BAŞLAT
+      </button>
+    </section>
+
+    <!-- Sonuç Önizleme -->
+    <section id="resultSection" class="ai-accent-bar bg-white rounded-xl card-shadow p-6 md:p-8 border border-slate-100">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="space-y-1">
+          <span class="inline-block px-2 py-1 bg-error-container text-on-error-container text-xs font-bold rounded uppercase tracking-wider mb-2">Yüksek Güven</span>
+          <h2 class="text-2xl font-bold text-on-background">Melanom Şüphesi</h2>
+          <p class="text-sm text-on-surface-variant max-w-md">Periferik bölgede yüksek yapısal düzensizlik ve asimetri tespit edildi.</p>
+        </div>
+        <div class="flex gap-4">
+          <div class="bg-surface-container-low p-4 rounded-lg border border-surface-container min-w-[110px] text-center">
+            <span class="block text-xs font-semibold text-outline uppercase mb-1">Güven</span>
+            <span class="text-xl font-bold text-primary">%89</span>
+          </div>
+          <div class="bg-surface-container-low p-4 rounded-lg border border-surface-container min-w-[110px] text-center">
+            <span class="block text-xs font-semibold text-outline uppercase mb-1">Evre</span>
+            <span class="text-xl font-bold text-tertiary">Evre II</span>
+          </div>
+        </div>
+      </div>
+      <div class="mt-6 pt-5 border-t border-slate-100 flex flex-wrap gap-3 items-center justify-between">
+        <div class="flex flex-wrap gap-2">
+          <span class="px-3 py-1 bg-blue-50 text-primary text-xs font-semibold rounded-full uppercase">Asimetrik Yapı</span>
+          <span class="px-3 py-1 bg-blue-50 text-primary text-xs font-semibold rounded-full uppercase">Kenar Düzensizliği</span>
+          <span class="px-3 py-1 bg-blue-50 text-primary text-xs font-semibold rounded-full uppercase">Renk Değişkenliği</span>
+        </div>
+        <a href="/teshis" class="px-5 py-2 bg-primary text-white font-semibold rounded-xl hover:bg-on-primary-fixed-variant transition-colors text-sm flex items-center gap-2">
+          <span class="material-symbols-outlined text-base">clinical_notes</span>
+          Detaylı Sonuç
+        </a>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- Mobil Alt Nav -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 flex justify-around items-center h-16 z-50">
+  <a href="/dashboard" class="flex flex-col items-center text-slate-400"><span class="material-symbols-outlined">dashboard</span><span class="text-xs font-bold uppercase mt-1">Dash</span></a>
+  <a href="/analiz" class="flex flex-col items-center text-primary"><span class="material-symbols-outlined">biotech</span><span class="text-xs font-bold uppercase mt-1">Analiz</span></a>
+  <a href="/teshis" class="flex flex-col items-center text-slate-400"><span class="material-symbols-outlined">clinical_notes</span><span class="text-xs font-bold uppercase mt-1">Teşhis</span></a>
+  <a href="/tedavi" class="flex flex-col items-center text-slate-400"><span class="material-symbols-outlined">medical_services</span><span class="text-xs font-bold uppercase mt-1">Tedavi</span></a>
+</nav>
+
+<!-- AI Durum Rozeti -->
+<div class="fixed bottom-6 right-6 hidden md:block">
+  <div class="bg-white px-4 py-2 rounded-full border border-outline-variant card-shadow flex items-center gap-3">
+    <span class="relative flex h-3 w-3">
+      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+      <span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+    </span>
+    <span class="text-xs font-semibold text-on-surface uppercase tracking-wider">AI ANALİZ MOTORU AKTİF</span>
+  </div>
+</div>
+
+<script>
+function secGoruntu(btn, tip) {
+  document.querySelectorAll('.img-type-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('goruntetipi').value = tip;
+}
+
+function onFileSelected(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = document.getElementById('previewImg');
+      img.src = e.target.result;
+      img.classList.remove('hidden');
+      document.getElementById('uploadPlaceholder').classList.add('hidden');
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+const dropzone = document.getElementById('dropzone');
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropzone.classList.remove('dragover');
+  const files = e.dataTransfer.files;
+  if (files.length > 0) {
+    const input = document.getElementById('fileInput');
+    input.files = files;
+    onFileSelected(input);
+  }
+});
+
+const steps = [
+  "DICOM görüntüsü okunuyor...",
+  "Ön işleme: CLAHE kontrast artırımı...",
+  "CNN modeli çalıştırılıyor...",
+  "ABCD kural analizi yapılıyor...",
+  "Risk skoru hesaplanıyor...",
+  "Sonuç raporu oluşturuluyor...",
+];
+
+function baslatAnaliz() {
+  const btn = document.getElementById('analizBtn');
+  const hasta = document.getElementById('hastaId').value || 'PX-DEMO';
+  
+  btn.disabled = true;
+  btn.classList.add('opacity-60', 'cursor-not-allowed');
+  btn.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span> Analiz Ediliyor...';
+  
+  document.getElementById('progressSection').style.display = 'block';
+  document.getElementById('resultSection').style.display = 'none';
+  
+  let progress = 0;
+  let stepIdx = 0;
+  
+  const interval = setInterval(() => {
+    progress += Math.random() * 18 + 5;
+    if (progress > 100) progress = 100;
+    
+    document.getElementById('progressBar').style.width = progress + '%';
+    document.getElementById('progressPct').textContent = Math.round(progress) + '%';
+    
+    if (stepIdx < steps.length) {
+      document.getElementById('progressStep').textContent = steps[stepIdx];
+      stepIdx++;
+    }
+    
+    if (progress >= 100) {
+      clearInterval(interval);
+      setTimeout(() => {
+        document.getElementById('progressLabel').textContent = 'Analiz Tamamlandı!';
+        document.getElementById('progressStep').textContent = 'AI analizi başarıyla tamamlandı.';
+        document.getElementById('resultSection').style.display = 'block';
+        document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        btn.disabled = false;
+        btn.classList.remove('opacity-60', 'cursor-not-allowed');
+        btn.innerHTML = '<span class="material-symbols-outlined" style="font-variation-settings:\'FILL\' 1;">bolt</span> YENİDEN ANALİZ ET';
+        
+        // Backend'e bildir (mock)
+        fetch('/api/v1/analiz/baslat', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({hasta_id: hasta, goruntu_tipi: document.getElementById('goruntetipi').value})
+        }).catch(() => {});
+      }, 600);
+    }
+  }, 320);
+}
+</script>
+</body>
+</html>

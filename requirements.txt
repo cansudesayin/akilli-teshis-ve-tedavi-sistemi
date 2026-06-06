@@ -1,0 +1,4 @@
+flask>=2.3.0
+flask-cors>=4.0.0
+# İsteğe bağlı: MySQL bağlantısı için
+# mysql-connector-python>=8.0.0
