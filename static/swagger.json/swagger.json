@@ -5,7 +5,7 @@
     "description": "Siber Şifacılar ekibinin geliştirdiği tıbbi yapay zeka sisteminin RESTful API dokümantasyonu. Bu API; tıbbi görüntüleri (Dermoskopik, Fundus, OCT) alır, TensorFlow/Keras CNN modeline iletir ve teşhis sonuçlarını, risk skorlarını ile kişiselleştirilmiş tedavi önerilerini döndürür.",
     "version": "1.0.0",
     "contact": {
-      "name": "Ali İstanbullu — Siber Şifacılar"
+      "name": "Edanur Yasak — Siber Şifacılar"
     }
   },
   "servers": [
