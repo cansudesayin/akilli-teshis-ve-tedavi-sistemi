@@ -1152,7 +1152,7 @@ Projenin 5. haftası kapsamında, bir önceki aşamada temel mimarisi tasarlanan
 ### **Eksik Giderme ve Dokümantasyon: Kullanıcı Arayüzü İyileştirme ve Kullanım Kılavuzu**
 
 **Sorumlu:** Cansude Sayın
-**Tarih:** 8 Haziran 2026
+**Tarih:** 7 Haziran 2026
 **Not:** Bu görev Edanur Yasak'a atanmış olup Swagger dokümantasyonu kısmı Edanur tarafından tamamlanmıştır. Arayüz iyileştirme ve kullanım kılavuzu kısımları Cansude Sayın tarafından üstlenilmiştir.
 
 #### Arayüz İyileştirmeleri
@@ -1265,7 +1265,7 @@ Hafta 5'te gerçekleştirilen temel eğitim (training) evresinden sonra, modelin
 ### **CNN Modeli API Entegrasyonu ve Swagger Dokümantasyonu Tamamlama**
 
 **Sorumlu:** Cansude Sayın
-**Tarih:** 8 Haziran 2026
+**Tarih:** 6 Haziran 2026
 
 Projenin son aşamasında, Enes Zukra tarafından geliştirilen ve optimize edilen CNN modelinin Flask API ile tam entegrasyonu sağlanmıştır. Aynı zamanda Swagger UI arayüzü lokal ortamda çalışır hale getirilmiştir.
 
