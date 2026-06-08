@@ -232,6 +232,7 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
   <span id="api-banner-text">API'den teşhis sonuçları yükleniyor...</span>
 </div>
 
+<script src="config.js"></script>
 <script>
 // URL'den analiz_id al (örn: ?analiz_id=5001), yoksa 5001 kullan
 var urlParams = new URLSearchParams(window.location.search);
@@ -244,7 +245,7 @@ async function sonuclariYukle() {
   banner.className = 'api-banner loading';
 
   try {
-    var res = await fetch('http://localhost:5000/api/v1/analiz/sonuc/' + analizId);
+    var res = await fetch((typeof MEDIAI_API_BASE !== 'undefined' ? MEDIAI_API_BASE : '') + '/api/v1/analiz/sonuc/' + analizId);
     if (!res.ok) throw new Error('Sunucu hatası');
     var data = await res.json();
 

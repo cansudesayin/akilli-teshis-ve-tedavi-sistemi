@@ -115,12 +115,16 @@ def swagger_json():
 # VERİTABANI BAĞLANTISI (Ali İstanbullu)
 # ==============================================================================
 def get_db_connection():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="sifre",
-        database="mediai_db"
-    )
+    try:
+        return mysql.connector.connect(
+            host=os.environ.get('DB_HOST', 'localhost'),
+            user=os.environ.get('DB_USER', 'root'),
+            password=os.environ.get('DB_PASSWORD', 'sifre'),
+            database=os.environ.get('DB_NAME', 'mediai_db')
+        )
+    except Exception as e:
+        print(f"Veritabanı bağlantı hatası: {e}")
+        return None
 
 # ==============================================================================
 # 1. KAPI: YENİ HASTA KAYDI (POST)
@@ -147,6 +151,14 @@ def hasta_kayit():
 
     try:
         conn = get_db_connection()
+        if conn is None:
+            import random
+            return jsonify({
+                "hata": False,
+                "mesaj": "[DEMO] Hasta kaydı simüle edildi (DB bağlantısı yok).",
+                "hasta_id": str(random.randint(1000, 9999)),
+                "zaman": datetime.now().isoformat()
+            }), 201
         cursor = conn.cursor()
         sql = "INSERT INTO Patients (age, gender, medical_history, diabetes) VALUES (%s, %s, %s, %s)"
         values = (yas, cinsiyet, gelen_veri.get('gecmis', ''), gelen_veri.get('diyabet', False))
@@ -177,6 +189,19 @@ def hasta_kayit():
 def hasta_getir(hasta_id):
     try:
         conn = get_db_connection()
+        if conn is None:
+            return jsonify({
+                "hata": False,
+                "hasta": {
+                    "patient_id": hasta_id,
+                    "age": 45,
+                    "gender": "Erkek",
+                    "medical_history": "Demo hasta verisi",
+                    "diabetes": False
+                },
+                "mesaj": "[DEMO] Veritabanı bağlantısı yok, örnek veri gösteriliyor.",
+                "zaman": datetime.now().isoformat()
+            }), 200
         cursor = conn.cursor(dictionary=True)
         cursor.execute("SELECT * FROM Patients WHERE patient_id = %s", (hasta_id,))
         hasta = cursor.fetchone()
@@ -306,9 +331,11 @@ def sunucu_hatasi(e):
 # SUNUCUYU BAŞLAT
 # ==============================================================================
 if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
     print("=" * 60)
     print("  Siber Şifacılar — MediAI API Sunucusu Başlatılıyor...")
     print(f"  Model Durumu: {'Aktif' if MODEL_AKTIF else 'Simülasyon Modu'}")
-    print("  Swagger: http://localhost:5000/api/docs")
+    print(f"  Port: {port}")
+    print(f"  Swagger: http://localhost:{port}/api/docs")
     print("=" * 60)
-    app.run(debug=True, port=5000)
+    app.run(debug=False, host='0.0.0.0', port=port)

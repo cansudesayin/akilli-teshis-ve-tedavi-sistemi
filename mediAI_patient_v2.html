@@ -383,6 +383,7 @@ function closeSidebar() {
   </div>
 </div>
 
+<script src="config.js"></script>
 <script>
 // "Profili Düzenle" butonunu modal'a bağla
 document.addEventListener('DOMContentLoaded', function() {
@@ -413,7 +414,7 @@ async function hastaKaydet() {
   var resultEl = document.getElementById('hasta-result');
 
   try {
-    var res = await fetch('http://localhost:5000/api/v1/hastalar', {
+    var res = await fetch((typeof MEDIAI_API_BASE !== 'undefined' ? MEDIAI_API_BASE : '') + '/api/v1/hastalar', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(veri)

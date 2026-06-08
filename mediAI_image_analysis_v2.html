@@ -277,6 +277,7 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
   <div class="upload-status" id="upload-status"></div>
 </div>
 
+<script src="config.js"></script>
 <script>
 function onFileSelected(input) {
   var file = input.files[0];
@@ -307,7 +308,7 @@ async function analizBaslat() {
   statusEl.textContent = 'Görüntü sunucuya gönderiliyor...';
 
   try {
-    var res = await fetch('http://localhost:5000/api/v1/analiz/baslat', {
+    var res = await fetch((typeof MEDIAI_API_BASE !== 'undefined' ? MEDIAI_API_BASE : '') + '/api/v1/analiz/baslat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ hasta_id: '1001', goruntu_turu: 'dermoskopi', dosya_adi: file.name })
