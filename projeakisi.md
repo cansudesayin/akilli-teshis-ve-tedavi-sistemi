@@ -1148,6 +1148,29 @@ Projenin 5. haftası kapsamında, bir önceki aşamada temel mimarisi tasarlanan
 
 ## 6. Hafta--------------------------------------------------
 
+
+### **Eksik Giderme ve Dokümantasyon: Kullanıcı Arayüzü İyileştirme ve Kullanım Kılavuzu**
+
+**Sorumlu:** Cansude Sayın
+**Tarih:** 8 Haziran 2026
+**Not:** Bu görev Edanur Yasak'a atanmış olup Swagger dokümantasyonu kısmı Edanur tarafından tamamlanmıştır. Arayüz iyileştirme ve kullanım kılavuzu kısımları Cansude Sayın tarafından üstlenilmiştir.
+
+#### Arayüz İyileştirmeleri
+
+- Tüm sayfalar v2 versiyonuna güncellenerek iyileştirmeler uygulanmıştır.
+- Görüntü Analizi sayfasına fare tekerleği ile zoom in/out, sürükleyerek pan, çalışan parlaklık/kontrast slider'ları, görüntü sıfırlama butonu, klavye kısayolları (+/-/0/ok tuşları) ve dokunmatik ekran desteği eklenmiştir.
+- Teşhis Sonuçları sayfasına yazdır, PDF indir ve panoya kopyala butonları ile print CSS eklenmiştir.
+- Hasta Profili sayfasına CSV ve JSON veri dışa aktarma, profil fotoğrafı yükleme ve oturum zaman aşımı uyarısı eklenmiştir.
+- Tüm sayfalara Dark Mode / Light Mode toggle butonu eklenmiş, tercih localStorage'a kaydedilerek sayfalar arası tutarlılık sağlanmıştır.
+- Sidebar navigasyon linkleri v2 dosyalarına yönlendirilmiş, sayfalar arası geçiş sorunsuz hale getirilmiştir.
+- CSS değişkenleri gerçek renk değerleriyle değiştirilerek tarayıcıda doğrudan açılabilir hale getirilmiştir.
+
+#### Kullanım Kılavuzu
+
+- `kullanim_kilavuzu.md` dosyası oluşturularak repoya eklenmiştir. Kılavuz; sisteme giriş, dashboard kullanımı, görüntü yükleme ve analiz, teşhis sonuçlarını değerlendirme, tedavi planı takibi, hasta profili yönetimi, karanlık mod ve klavye kısayollarını kapsamaktadır.
+
+--------------------------------
+
  ### **Eksik Giderme ve Dokümantasyon: API Entegrasyonu ve Teknik Dokümantasyon**
 
 **Sorumlu:** Cansude Sayın  
@@ -1238,6 +1261,25 @@ Hafta 5'te gerçekleştirilen temel eğitim (training) evresinden sonra, modelin
 - **Entegrasyon Hazırlığı:** Optimize edilen nihai model, API katmanı (Backend) ve kullanıcı arayüzü (UI) ile tam uyumlu şekilde entegre edilmeye hazır hale getirilmiştir.
 
 ---------------------------------
+
+### **CNN Modeli API Entegrasyonu ve Swagger Dokümantasyonu Tamamlama**
+
+**Sorumlu:** Cansude Sayın
+**Tarih:** 8 Haziran 2026
+
+Projenin son aşamasında, Enes Zukra tarafından geliştirilen ve optimize edilen CNN modelinin Flask API ile tam entegrasyonu sağlanmıştır. Aynı zamanda Swagger UI arayüzü lokal ortamda çalışır hale getirilmiştir.
+
+#### Yapılan Çalışmalar
+
+- Enes Zukra'nın `ai_model.py` dosyasındaki CNN mimarisi `app.py`'e entegre edilmiştir. TensorFlow yüklü ortamlarda `model.h5` dosyası otomatik yüklenir, yüklü değilse sistem simülasyon modunda çalışmaya devam eder.
+- `model.h5` dosyası (128MB) Enes Zukra tarafından iletilmiş, `app.py` ile aynı dizine yerleştirilerek `model.predict()` entegrasyonu tamamlanmıştır.
+- Selim Yağbasan'ın `data_preprocessing.py` modülü ile uyumlu görüntü ön işleme adımları analiz başlatma endpoint'ine entegre edilmiştir.
+- Edanur Yasak tarafından oluşturulan `swagger.json` dosyası `static_klasor` dizinine yerleştirilerek Swagger UI arayüzü `http://localhost:5000/api/docs` adresinde başarıyla çalıştırılmıştır.
+- Lokal test sonuçları `MediAI_Swagger_Test_Raporu.pdf` dosyası olarak dokümante edilmiştir.
+
+
+---------------------------------
+
 
 ### **Model Performans Testlerinin Gerçekleştirilmesi**
 
