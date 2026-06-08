@@ -430,7 +430,7 @@ Bu sistemde hem **görüntü verisi** hem de **hasta bilgileri (EHR)** tutulaca�
 
 ---
 
-# 1 Temel Varlıklar (Tablolar)
+# 1️ Temel Varlıklar (Tablolar)
 
 Bu sistem 5 ana tablodan oluşur:
 
