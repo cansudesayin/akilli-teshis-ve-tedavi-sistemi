@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    var bellBtn = document.querySelector('.icon-btn');
+    // old bell logic removed
     if(bellBtn && bellBtn.innerText.includes('🔔')) {
         bellBtn.onclick = function() { document.getElementById('notifModal').classList.add('open'); }
     }
@@ -460,4 +460,19 @@ function addMed() {
     document.getElementById('medModal').classList.remove('open');
     showGlobalToast('Yeni ilaç reçeteye yazıldı.', 'success');
 }
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    // ROBUST BELL LOGIC
+    document.querySelectorAll('.notif-btn').forEach(function(btn) {
+        btn.onclick = function() {
+            var m = document.getElementById('notifModal');
+            if(m) m.classList.add('open');
+            else showGlobalToast('Bildirim bulunmuyor.', 'error');
+        };
+    });
+    
+});
 </script>

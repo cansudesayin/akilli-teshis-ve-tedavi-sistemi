@@ -461,9 +461,98 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    var bellBtn = document.querySelector('.icon-btn');
+    // old bell logic removed
     if(bellBtn && bellBtn.innerText.includes('🔔')) {
         bellBtn.onclick = function() { document.getElementById('notifModal').classList.add('open'); }
+    }
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    // ROBUST BELL LOGIC
+    document.querySelectorAll('.notif-btn').forEach(function(btn) {
+        btn.onclick = function() {
+            var m = document.getElementById('notifModal');
+            if(m) m.classList.add('open');
+            else showGlobalToast('Bildirim bulunmuyor.', 'error');
+        };
+    });
+    
+});
+</script>
+
+<!-- ROBUST VIEWER SCRIPT -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Sliders
+    var bright = document.getElementById('brightness-slider');
+    var cont = document.getElementById('contrast-slider');
+    var ctImg = document.querySelector('.ct-image');
+    
+    if(bright && cont && ctImg) {
+        function updateFilter() {
+            var b = bright.value;
+            var c = cont.value;
+            // Map 0-100 to 0.5-1.5 for brightness, etc.
+            ctImg.style.filter = `brightness(${b}%) contrast(${c}%)`;
+        }
+        bright.addEventListener('input', updateFilter);
+        cont.addEventListener('input', updateFilter);
+    }
+
+    // Thumbnails
+    var thumbs = document.querySelectorAll('.thumb');
+    thumbs.forEach(function(t) {
+        t.onclick = function() {
+            thumbs.forEach(x => x.classList.remove('on'));
+            this.classList.add('on');
+            var sliceNum = this.querySelector('.thumb-n').innerText;
+            var infoBox = document.querySelector('.viewer-info');
+            if(infoBox) {
+                infoBox.innerHTML = `Hasta: Ahmet Yıldız<br>Tarih: 29.03.2026<br>Modalite: CT<br>Kesit: ${sliceNum}/120`;
+            }
+            if(ctImg) {
+                ctImg.style.opacity = '0.5';
+                setTimeout(() => ctImg.style.opacity = '1', 200);
+            }
+        };
+    });
+
+    // Tool Buttons
+    var tools = document.querySelectorAll('.tool-btn');
+    tools.forEach(function(btn) {
+        btn.onclick = function() {
+            tools.forEach(x => x.classList.remove('active'));
+            this.classList.add('active');
+            if(this.innerText && this.innerText.includes('W/L')) {
+                showGlobalToast('Window/Level aracı seçildi.', 'success');
+            } else {
+                showGlobalToast('Görüntüleme aracı aktif.', 'success');
+            }
+            // If invert tool
+            if(this.innerHTML.includes('circle') && !this.innerHTML.includes('W/L')) {
+                if(ctImg.style.filter.includes('invert')) {
+                    ctImg.style.filter = ctImg.style.filter.replace('invert(1)', '');
+                } else {
+                    ctImg.style.filter += ' invert(1)';
+                }
+            }
+        };
+    });
+
+    // Slice Bar Drag Simulation
+    var track = document.querySelector('.slice-track');
+    var thumb = document.querySelector('.slice-thumb');
+    if(track && thumb) {
+        track.onclick = function(e) {
+            var rect = track.getBoundingClientRect();
+            var y = e.clientY - rect.top;
+            var pct = Math.max(0, Math.min(100, (y / rect.height) * 100));
+            thumb.style.top = pct + '%';
+            showGlobalToast('Kesit ' + Math.floor((1 - pct/100)*120) + ' yüklendi.', 'success');
+        };
     }
 });
 </script>
