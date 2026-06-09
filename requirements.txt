@@ -1,6 +1,0 @@
-flask
-flask-cors
-flask-swagger-ui
-mysql-connector-python
-numpy
-gunicorn
