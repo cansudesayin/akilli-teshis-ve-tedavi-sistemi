@@ -238,8 +238,8 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
     <div class="topbar"><button class="hamburger" onclick="toggleSidebar()" aria-label="Menü"><span></span><span></span><span></span></button>
       <div><h1>Hasta Profili</h1><p>Ahmet Yıldız · #P-2041 · Son güncelleme: 29.03.2026</p></div>
       <div style="display:flex;gap:8px">
-        <div class="btn" onclick="alert('Hasta raporu oluşturuluyor...')">Rapor Oluştur</div>
-        <div class="btn btn-primary" onclick="alert('Profil düzenleme ekranı açılıyor...')">Profili Düzenle</div>
+        <div class="btn" onclick="simBtn(event, \'Hasta raporu oluşturuluyor...\')">Rapor Oluştur</div>
+        <div class="btn btn-primary" onclick="simBtn(event, \'Profil düzenleme ekranı açılıyor...\')">Profili Düzenle</div>
       </div>
     </div>
     <div class="export-bar">
@@ -466,3 +466,5 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 });
 </script>
+
+<script src="ui.js"></script>

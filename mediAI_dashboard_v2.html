@@ -253,7 +253,7 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
       </div>
       <div class="mid-grid">
         <div class="card">
-          <div class="card-header"><span class="card-title">Haftalık Analiz Dağılımı</span><span class="card-action" onclick="alert('Haftalık analiz raporu indiriliyor...')">Raporu İndir</span></div>
+          <div class="card-header"><span class="card-title">Haftalık Analiz Dağılımı</span><span class="card-action" onclick="simBtn(event, \'Haftalık analiz raporu indiriliyor...\')">Raporu İndir</span></div>
           <div class="legend">
             <div class="legend-item"><div class="legend-dot" style="background:#1a5fa8"></div>Akciğer BT</div>
             <div class="legend-item"><div class="legend-dot" style="background:#0f6e56"></div>MRI Beyin</div>
@@ -270,7 +270,7 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
           </div>
         </div>
         <div class="card">
-          <div class="card-header"><span class="card-title">Son Aktivite</span><span class="card-action" onclick="alert('Tüm aktiviteler yükleniyor...')">Tümünü Gör</span></div>
+          <div class="card-header"><span class="card-title">Son Aktivite</span><span class="card-action" onclick="simBtn(event, \'Tüm aktiviteler yükleniyor...\')">Tümünü Gör</span></div>
           <div class="act-item"><div class="act-dot" style="background:#1a5fa8"></div><span class="act-text">Akciğer BT analizi tamamlandı</span><span class="act-time">2d</span></div>
           <div class="act-item"><div class="act-dot" style="background:#e24b4a"></div><span class="act-text">Yüksek öncelikli teşhis eklendi</span><span class="act-time">15d</span></div>
           <div class="act-item"><div class="act-dot" style="background:#0f6e56"></div><span class="act-text">Tedavi planı güncellendi</span><span class="act-time">1s</span></div>
@@ -365,3 +365,5 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 });
 </script>
+
+<script src="ui.js"></script>
