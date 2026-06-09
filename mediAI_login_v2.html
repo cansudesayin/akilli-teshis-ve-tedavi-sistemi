@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
       var err = document.getElementById('login-error');
       
       if(email && pass) {
-        if(email.value === 'admin@mediai.com' && pass.value === '123456') {
+        if(email.value.trim() !== '' && pass.value.length >= 3) {
           localStorage.setItem('isLoggedIn', 'true');
           var orig = loginBtn.innerHTML;
           loginBtn.innerHTML = '<span class="spinner-btn" style="width:16px;height:16px;border:2px solid #fff;border-bottom-color:transparent;border-radius:50%;display:inline-block;animation:spin 1s linear infinite"></span>';

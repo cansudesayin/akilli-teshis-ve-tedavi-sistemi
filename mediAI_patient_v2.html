@@ -507,3 +507,37 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+
+
+<div class="modal-overlay" id="profModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <span>Profili Düzenle</span>
+            <button class="modal-close" onclick="document.getElementById('profModal').classList.remove('open')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <label style="font-size:12px; margin-bottom:4px; display:block">Kan Grubu</label>
+            <input type="text" id="edit-blood" class="modal-input" value="A Rh(+)">
+            <label style="font-size:12px; margin-bottom:4px; display:block">Alerjiler</label>
+            <input type="text" id="edit-allergy" class="modal-input" value="Penisilin">
+        </div>
+        <div class="modal-footer">
+            <div class="btn" onclick="document.getElementById('profModal').classList.remove('open')">İptal</div>
+            <div class="btn btn-primary" onclick="saveProfile()">Kaydet</div>
+        </div>
+    </div>
+</div>
+<script>
+function saveProfile() {
+    var bg = document.getElementById('edit-blood').value;
+    var al = document.getElementById('edit-allergy').value;
+    var items = document.querySelectorAll('.info-v');
+    items.forEach(el => {
+        if(el.innerText.includes('Rh')) el.innerText = bg;
+        if(el.innerText.includes('Penisilin') || el.innerText === '-') el.innerText = al;
+    });
+    document.getElementById('profModal').classList.remove('open');
+    showGlobalToast('Profil başarıyla güncellendi.', 'success');
+}
+</script>

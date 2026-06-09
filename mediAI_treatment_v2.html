@@ -384,3 +384,80 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+
+
+<div class="modal-overlay" id="planModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <span>Tedavi Planına Aşama Ekle</span>
+            <button class="modal-close" onclick="document.getElementById('planModal').classList.remove('open')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <label style="font-size:12px; margin-bottom:4px; display:block">Aşama Adı</label>
+            <input type="text" id="plan-title" class="modal-input" placeholder="Örn: Konsültasyon Sonucu">
+            <label style="font-size:12px; margin-bottom:4px; display:block">Detay</label>
+            <textarea id="plan-desc" class="modal-input" rows="3" placeholder="Detayları giriniz..."></textarea>
+        </div>
+        <div class="modal-footer">
+            <div class="btn" onclick="document.getElementById('planModal').classList.remove('open')">İptal</div>
+            <div class="btn btn-primary" onclick="addPlanStep()">Ekle</div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="medModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <span>Yeni İlaç Ekle</span>
+            <button class="modal-close" onclick="document.getElementById('medModal').classList.remove('open')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <label style="font-size:12px; margin-bottom:4px; display:block">İlaç Adı</label>
+            <input type="text" id="med-name" class="modal-input" placeholder="İlaç Adı">
+            <label style="font-size:12px; margin-bottom:4px; display:block">Dozaj / Sıklık</label>
+            <input type="text" id="med-dose" class="modal-input" placeholder="Örn: 500mg, Günde 2x1">
+        </div>
+        <div class="modal-footer">
+            <div class="btn" onclick="document.getElementById('medModal').classList.remove('open')">İptal</div>
+            <div class="btn btn-primary" onclick="addMed()">Kaydet</div>
+        </div>
+    </div>
+</div>
+
+<script>
+function addPlanStep() {
+    var title = document.getElementById('plan-title').value;
+    var desc = document.getElementById('plan-desc').value;
+    if(!title) return;
+    var stepHtml = `
+    <div class="plan-step">
+      <div class="step-num" style="background:#e8f0fb;color:#185fa5">Yeni</div>
+      <div style="flex:1">
+        <div style="font-size:12px;font-weight:500;color:#0b1c30;margin-bottom:2px">${title}</div>
+        <div style="font-size:11px;color:#526070">${desc}</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px"><span style="font-size:10px;color:#8a9aaa">Şimdi</span><span class="badge bb">Aktif</span></div>
+      </div>
+    </div>`;
+    var container = document.querySelector('.card:first-child');
+    if(container) container.insertAdjacentHTML('beforeend', stepHtml);
+    document.getElementById('planModal').classList.remove('open');
+    showGlobalToast('Plan aşaması eklendi.', 'success');
+}
+
+function addMed() {
+    var name = document.getElementById('med-name').value;
+    var dose = document.getElementById('med-dose').value;
+    if(!name) return;
+    var medHtml = `
+    <div class="med-row">
+      <div class="med-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="3" y="3" width="10" height="10" rx="2" stroke="#526070" stroke-width="1.2"/><path d="M8 6v4M6 8h4" stroke="#526070" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+      <div><div style="font-size:12px;font-weight:500;color:#0b1c30">${name}</div><div style="font-size:11px;color:#526070">${dose}</div></div>
+      <div class="med-sched">Yeni Eklendi</div>
+    </div>`;
+    var medCards = document.querySelectorAll('.card');
+    if(medCards.length >= 2) medCards[1].insertAdjacentHTML('beforeend', medHtml);
+    document.getElementById('medModal').classList.remove('open');
+    showGlobalToast('Yeni ilaç reçeteye yazıldı.', 'success');
+}
+</script>

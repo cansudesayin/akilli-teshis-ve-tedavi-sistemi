@@ -406,3 +406,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+
+
+<div class="modal-overlay" id="actModal">
+    <div class="modal-box" style="max-width: 500px">
+        <div class="modal-header">
+            <span>Tüm Aktiviteler</span>
+            <button class="modal-close" onclick="document.getElementById('actModal').classList.remove('open')">&times;</button>
+        </div>
+        <div class="modal-body" style="max-height: 300px; overflow-y: auto;">
+            <ul style="list-style: none; padding:0; margin:0; font-size:13px; line-height:1.6">
+                <li style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #e2e8f0"><b>Bugün 14:30</b> - Yeni hasta kaydı oluşturuldu: Zeynep K.</li>
+                <li style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #e2e8f0"><b>Bugün 11:15</b> - Ahmet Yıldız için BT analizi tamamlandı.</li>
+                <li style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #e2e8f0"><b>Dün 09:45</b> - Sistem güncellemesi v2.1.4 uygulandı.</li>
+                <li style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #e2e8f0"><b>26 Mart</b> - Dr. Selin Bozkurt sisteme giriş yaptı.</li>
+                <li><b>25 Mart</b> - Haftalık sistem yedeği alındı.</li>
+            </ul>
+        </div>
+        <div class="modal-footer">
+            <div class="btn" onclick="document.getElementById('actModal').classList.remove('open')">Kapat</div>
+        </div>
+    </div>
+</div>
