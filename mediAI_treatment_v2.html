@@ -188,7 +188,7 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
       <div><h1>Tedavi Planı</h1><p>Ahmet Yıldız · Plan oluşturuldu: 29.03.2026</p></div>
       <div style="display:flex;gap:8px">
         <div class="btn" onclick="printPage(event)">Yazdır</div>
-        <div class="btn btn-primary" onclick="simBtn(event, \'Tedavi planı güncelleme ekranı yükleniyor...\')">Planı Güncelle</div>
+        <div class="btn btn-primary" onclick="document.getElementById('planModal').classList.add('open')">Planı Güncelle</div>
       </div>
     </div>
     <div class="content">
@@ -247,7 +247,7 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
           </div>
         </div>
         <div class="card">
-          <div class="card-header"><span class="card-title">Mevcut İlaçlar</span><span style="font-size:11px;color:#1a5fa8;cursor:pointer" onclick="simBtn(event, \'İlaç ekleme ekranı yükleniyor...\')">+ İlaç Ekle</span></div>
+          <div class="card-header"><span class="card-title">Mevcut İlaçlar</span><span style="font-size:11px;color:#1a5fa8;cursor:pointer" onclick="document.getElementById('medModal').classList.add('open')">+ İlaç Ekle</span></div>
           <div class="med-row">
             <div class="med-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="3" y="3" width="10" height="10" rx="2" stroke="#526070" stroke-width="1.2"/><path d="M8 6v4M6 8h4" stroke="#526070" stroke-width="1.2" stroke-linecap="round"/></svg></div>
             <div><div style="font-size:12px;font-weight:500;color:#0b1c30">Acetylsalicylic Acid</div><div style="font-size:11px;color:#526070">100 mg</div></div>
