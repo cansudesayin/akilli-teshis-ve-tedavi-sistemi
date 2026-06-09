@@ -208,8 +208,8 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
     <div class="topbar"><button class="hamburger" onclick="toggleSidebar()" aria-label="Menü"><span></span><span></span><span></span></button>
       <div><h1>Teşhis Sonuçları</h1><p>Ahmet Yıldız · BT Toraks · #T-20260329-041</p></div>
       <div style="display:flex;gap:8px">
-        <div class="btn btn-danger" onclick="simBtn(event, \'Teşhis reddedildi. Tekrar inceleme talep edilecek.\')">Reddet</div>
-        <div class="btn btn-primary" onclick="simBtn(event, \'Teşhis onaylandı. Tedavi planı sayfasına yönlendiriliyor...\', \'mediAI_treatment_v2.html\')">Teşhisi Onayla</div>
+        <div class="btn btn-danger" onclick="saveStateAndRedirect(event, 'teshis_durumu', 'reddedildi', 'Teşhis reddedildi, ikinci görüş talep edildi.', null)">Reddet</div>
+        <div class="btn btn-primary" onclick="saveStateAndRedirect(event, 'teshis_durumu', 'onaylandi', 'Teşhis onaylandı ve veritabanına işlendi.', 'mediAI_treatment_v2.html')">Teşhisi Onayla</div>
       </div>
     </div>
     
