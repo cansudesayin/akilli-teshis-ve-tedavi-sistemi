@@ -116,12 +116,17 @@ def swagger_json():
 # ==============================================================================
 def get_db_connection():
     try:
-        return mysql.connector.connect(
-            host=os.environ.get('DB_HOST', 'localhost'),
-            user=os.environ.get('DB_USER', 'root'),
-            password=os.environ.get('DB_PASSWORD', 'sifre'),
-            database=os.environ.get('DB_NAME', 'mediai_db')
-        )
+        config = {
+            'host': os.environ.get('DB_HOST', 'localhost'),
+            'port': int(os.environ.get('DB_PORT', 3306)),
+            'user': os.environ.get('DB_USER', 'root'),
+            'password': os.environ.get('DB_PASSWORD', 'sifre'),
+            'database': os.environ.get('DB_NAME', 'mediai_db')
+        }
+        # Aiven gibi bulut MySQL servisleri SSL zorunlu tutar
+        if os.environ.get('DB_SSL', 'false').lower() == 'true':
+            config['ssl_disabled'] = False
+        return mysql.connector.connect(**config)
     except Exception as e:
         print(f"Veritabanı bağlantı hatası: {e}")
         return None
