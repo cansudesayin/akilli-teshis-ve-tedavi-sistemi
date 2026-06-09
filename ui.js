@@ -1,3 +1,21 @@
+
+// --- AUTH GUARD ---
+(function() {
+    var path = window.location.pathname;
+    if (path && path.indexOf('login') === -1 && path.indexOf('index.html') === -1 && !path.endsWith('/')) {
+        if(localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'mediAI_login_v2.html';
+        }
+    }
+})();
+
+window.logoutSystem = function(event) {
+    if(event) event.preventDefault();
+    localStorage.removeItem('isLoggedIn');
+    window.location.href = 'mediAI_login_v2.html';
+};
+// ------------------
+
 document.addEventListener('DOMContentLoaded', function() {
   var t = document.createElement('div');
   t.id = 'global-toast';

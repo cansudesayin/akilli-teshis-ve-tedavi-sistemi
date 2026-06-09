@@ -49,40 +49,8 @@
   .stat-val { color: #93C5FD; font-size: 20px; font-weight: 600; }
   .stat-lbl { color: #475569; font-size: 11px; margin-top: 2px; }
 </style>
-<div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
 <div class="medi-root">
-  <div class="medi-sidebar">
-    <div class="medi-logo">
-      <div class="medi-logo-icon">
-        <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="1.5"/><path d="M10 6v8M6 10h8" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
-      </div>
-      <div>
-        <div class="medi-logo-text">MediAI</div>
-        <div class="medi-logo-sub">Klinik Karar Destek</div>
-      </div>
-    </div>
-    <div class="sidebar-label">Navigasyon</div>
-    <div class="sidebar-item active"><span class="sidebar-dot active"></span>Giriş Yap</div>
-    <div class="sidebar-item"><span class="sidebar-dot"></span>Dashboard</div>
-    <div class="sidebar-item"><span class="sidebar-dot"></span>Görüntü Analizi</div>
-    <div class="sidebar-item"><span class="sidebar-dot"></span>Teşhis Sonuçları</div>
-    <div class="sidebar-item"><span class="sidebar-dot"></span>Tedavi Planı</div>
-    <div class="sidebar-item"><span class="sidebar-dot"></span>Hasta Profili</div>
-    <hr class="sidebar-divider">
-    <div class="sidebar-item"><span class="sidebar-dot"></span>Ayarlar</div>
-    <div class="side-info">
-      <div class="stat-card">
-        <div class="stat-val">%95.4</div>
-        <div class="stat-lbl">Melanom tespit doğruluğu</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-val">%60</div>
-        <div class="stat-lbl">Raporlama süresi azalması</div>
-      </div>
-    </div>
-  </div>
-  <div class="medi-main"><button class="hamburger" style="position:fixed;top:16px;left:16px;z-index:101;background:#0A1628;border-radius:6px;padding:8px" onclick="toggleSidebar()"><span style="background:#94A3B8"></span><span style="background:#94A3B8"></span><span style="background:#94A3B8"></span></button>
-    <div class="login-card">
+  <div class="medi-main">    <div class="login-card">
       <div class="login-header">
         <div class="login-badge"><span class="login-badge-dot"></span>Güvenli Sistem Girişi</div>
         <div class="login-title">Hoş geldiniz</div>
@@ -168,7 +136,11 @@ document.addEventListener('DOMContentLoaded', function() {
       
       if(email && pass) {
         if(email.value === 'admin@mediai.com' && pass.value === '123456') {
-          window.location.href = 'mediAI_dashboard_v2.html';
+          localStorage.setItem('isLoggedIn', 'true');
+          var orig = loginBtn.innerHTML;
+          loginBtn.innerHTML = '<span class="spinner-btn" style="width:16px;height:16px;border:2px solid #fff;border-bottom-color:transparent;border-radius:50%;display:inline-block;animation:spin 1s linear infinite"></span>';
+          loginBtn.style.opacity = '0.8';
+          setTimeout(function(){ window.location.href = 'mediAI_dashboard_v2.html'; }, 800);
         } else {
           err.style.display = 'block';
         }
