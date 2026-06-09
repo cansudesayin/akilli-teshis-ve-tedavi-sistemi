@@ -368,8 +368,8 @@ async function analizBaslat() {
           <div class="sec-title">İşlemler</div>
           <div class="action-col">
             <div class="btn btn-primary" style="justify-content:center" onclick="saveStateAndRedirect(event, 'analiz_durumu', 'onaylandi', 'Teşhis oluşturuluyor...', 'mediAI_diagnosis_v2.html')">Teşhis Oluştur</div>
-            <div class="btn" style="justify-content:center">Rapor Görüntüle</div>
-            <div class="btn" style="justify-content:center">İkinci Görüş İste</div>
+            <div class="btn" style="justify-content:center" onclick="showGlobalToast('Kapsamlı rapor hazırlanıyor...', 'success'); setTimeout(() => window.location.href='mediAI_diagnosis_v2.html', 1500)">Rapor Görüntüle</div>
+            <div class="btn" style="justify-content:center" onclick="showGlobalToast('İkinci görüş talebi uzman havuzuna başarıyla iletildi.', 'success')">İkinci Görüş İste</div>
           </div>
         </div>
       </div>
