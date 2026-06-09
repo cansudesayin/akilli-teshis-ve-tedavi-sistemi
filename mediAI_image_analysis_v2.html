@@ -195,8 +195,8 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
     <div class="topbar"><button class="hamburger" onclick="toggleSidebar()" aria-label="Menü"><span></span><span></span><span></span></button>
       <div><h1>Görüntü Analizi</h1><p>Hasta: Ahmet Yıldız · Akciğer BT · 29.03.2026</p></div>
       <div style="display:flex;gap:8px">
-        <div class="btn"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M4 6l4 4 4-4M2 12h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>DICOM İndir</div>
-        <div class="btn btn-primary"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="white" stroke-width="1.3"/><path d="M6 8l1.5 1.5L10 6" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>Analizi Onayla</div>
+        <div class="btn" onclick="alert('DICOM dosyaları indiriliyor...')"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M4 6l4 4 4-4M2 12h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>DICOM İndir</div>
+        <div class="btn btn-primary" onclick="alert('Analiz onaylandı. Teşhis sayfasına yönlendiriliyor...'); window.location.href='mediAI_diagnosis_v2.html'"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="white" stroke-width="1.3"/><path d="M6 8l1.5 1.5L10 6" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>Analizi Onayla</div>
       </div>
     </div>
     <div class="workspace">
