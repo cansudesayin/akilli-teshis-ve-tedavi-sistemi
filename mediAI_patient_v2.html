@@ -377,7 +377,7 @@ function closeSidebar() {
     </label>
     <div class="modal-actions">
       <button class="modal-btn" onclick="closeHastaModal()">İptal</button>
-      <button class="modal-btn modal-btn-primary" onclick="hastaKaydet()">Kaydet</button>
+      <button class="modal-btn modal-btn-primary" onclick="hastaKaydet(event)">Kaydet</button>
     </div>
     <div class="modal-result" id="hasta-result"></div>
   </div>
@@ -399,13 +399,15 @@ function closeHastaModal() {
   document.getElementById('hasta-result').className = 'modal-result';
 }
 
-async function hastaKaydet() {
-  var btn = event.target;
+async function hastaKaydet(event) {
+  var btn = event ? event.target : document.querySelector('.modal-btn-primary');
+  var origText = btn.textContent;
   btn.textContent = 'Kaydediliyor...';
   btn.disabled = true;
 
+  var yasVal = parseInt(document.getElementById('inp-yas').value, 10);
   var veri = {
-    yas:      document.getElementById('inp-yas').value,
+    yas:      isNaN(yasVal) ? 0 : yasVal,
     cinsiyet: document.getElementById('inp-cinsiyet').value,
     gecmis:   document.getElementById('inp-gecmis').value,
     diyabet:  document.getElementById('inp-diyabet').checked
@@ -420,15 +422,21 @@ async function hastaKaydet() {
       body: JSON.stringify(veri)
     });
     var data = await res.json();
-    resultEl.className = 'modal-result success';
-    resultEl.textContent = data.mesaj + ' (ID: ' + data.hasta_id + ')';
+    
+    if (res.ok && !data.hata) {
+      resultEl.className = 'modal-result success';
+      resultEl.textContent = data.mesaj + ' (ID: ' + data.hasta_id + ')';
+    } else {
+      resultEl.className = 'modal-result error';
+      resultEl.textContent = data.mesaj || 'Bir hata oluştu.';
+    }
   } catch(err) {
     // Sunucu çalışmıyorsa demo mod
     resultEl.className = 'modal-result success';
     resultEl.textContent = 'Hasta başarıyla kaydedildi (Ağ Kaydı ID: 1001)';
   }
 
-  btn.textContent = 'Kaydet';
+  btn.textContent = origText;
   btn.disabled = false;
 }
 </script>
@@ -502,7 +510,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // old bell logic removed
-    if(bellBtn && bellBtn.innerText.includes('🔔')) {
+    var bellBtn = document.querySelector('.notif-btn');
+    if(bellBtn && bellBtn.innerText && bellBtn.innerText.includes('🔔')) {
         bellBtn.onclick = function() { document.getElementById('notifModal').classList.add('open'); }
     }
 });
