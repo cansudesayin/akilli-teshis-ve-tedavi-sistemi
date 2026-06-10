@@ -639,7 +639,13 @@ async function analizBaslat() {
     if(data.on_isleme && data.on_isleme.length > 0) {
       msg += ' (' + data.on_isleme.length + ' ön işleme adımı)';
     }
-    statusEl.textContent = msg;
+    statusEl.textContent = msg + ' — Teşhis sonuçlarına yönlendiriliyorsunuz...';
+    
+    // Redirect after success just like in demo mode
+    var redirId = data.analiz_id || 5001;
+    setTimeout(function() {
+      window.location.href = 'mediAI_diagnosis_v2.html?analiz_id=' + redirId;
+    }, 2500);
   } catch(err) {
     // Demo mod — API'ye bağlanamadığında
     statusEl.className = 'upload-status success';

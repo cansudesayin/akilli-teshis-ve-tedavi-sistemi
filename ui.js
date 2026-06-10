@@ -32,7 +32,7 @@ function showGlobalToast(msg, type) {
 
 window.simBtn = function(event, msg, redirect) {
   if (event) event.preventDefault();
-  var btn = event.currentTarget;
+  var btn = event.currentTarget || event.target;
   if(btn.dataset.loading) return;
   btn.dataset.loading = 'true';
   
@@ -57,7 +57,7 @@ window.simBtn = function(event, msg, redirect) {
 // Gerçek Fonksiyonlar (Sahte uyarilar yerine)
 window.downloadFile = function(event, filename, content) {
     if(event) event.preventDefault();
-    var btn = event.currentTarget;
+    var btn = event.currentTarget || event.target;
     
     // Spinner baslat
     var orig = btn.innerHTML;
@@ -96,7 +96,7 @@ window.printPage = function(event) {
 
 window.saveStateAndRedirect = function(event, key, value, msg, redirect) {
     if(event) event.preventDefault();
-    var btn = event.currentTarget;
+    var btn = event.currentTarget || event.target;
     var orig = btn.innerHTML;
     btn.style.width = btn.offsetWidth + 'px'; 
     btn.innerHTML = '<span class="spinner-btn"></span>';
