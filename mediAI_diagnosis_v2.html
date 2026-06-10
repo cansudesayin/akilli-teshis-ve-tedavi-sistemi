@@ -298,8 +298,8 @@ document.addEventListener('DOMContentLoaded', sonuclariYukle);
           <div class="diag-header">
             <div class="diag-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#a32d2d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
             <div style="flex:1">
-              <div style="font-size:15px;font-weight:500;color:#0b1c30;margin-bottom:3px">Pulmoner Nodül — Malignite Şüphesi</div>
-              <div style="font-size:11px;color:#526070">ICD-10: R91.1 · Sağ alt lob, solid, 8.2mm</div>
+              <div class="diag-name" style="font-size:15px;font-weight:500;color:#0b1c30;margin-bottom:3px">Pulmoner Nodül — Malignite Şüphesi</div>
+              <div class="diag-code" style="font-size:11px;color:#526070">ICD-10: R91.1 · Sağ alt lob, solid, 8.2mm</div>
               <div style="display:flex;gap:8px;margin-top:6px"><span class="badge br">Pirads 4</span><span class="badge ba">Biyopsi Gerekli</span></div>
             </div>
           </div>
@@ -448,8 +448,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // old bell logic removed
-    if(bellBtn && bellBtn.innerText.includes('🔔')) {
+    // old bell logic removed — bellBtn safely checked
+    var bellBtn = document.querySelector('.notif-btn');
+    if(bellBtn && bellBtn.innerText && bellBtn.innerText.includes('🔔')) {
         bellBtn.onclick = function() { document.getElementById('notifModal').classList.add('open'); }
     }
 });
