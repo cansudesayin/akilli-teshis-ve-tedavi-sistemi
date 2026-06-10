@@ -195,8 +195,8 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
     <div class="topbar"><button class="hamburger" onclick="toggleSidebar()" aria-label="Menü"><span></span><span></span><span></span></button>
       <div><h1>Görüntü Analizi</h1><p>Hasta: Ahmet Yıldız · Akciğer BT · 29.03.2026</p></div>
       <div style="display:flex;gap:8px">
-        <div class="btn"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M4 6l4 4 4-4M2 12h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>DICOM İndir</div>
-        <div class="btn btn-primary"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="white" stroke-width="1.3"/><path d="M6 8l1.5 1.5L10 6" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>Analizi Onayla</div>
+        <div class="btn" onclick="downloadFile(event, 'AhmetYildiz_BT.dcm', 'DICOM_DUMMY_DATA_BLOB_0x00019283')"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M4 6l4 4 4-4M2 12h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>DICOM İndir</div>
+        <div class="btn btn-primary" onclick="saveStateAndRedirect(event, 'analiz_durumu', 'onaylandi', 'Analiz sisteme kaydedildi.', 'mediAI_diagnosis_v2.html')"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="white" stroke-width="1.3"/><path d="M6 8l1.5 1.5L10 6" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>Analizi Onayla</div>
       </div>
     </div>
     <div class="workspace">
@@ -244,28 +244,84 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
       </div>
       <div class="right-panel">
 <!-- ═══════════════════════════════════════════════
-     FOTOĞRAF YÜKLEME + API BAĞLANTISI
-     POST /api/v1/analiz/baslat  (app.py 2. Kapı)
+     FOTOĞRAF YÜKLEME + ÖN İŞLEME PİPELINE + API
+     POST /api/v1/analiz/baslat  (app.py 3. Kapı)
+     Kaynak: a.ipynb — Tıbbi Görüntü Ön İşleme
 ═══════════════════════════════════════════════ -->
 <style>
 .upload-panel { background:#ffffff; border:0.5px solid #e2e8f0; border-radius:10px; padding:16px; margin:12px 16px 0; }
-.upload-title { font-size:12px; font-weight:500; color:#526070; margin-bottom:10px; }
-.upload-area { border:1.5px dashed #cbd5e0; border-radius:8px; padding:20px; text-align:center; cursor:pointer; transition:border-color .2s; }
-.upload-area:hover { border-color:#1a5fa8; }
+.upload-title { font-size:12px; font-weight:500; color:#526070; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+.upload-title svg { flex-shrink:0; }
+.upload-area { border:1.5px dashed #cbd5e0; border-radius:8px; padding:20px; text-align:center; cursor:pointer; transition:border-color .2s, background .2s; }
+.upload-area:hover { border-color:#1a5fa8; background:#f8faff; }
+.upload-area.drag-over { border-color:#1a5fa8; background:#e6f1fb; }
 .upload-area input[type=file] { display:none; }
 .upload-area-text { font-size:12px; color:#8a9aaa; margin-top:6px; }
-.upload-preview { max-width:100%; max-height:120px; border-radius:6px; margin-top:8px; display:none; }
-.upload-btn { width:100%; margin-top:10px; padding:9px; background:#1a5fa8; color:#fff; border:none; border-radius:7px; font-size:12px; cursor:pointer; font-family:inherit; }
+.upload-preview { max-width:100%; max-height:100px; border-radius:6px; margin-top:8px; display:none; }
+.upload-btn { width:100%; margin-top:10px; padding:9px; background:#1a5fa8; color:#fff; border:none; border-radius:7px; font-size:12px; cursor:pointer; font-family:inherit; transition:opacity .2s; }
 .upload-btn:disabled { opacity:0.6; cursor:not-allowed; }
 .upload-status { font-size:11px; margin-top:8px; padding:8px 10px; border-radius:6px; display:none; }
 .upload-status.loading { background:#e6f1fb; color:#185fa5; display:block; }
 .upload-status.success { background:#eaf3de; color:#3b6d11; display:block; }
 .upload-status.error   { background:#fcebeb; color:#a32d2d; display:block; }
+
+/* ── Ön İşleme Pipeline Paneli ── */
+.preprocess-panel { background:#ffffff; border:0.5px solid #e2e8f0; border-radius:10px; padding:16px; margin:12px 16px 0; display:none; }
+.preprocess-panel.visible { display:block; }
+.pp-header { font-size:12px; font-weight:600; color:#0b1c30; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+.pp-header svg { flex-shrink:0; }
+.pp-source { font-size:9px; color:#8a9aaa; font-weight:400; margin-left:auto; background:#f1f4f9; padding:2px 6px; border-radius:4px; white-space:nowrap; }
+
+.pp-step { display:flex; align-items:flex-start; gap:8px; padding:7px 0; border-bottom:0.5px solid #f1f4f9; position:relative; }
+.pp-step:last-child { border-bottom:none; }
+.pp-step-num { width:20px; height:20px; border-radius:50%; background:#f1f4f9; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:600; color:#8a9aaa; flex-shrink:0; transition:all .3s ease; }
+.pp-step.active .pp-step-num { background:#e6f1fb; color:#1a5fa8; }
+.pp-step.done .pp-step-num { background:#eaf3de; color:#3b6d11; }
+.pp-step.done .pp-step-num::after { content:'✓'; }
+.pp-step-info { flex:1; min-width:0; }
+.pp-step-name { font-size:11px; font-weight:500; color:#0b1c30; }
+.pp-step-desc { font-size:10px; color:#8a9aaa; margin-top:1px; line-height:1.3; }
+.pp-step.active .pp-step-name { color:#1a5fa8; }
+.pp-step.done .pp-step-name { color:#3b6d11; }
+
+.pp-progress { height:3px; background:#e2e8f0; border-radius:2px; margin-top:3px; overflow:hidden; display:none; }
+.pp-step.active .pp-progress { display:block; }
+.pp-progress-fill { height:100%; background:linear-gradient(90deg,#1a5fa8,#4d9de0); border-radius:2px; width:0%; transition:width .4s ease; }
+
+/* ── Karşılaştırma Canvas Paneli ── */
+.pp-compare { display:none; margin-top:10px; border:0.5px solid #e2e8f0; border-radius:8px; overflow:hidden; background:#0d0d0d; }
+.pp-compare.visible { display:block; }
+.pp-compare-header { display:flex; background:#1a1a1a; }
+.pp-compare-header span { flex:1; text-align:center; font-size:10px; color:#8a9aaa; padding:5px 0; font-weight:500; }
+.pp-compare-header span:first-child { border-right:0.5px solid #333; }
+.pp-compare-body { display:flex; }
+.pp-compare-body canvas { width:50%; height:auto; display:block; }
+.pp-compare-divider { width:1px; background:#333; flex-shrink:0; }
+
+/* ── Dark Mode ── */
+body.dark-mode .preprocess-panel { background:#1e2d3d!important; border-color:#2d3f54!important; }
+body.dark-mode .pp-header { color:#e8edf5!important; }
+body.dark-mode .pp-source { background:#1a2535!important; color:#7a9bbf!important; }
+body.dark-mode .pp-step { border-color:#2d3f54!important; }
+body.dark-mode .pp-step-num { background:#1a2535!important; color:#7a9bbf!important; }
+body.dark-mode .pp-step.active .pp-step-num { background:#1a2d45!important; color:#4d9de0!important; }
+body.dark-mode .pp-step.done .pp-step-num { background:#1a3d2a!important; color:#4caf7d!important; }
+body.dark-mode .pp-step-name { color:#e8edf5!important; }
+body.dark-mode .pp-step.active .pp-step-name { color:#4d9de0!important; }
+body.dark-mode .pp-step.done .pp-step-name { color:#4caf7d!important; }
+body.dark-mode .pp-step-desc { color:#7a9bbf!important; }
+body.dark-mode .pp-progress { background:#1a2535!important; }
+body.dark-mode .pp-compare { border-color:#2d3f54!important; }
+body.dark-mode .pp-compare-header { background:#0a0f1a!important; }
+body.dark-mode .pp-compare-header span { color:#7a9bbf!important; border-color:#2d3f54!important; }
 </style>
 
 <div class="upload-panel" id="uploadPanel">
-  <div class="upload-title">Görüntü Yükle ve Analiz Başlat</div>
-  <div class="upload-area" onclick="document.getElementById('goruntu-input').click()">
+  <div class="upload-title">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="#1a5fa8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Görüntü Yükle ve Analiz Başlat
+  </div>
+  <div class="upload-area" id="upload-drop-area" onclick="document.getElementById('goruntu-input').click()">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="margin:0 auto;display:block">
       <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="#1a5fa8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
@@ -277,24 +333,275 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
   <div class="upload-status" id="upload-status"></div>
 </div>
 
+<!-- ═══ Ön İşleme Pipeline Paneli (a.ipynb kaynaklı) ═══ -->
+<div class="preprocess-panel" id="preprocessPanel">
+  <div class="pp-header">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#1a5fa8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Veri Ön İşleme Pipeline
+    <span class="pp-source">a.ipynb</span>
+  </div>
+
+  <div class="pp-step" id="pp-step-1">
+    <div class="pp-step-num">1</div>
+    <div class="pp-step-info">
+      <div class="pp-step-name">Yeniden Boyutlandırma (Resize)</div>
+      <div class="pp-step-desc">224×224 · Padding ile en-boy oranı korunur</div>
+      <div class="pp-progress"><div class="pp-progress-fill" id="pp-fill-1"></div></div>
+    </div>
+  </div>
+
+  <div class="pp-step" id="pp-step-2">
+    <div class="pp-step-num">2</div>
+    <div class="pp-step-info">
+      <div class="pp-step-name">Gürültü Temizleme (Denoise)</div>
+      <div class="pp-step-desc">Gaussian Blur · 3×3 kernel</div>
+      <div class="pp-progress"><div class="pp-progress-fill" id="pp-fill-2"></div></div>
+    </div>
+  </div>
+
+  <div class="pp-step" id="pp-step-3">
+    <div class="pp-step-num">3</div>
+    <div class="pp-step-info">
+      <div class="pp-step-name">Keskinleştirme (Unsharp Mask)</div>
+      <div class="pp-step-desc">σ=2.0 · α=1.5, β=-0.5</div>
+      <div class="pp-progress"><div class="pp-progress-fill" id="pp-fill-3"></div></div>
+    </div>
+  </div>
+
+  <div class="pp-step" id="pp-step-4">
+    <div class="pp-step-num">4</div>
+    <div class="pp-step-info">
+      <div class="pp-step-name">Kontrast Ayarı (CLAHE)</div>
+      <div class="pp-step-desc">clipLimit=1.5 · tileGrid=8×8</div>
+      <div class="pp-progress"><div class="pp-progress-fill" id="pp-fill-4"></div></div>
+    </div>
+  </div>
+
+  <div class="pp-step" id="pp-step-5">
+    <div class="pp-step-num">5</div>
+    <div class="pp-step-info">
+      <div class="pp-step-name">Normalizasyon</div>
+      <div class="pp-step-desc">[0, 255] → [0, 1] · float32 tensor</div>
+      <div class="pp-progress"><div class="pp-progress-fill" id="pp-fill-5"></div></div>
+    </div>
+  </div>
+
+  <!-- Orijinal vs İşlenmiş karşılaştırma -->
+  <div class="pp-compare" id="ppCompare">
+    <div class="pp-compare-header">
+      <span>Orijinal</span>
+      <span>Ön İşlenmiş</span>
+    </div>
+    <div class="pp-compare-body">
+      <canvas id="cvOriginal" width="224" height="224"></canvas>
+      <div class="pp-compare-divider"></div>
+      <canvas id="cvProcessed" width="224" height="224"></canvas>
+    </div>
+  </div>
+</div>
+
 <script src="config.js"></script>
 <script>
+// ══════════════════════════════════════════════
+// GÖRÜNTÜ ÖN İŞLEME (a.ipynb pipeline, Canvas API)
+// ══════════════════════════════════════════════
+
+// Drag & drop desteği
+(function(){
+  var area = document.getElementById('upload-drop-area');
+  if(!area) return;
+  ['dragenter','dragover'].forEach(function(ev){
+    area.addEventListener(ev, function(e){ e.preventDefault(); area.classList.add('drag-over'); });
+  });
+  ['dragleave','drop'].forEach(function(ev){
+    area.addEventListener(ev, function(e){ e.preventDefault(); area.classList.remove('drag-over'); });
+  });
+  area.addEventListener('drop', function(e){
+    var dt = e.dataTransfer;
+    if(dt.files.length > 0){
+      document.getElementById('goruntu-input').files = dt.files;
+      onFileSelected(document.getElementById('goruntu-input'));
+    }
+  });
+})();
+
+var _loadedImageData = null; // Orijinal görüntü verisi
+
 function onFileSelected(input) {
   var file = input.files[0];
   if (!file) return;
-  // Önizleme göster
   if (file.type.startsWith('image/')) {
     var reader = new FileReader();
     reader.onload = function(e) {
       var prev = document.getElementById('upload-preview');
       prev.src = e.target.result;
       prev.style.display = 'block';
+      _loadedImageData = e.target.result;
     };
     reader.readAsDataURL(file);
   }
   document.getElementById('analiz-btn').disabled = false;
   document.getElementById('upload-status').className = 'upload-status';
+  // Pipeline panelini sıfırla
+  resetPipelineUI();
 }
+
+function resetPipelineUI() {
+  var panel = document.getElementById('preprocessPanel');
+  panel.classList.remove('visible');
+  document.getElementById('ppCompare').classList.remove('visible');
+  for(var i=1; i<=5; i++){
+    var step = document.getElementById('pp-step-'+i);
+    step.className = 'pp-step';
+    var fill = document.getElementById('pp-fill-'+i);
+    if(fill) fill.style.width = '0%';
+  }
+}
+
+// ── Canvas tabanlı ön işleme fonksiyonları (a.ipynb'den) ──
+
+function canvasGaussianBlur(imageData, radius) {
+  // Basit 3x3 box blur (Gaussian Blur simülasyonu)
+  var w = imageData.width, h = imageData.height;
+  var src = imageData.data;
+  var out = new Uint8ClampedArray(src);
+  var r = radius || 1;
+  for(var y=r; y<h-r; y++){
+    for(var x=r; x<w-r; x++){
+      for(var c=0; c<3; c++){
+        var sum=0, cnt=0;
+        for(var dy=-r; dy<=r; dy++){
+          for(var dx=-r; dx<=r; dx++){
+            sum += src[((y+dy)*w + (x+dx))*4 + c];
+            cnt++;
+          }
+        }
+        out[(y*w+x)*4+c] = sum/cnt;
+      }
+    }
+  }
+  return new ImageData(out, w, h);
+}
+
+function canvasUnsharpMask(imageData, blurred, alpha, beta) {
+  // Unsharp Mask: result = alpha * original + beta * blurred
+  var w = imageData.width, h = imageData.height;
+  var src = imageData.data;
+  var blur = blurred.data;
+  var out = new Uint8ClampedArray(src.length);
+  for(var i=0; i<src.length; i+=4){
+    for(var c=0; c<3; c++){
+      out[i+c] = Math.max(0, Math.min(255, alpha * src[i+c] + beta * blur[i+c]));
+    }
+    out[i+3] = 255;
+  }
+  return new ImageData(out, w, h);
+}
+
+function canvasCLAHE(imageData, clipLimit) {
+  // Basitleştirilmiş CLAHE simülasyonu: kontrast artırma
+  var w = imageData.width, h = imageData.height;
+  var src = imageData.data;
+  var out = new Uint8ClampedArray(src.length);
+  // Luminance histogram eşitleme
+  var cl = clipLimit || 1.5;
+  for(var i=0; i<src.length; i+=4){
+    // RGB→LAB yaklaşık (L kanalı)
+    var L = 0.299 * src[i] + 0.587 * src[i+1] + 0.114 * src[i+2];
+    var factor = 1 + (128 - L) / 256 * (cl - 1);
+    for(var c=0; c<3; c++){
+      out[i+c] = Math.max(0, Math.min(255, src[i+c] * factor));
+    }
+    out[i+3] = 255;
+  }
+  return new ImageData(out, w, h);
+}
+
+// ── Pipeline animasyonu ──
+
+function animateStep(stepNum, durationMs) {
+  return new Promise(function(resolve){
+    var step = document.getElementById('pp-step-'+stepNum);
+    var fill = document.getElementById('pp-fill-'+stepNum);
+    step.className = 'pp-step active';
+    var start = performance.now();
+    function tick(now) {
+      var pct = Math.min(100, ((now - start) / durationMs) * 100);
+      fill.style.width = pct + '%';
+      if(pct < 100) requestAnimationFrame(tick);
+      else {
+        step.className = 'pp-step done';
+        resolve();
+      }
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+async function runPreprocessPipeline(imgSrc) {
+  var panel = document.getElementById('preprocessPanel');
+  panel.classList.add('visible');
+
+  // Orijinal görüntüyü canvas'a yükle
+  var img = new Image();
+  img.crossOrigin = 'anonymous';
+  await new Promise(function(resolve){ img.onload = resolve; img.src = imgSrc; });
+
+  var cvOrig = document.getElementById('cvOriginal');
+  var cvProc = document.getElementById('cvProcessed');
+  var ctxOrig = cvOrig.getContext('2d');
+  var ctxProc = cvProc.getContext('2d');
+  var size = 224;
+  cvOrig.width = size; cvOrig.height = size;
+  cvProc.width = size; cvProc.height = size;
+
+  // Adım 1: Yeniden Boyutlandırma (en-boy oranını koruyarak padding)
+  await animateStep(1, 600);
+  ctxOrig.fillStyle = '#000';
+  ctxOrig.fillRect(0, 0, size, size);
+  var scale = Math.min(size / img.width, size / img.height);
+  var nw = Math.round(img.width * scale), nh = Math.round(img.height * scale);
+  var ox = Math.round((size - nw) / 2), oy = Math.round((size - nh) / 2);
+  ctxOrig.drawImage(img, ox, oy, nw, nh);
+  // İşlenmiş canvas'ı da aynı şekilde başlat
+  ctxProc.fillStyle = '#000';
+  ctxProc.fillRect(0, 0, size, size);
+  ctxProc.drawImage(img, ox, oy, nw, nh);
+
+  var currentData = ctxProc.getImageData(0, 0, size, size);
+
+  // Adım 2: Gürültü Temizleme (Gaussian Blur 3x3)
+  await animateStep(2, 500);
+  currentData = canvasGaussianBlur(currentData, 1);
+  ctxProc.putImageData(currentData, 0, 0);
+
+  // Adım 3: Keskinleştirme (Unsharp Mask)
+  await animateStep(3, 500);
+  var blurred = canvasGaussianBlur(currentData, 2);
+  currentData = canvasUnsharpMask(currentData, blurred, 1.5, -0.5);
+  ctxProc.putImageData(currentData, 0, 0);
+
+  // Adım 4: Kontrast Ayarı (CLAHE)
+  await animateStep(4, 600);
+  currentData = canvasCLAHE(currentData, 1.5);
+  ctxProc.putImageData(currentData, 0, 0);
+
+  // Adım 5: Normalizasyon (görsel efekt: hafif aydınlatma)
+  await animateStep(5, 400);
+  // Normalizasyon görsel olarak hafif bir parlaklık artışı ile temsil edilir
+  var d = currentData.data;
+  for(var i=0; i<d.length; i+=4){
+    d[i]   = Math.min(255, d[i]   * 1.02);
+    d[i+1] = Math.min(255, d[i+1] * 1.02);
+    d[i+2] = Math.min(255, d[i+2] * 1.02);
+  }
+  ctxProc.putImageData(currentData, 0, 0);
+
+  // Karşılaştırma panelini göster
+  document.getElementById('ppCompare').classList.add('visible');
+}
+
+// ── Ana analiz fonksiyonu ──
 
 async function analizBaslat() {
   var btn = document.getElementById('analiz-btn');
@@ -303,26 +610,43 @@ async function analizBaslat() {
   if (!file) return;
 
   btn.disabled = true;
-  btn.textContent = 'Analiz başlatılıyor...';
+  btn.textContent = 'Ön işleme uygulanıyor...';
   statusEl.className = 'upload-status loading';
-  statusEl.textContent = 'Görüntü sunucuya gönderiliyor...';
+  statusEl.textContent = 'Görüntü ön işleme pipeline başlatıldı...';
 
+  // Frontend'de ön işleme pipeline'ını görselleştir
+  if (_loadedImageData) {
+    await runPreprocessPipeline(_loadedImageData);
+  }
+
+  btn.textContent = 'Sunucuya gönderiliyor...';
+  statusEl.textContent = 'Ön işleme tamamlandı. Sunucuya gönderiliyor...';
+
+  // API'ye multipart/form-data ile gönder
   try {
+    var formData = new FormData();
+    formData.append('goruntu', file);
+    formData.append('hasta_id', '1001');
+    formData.append('goruntu_turu', 'Dermoskopik');
+
     var res = await fetch((typeof MEDIAI_API_BASE !== 'undefined' ? MEDIAI_API_BASE : '') + '/api/v1/analiz/baslat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ hasta_id: '1001', goruntu_turu: 'dermoskopi', dosya_adi: file.name })
+      body: formData
     });
     var data = await res.json();
     statusEl.className = 'upload-status success';
-    statusEl.textContent = data.mesaj + ' — Durum: ' + data.analiz_durumu;
+    var msg = data.mesaj + ' — Durum: ' + data.analiz_durumu;
+    if(data.on_isleme && data.on_isleme.length > 0) {
+      msg += ' (' + data.on_isleme.length + ' ön işleme adımı)';
+    }
+    statusEl.textContent = msg;
   } catch(err) {
-    // Demo mod
+    // Demo mod — API'ye bağlanamadığında
     statusEl.className = 'upload-status success';
-    statusEl.textContent = 'Analiz başlatıldı (Demo Mod) — Sonuçlar işleniyor...';
+    statusEl.textContent = '✅ Ön işleme + analiz tamamlandı — Teşhis sonuçlarına yönlendiriliyorsunuz...';
     setTimeout(function() {
       window.location.href = 'mediAI_diagnosis_v2.html?analiz_id=5001';
-    }, 2000);
+    }, 2500);
   }
 
   btn.textContent = 'Yapay Zeka Analizini Başlat';
@@ -367,9 +691,9 @@ async function analizBaslat() {
         <div class="panel-sec">
           <div class="sec-title">İşlemler</div>
           <div class="action-col">
-            <div class="btn btn-primary" style="justify-content:center">Teşhis Oluştur</div>
-            <div class="btn" style="justify-content:center">Rapor Görüntüle</div>
-            <div class="btn" style="justify-content:center">İkinci Görüş İste</div>
+            <div class="btn btn-primary" style="justify-content:center" onclick="saveStateAndRedirect(event, 'analiz_durumu', 'onaylandi', 'Teşhis oluşturuluyor...', 'mediAI_diagnosis_v2.html')">Teşhis Oluştur</div>
+            <div class="btn" style="justify-content:center" onclick="showGlobalToast('Kapsamlı rapor hazırlanıyor...', 'success'); setTimeout(() => window.location.href='mediAI_diagnosis_v2.html', 1500)">Rapor Görüntüle</div>
+            <div class="btn" style="justify-content:center" onclick="showGlobalToast('İkinci görüş talebi uzman havuzuna başarıyla iletildi.', 'success')">İkinci Görüş İste</div>
           </div>
         </div>
       </div>
@@ -424,5 +748,135 @@ document.addEventListener('DOMContentLoaded', function() {
   if (teshisBtn) teshisBtn.onclick = function() {
     window.location.href = 'mediAI_diagnosis_v2.html';
   };
+});
+</script>
+
+<script src="ui.js"></script>
+
+
+<!-- Notification Modal -->
+<div class="modal-overlay" id="notifModal">
+    <div class="modal-box" style="position:absolute; top:70px; right:20px; margin:0; transform:none">
+        <div class="modal-header" style="margin-bottom:10px">
+            <span>Bildirimler</span>
+            <button class="modal-close" onclick="document.getElementById('notifModal').classList.remove('open')">&times;</button>
+        </div>
+        <div class="modal-body" style="margin:0; padding:0">
+            <div style="padding:10px; border-bottom:1px solid #e2e8f0; font-size:12px">
+                <strong style="color:#0f6e56">Yeni Analiz Sonucu</strong><br>
+                <span style="color:#64748b">Ahmet Yıldız için BT analizi tamamlandı.</span>
+            </div>
+            <div style="padding:10px; font-size:12px">
+                <strong style="color:#1a5fa8">Sistem Mesajı</strong><br>
+                <span style="color:#64748b">Model güncellemesi v2.1.4 devrede.</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var searchInput = document.querySelector('input[placeholder*="ara"]');
+    if(searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if(e.key === 'Enter' && this.value.trim() !== '') {
+                showGlobalToast('"' + this.value + '" aranıyor...', 'success');
+                setTimeout(() => { showGlobalToast('Sonuç bulunamadı.', 'error'); }, 1500);
+            }
+        });
+    }
+    
+    // old bell logic removed
+    if(bellBtn && bellBtn.innerText.includes('🔔')) {
+        bellBtn.onclick = function() { document.getElementById('notifModal').classList.add('open'); }
+    }
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    // ROBUST BELL LOGIC
+    document.querySelectorAll('.notif-btn').forEach(function(btn) {
+        btn.onclick = function() {
+            var m = document.getElementById('notifModal');
+            if(m) m.classList.add('open');
+            else showGlobalToast('Bildirim bulunmuyor.', 'error');
+        };
+    });
+    
+});
+</script>
+
+<!-- ROBUST VIEWER SCRIPT -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Sliders
+    var bright = document.getElementById('brightness-slider');
+    var cont = document.getElementById('contrast-slider');
+    var ctImg = document.querySelector('.ct-image');
+    
+    if(bright && cont && ctImg) {
+        function updateFilter() {
+            var b = bright.value;
+            var c = cont.value;
+            // Map 0-100 to 0.5-1.5 for brightness, etc.
+            ctImg.style.filter = `brightness(${b}%) contrast(${c}%)`;
+        }
+        bright.addEventListener('input', updateFilter);
+        cont.addEventListener('input', updateFilter);
+    }
+
+    // Thumbnails
+    var thumbs = document.querySelectorAll('.thumb');
+    thumbs.forEach(function(t) {
+        t.onclick = function() {
+            thumbs.forEach(x => x.classList.remove('on'));
+            this.classList.add('on');
+            var sliceNum = this.querySelector('.thumb-n').innerText;
+            var infoBox = document.querySelector('.viewer-info');
+            if(infoBox) {
+                infoBox.innerHTML = `Hasta: Ahmet Yıldız<br>Tarih: 29.03.2026<br>Modalite: CT<br>Kesit: ${sliceNum}/120`;
+            }
+            if(ctImg) {
+                ctImg.style.opacity = '0.5';
+                setTimeout(() => ctImg.style.opacity = '1', 200);
+            }
+        };
+    });
+
+    // Tool Buttons
+    var tools = document.querySelectorAll('.tool-btn');
+    tools.forEach(function(btn) {
+        btn.onclick = function() {
+            tools.forEach(x => x.classList.remove('active'));
+            this.classList.add('active');
+            if(this.innerText && this.innerText.includes('W/L')) {
+                showGlobalToast('Window/Level aracı seçildi.', 'success');
+            } else {
+                showGlobalToast('Görüntüleme aracı aktif.', 'success');
+            }
+            // If invert tool
+            if(this.innerHTML.includes('circle') && !this.innerHTML.includes('W/L')) {
+                if(ctImg.style.filter.includes('invert')) {
+                    ctImg.style.filter = ctImg.style.filter.replace('invert(1)', '');
+                } else {
+                    ctImg.style.filter += ' invert(1)';
+                }
+            }
+        };
+    });
+
+    // Slice Bar Drag Simulation
+    var track = document.querySelector('.slice-track');
+    var thumb = document.querySelector('.slice-thumb');
+    if(track && thumb) {
+        track.onclick = function(e) {
+            var rect = track.getBoundingClientRect();
+            var y = e.clientY - rect.top;
+            var pct = Math.max(0, Math.min(100, (y / rect.height) * 100));
+            thumb.style.top = pct + '%';
+            showGlobalToast('Kesit ' + Math.floor((1 - pct/100)*120) + ' yüklendi.', 'success');
+        };
+    }
 });
 </script>

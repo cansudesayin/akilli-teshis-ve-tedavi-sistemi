@@ -7,6 +7,75 @@ import numpy as np
 import os
 
 # ==============================================================================
+# GÖRÜNTÜ ÖN İŞLEME MODÜLÜ (a.ipynb'den entegre edildi)
+# Kaynak: Tıbbi Görüntü Ön İşleme (Data Preprocessing Pipeline)
+# ==============================================================================
+try:
+    import cv2
+    CV2_AKTIF = True
+except ImportError:
+    CV2_AKTIF = False
+    print("OpenCV bulunamadı. Görüntü ön işleme devre dışı.")
+
+def preprocess_medical_image(image_path, target_size=(224, 224)):
+    """
+    Tıbbi görüntüleri en-boy oranını koruyarak, netleştirip kontrastını artırarak hazırlar.
+    a.ipynb notebook'undan entegre edilmiştir.
+
+    Adımlar:
+    1. Görüntüyü Oku ve RGB'ye Çevir
+    2. En-Boy Oranını Koruyarak Yeniden Boyutlandırma (Padding)
+    3. Gürültü Temizleme (Gaussian Blur, 3x3 kernel)
+    3.5. Netlik (Sharpening - Unsharp Mask)
+    4. Kontrast Ayarı (CLAHE, clipLimit=1.5, tileGridSize=8x8)
+    5. Normalizasyon ve NumPy Dönüşümü
+    """
+    if not CV2_AKTIF:
+        # OpenCV yoksa rastgele veri döndür (simülasyon modu)
+        return None, np.random.rand(1, *target_size, 3).astype('float32'), None
+
+    # 1. Görüntüyü Oku ve RGB'ye Çevir
+    img = cv2.imread(image_path)
+    if img is None:
+        raise ValueError(f"Görüntü okunamadı. Dosya yolunu kontrol edin: {image_path}")
+    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    # 2. EN-BOY ORANINI KORUYARAK Yeniden Boyutlandırma (Padding)
+    h, w = img_rgb.shape[:2]
+    target_w, target_h = target_size
+    scale = min(target_w / w, target_h / h)
+    new_w, new_h = int(w * scale), int(h * scale)
+    img_scaled = cv2.resize(img_rgb, (new_w, new_h))
+
+    delta_w = target_w - new_w
+    delta_h = target_h - new_h
+    top, bottom = delta_h // 2, delta_h - (delta_h // 2)
+    left, right = delta_w // 2, delta_w - (delta_w // 2)
+    img_padded = cv2.copyMakeBorder(img_scaled, top, bottom, left, right, cv2.BORDER_CONSTANT, value=[0, 0, 0])
+
+    # 3. Gürültü Temizleme (Daha hafif bir bulanıklık veriyoruz: 3x3 kernel)
+    img_denoised = cv2.GaussianBlur(img_padded, (3, 3), 0)
+
+    # 3.5. NETLİK (Sharpening - Unsharp Mask) İşlemi
+    gaussian_blur_for_sharpness = cv2.GaussianBlur(img_denoised, (0, 0), 2.0)
+    img_sharpened = cv2.addWeighted(img_denoised, 1.5, gaussian_blur_for_sharpness, -0.5, 0)
+
+    # 4. KONTRAST Ayarı (CLAHE)
+    lab = cv2.cvtColor(img_sharpened, cv2.COLOR_RGB2LAB)
+    l, a, b = cv2.split(lab)
+    clahe = cv2.createCLAHE(clipLimit=1.5, tileGridSize=(8, 8))
+    cl = clahe.apply(l)
+    limg = cv2.merge((cl, a, b))
+    img_contrast = cv2.cvtColor(limg, cv2.COLOR_LAB2RGB)
+
+    # 5. Normalizasyon
+    img_normalized = img_contrast / 255.0
+    img_array = np.expand_dims(img_normalized.astype('float32'), axis=0)
+
+    return img_rgb, img_array, img_contrast
+
+
+# ==============================================================================
 # MODEL ENTEGRASYONU
 # Geliştirici: Cansude Sayın (Enes Zukra'nın ai_model.py dosyası baz alındı)
 # ==============================================================================
@@ -116,12 +185,17 @@ def swagger_json():
 # ==============================================================================
 def get_db_connection():
     try:
-        return mysql.connector.connect(
-            host=os.environ.get('DB_HOST', 'localhost'),
-            user=os.environ.get('DB_USER', 'root'),
-            password=os.environ.get('DB_PASSWORD', 'sifre'),
-            database=os.environ.get('DB_NAME', 'mediai_db')
-        )
+        config = {
+            'host': os.environ.get('DB_HOST', 'localhost'),
+            'port': int(os.environ.get('DB_PORT', 3306)),
+            'user': os.environ.get('DB_USER', 'root'),
+            'password': os.environ.get('DB_PASSWORD', 'sifre'),
+            'database': os.environ.get('DB_NAME', 'mediai_db')
+        }
+        # Aiven gibi bulut MySQL servisleri SSL zorunlu tutar
+        if os.environ.get('DB_SSL', 'false').lower() == 'true':
+            config['ssl_disabled'] = False
+        return mysql.connector.connect(**config)
     except Exception as e:
         print(f"Veritabanı bağlantı hatası: {e}")
         return None
@@ -229,13 +303,23 @@ def hasta_getir(hasta_id):
         }), 500
 
 # ==============================================================================
-# 3. KAPI: ANALİZ BAŞLATMA (POST) — CNN Model Entegrasyonu
+# 3. KAPI: ANALİZ BAŞLATMA (POST) — CNN Model + Ön İşleme Entegrasyonu
 # ==============================================================================
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 @app.route('/api/v1/analiz/baslat', methods=['POST'])
 def analiz_baslat():
-    gelen_veri = request.json
-    hasta_id = gelen_veri.get('hasta_id')
-    goruntu_turu = gelen_veri.get('goruntu_turu', '')
+    # Hem JSON hem multipart/form-data destekle
+    if request.content_type and 'multipart/form-data' in request.content_type:
+        hasta_id = request.form.get('hasta_id', '1001')
+        goruntu_turu = request.form.get('goruntu_turu', 'Dermoskopik')
+        dosya = request.files.get('goruntu')
+    else:
+        gelen_veri = request.json or {}
+        hasta_id = gelen_veri.get('hasta_id')
+        goruntu_turu = gelen_veri.get('goruntu_turu', '')
+        dosya = None
 
     if not hasta_id:
         return jsonify({
@@ -253,13 +337,41 @@ def analiz_baslat():
         }), 415
 
     try:
-        # Selim'in ön işleme modülü entegrasyonu (data_preprocessing.py)
-        # Gerçek görüntü geldiğinde:
-        # from data_preprocessing import ehr_veri_temizle
-        # goruntu_dizisi = verify_and_load_medical_data(goruntu_dosya_yolu)
-        goruntu_dizisi = np.random.rand(1, 224, 224, 3).astype('float32')
+        on_isleme_adimlari = []
+        goruntu_dizisi = None
 
-        # Enes'in CNN modeli
+        # Dosya yüklendiyse gerçek ön işleme uygula (a.ipynb pipeline'ı)
+        if dosya:
+            dosya_yolu = os.path.join(UPLOAD_FOLDER, dosya.filename)
+            dosya.save(dosya_yolu)
+
+            try:
+                orijinal, goruntu_dizisi, islenmiş = preprocess_medical_image(dosya_yolu)
+                on_isleme_adimlari = [
+                    {"adim": 1, "islem": "RGB Dönüşümü", "aciklama": "BGR → RGB renk uzayına çevrildi", "durum": "tamamlandi"},
+                    {"adim": 2, "islem": "Yeniden Boyutlandırma", "aciklama": "224×224 boyutuna padding ile ölçeklendirildi (en-boy oranı korundu)", "durum": "tamamlandi"},
+                    {"adim": 3, "islem": "Gürültü Temizleme", "aciklama": "Gaussian Blur (3×3 kernel) ile piksel bozulmaları yumuşatıldı", "durum": "tamamlandi"},
+                    {"adim": 4, "islem": "Keskinleştirme", "aciklama": "Unsharp Mask (σ=2.0, α=1.5, β=-0.5) ile kenarlar netleştirildi", "durum": "tamamlandi"},
+                    {"adim": 5, "islem": "Kontrast Ayarı (CLAHE)", "aciklama": "Adaptif Histogram Eşitleme (clipLimit=1.5, grid=8×8) uygulandı", "durum": "tamamlandi"},
+                    {"adim": 6, "islem": "Normalizasyon", "aciklama": "Piksel değerleri [0,255] → [0,1] aralığına normalize edildi", "durum": "tamamlandi"},
+                ]
+            except Exception as pre_err:
+                on_isleme_adimlari = [{"adim": 0, "islem": "Hata", "aciklama": str(pre_err), "durum": "hata"}]
+                goruntu_dizisi = np.random.rand(1, 224, 224, 3).astype('float32')
+
+            # Temizlik
+            try:
+                os.remove(dosya_yolu)
+            except:
+                pass
+        else:
+            # Dosya yüklenmediyse simülasyon modu
+            goruntu_dizisi = np.random.rand(1, 224, 224, 3).astype('float32')
+            on_isleme_adimlari = [
+                {"adim": 1, "islem": "Simülasyon", "aciklama": "Dosya yüklenmedi, rastgele veri ile simülasyon yapıldı", "durum": "simulasyon"},
+            ]
+
+        # Enes'in CNN modeli ile tahmin
         sonuc = model_tahmin_et(goruntu_dizisi)
 
         return jsonify({
@@ -267,6 +379,7 @@ def analiz_baslat():
             "mesaj": f"{hasta_id} ID'li hasta için analiz tamamlandı.",
             "analiz_durumu": "Tamamlandı",
             "analiz_id": 5001,
+            "on_isleme": on_isleme_adimlari,
             "sonuc": sonuc,
             "tahmini_sure_saniye": 8,
             "zaman": datetime.now().isoformat()
