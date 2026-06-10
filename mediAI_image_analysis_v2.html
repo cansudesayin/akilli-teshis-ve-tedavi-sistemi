@@ -742,12 +742,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (loginBtn) loginBtn.onclick = function() {
     window.location.href = 'mediAI_dashboard_v2.html';
   };
-  // "Teşhis Oluştur" butonu → teşhis sonuçları
-  var teshisBtn = Array.from(document.querySelectorAll('.btn-primary'))
-    .find(b => b.textContent.trim() === 'Teşhis Oluştur');
-  if (teshisBtn) teshisBtn.onclick = function() {
-    window.location.href = 'mediAI_diagnosis_v2.html';
-  };
+  // "Teşhis Oluştur" butonu HTML içinde 'onclick' özniteliğiyle çalışmaktadır, buradaki ezici kod kaldırıldı.
 });
 </script>
 
@@ -786,7 +781,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // old bell logic removed
-    if(bellBtn && bellBtn.innerText.includes('🔔')) {
+    var bellBtn = document.querySelector('.notif-btn');
+    if(bellBtn && bellBtn.innerText && bellBtn.innerText.includes('🔔')) {
         bellBtn.onclick = function() { document.getElementById('notifModal').classList.add('open'); }
     }
 });
