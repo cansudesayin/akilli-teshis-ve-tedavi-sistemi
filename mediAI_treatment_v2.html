@@ -187,8 +187,8 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
     <div class="topbar"><button class="hamburger" onclick="toggleSidebar()" aria-label="Menü"><span></span><span></span><span></span></button>
       <div><h1>Tedavi Planı</h1><p>Ahmet Yıldız · Plan oluşturuldu: 29.03.2026</p></div>
       <div style="display:flex;gap:8px">
-        <div class="btn">Yazdır</div>
-        <div class="btn btn-primary">Planı Güncelle</div>
+        <div class="btn" onclick="printPage(event)">Yazdır</div>
+        <div class="btn btn-primary" onclick="document.getElementById('planModal').classList.add('open')">Planı Güncelle</div>
       </div>
     </div>
     <div class="content">
@@ -247,7 +247,7 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
           </div>
         </div>
         <div class="card">
-          <div class="card-header"><span class="card-title">Mevcut İlaçlar</span><span style="font-size:11px;color:#1a5fa8;cursor:pointer">+ İlaç Ekle</span></div>
+          <div class="card-header"><span class="card-title">Mevcut İlaçlar</span><span style="font-size:11px;color:#1a5fa8;cursor:pointer" onclick="document.getElementById('medModal').classList.add('open')">+ İlaç Ekle</span></div>
           <div class="med-row">
             <div class="med-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="3" y="3" width="10" height="10" rx="2" stroke="#526070" stroke-width="1.2"/><path d="M8 6v4M6 8h4" stroke="#526070" stroke-width="1.2" stroke-linecap="round"/></svg></div>
             <div><div style="font-size:12px;font-weight:500;color:#0b1c30">Acetylsalicylic Acid</div><div style="font-size:11px;color:#526070">100 mg</div></div>
@@ -341,5 +341,138 @@ document.addEventListener('DOMContentLoaded', function() {
   if (teshisBtn) teshisBtn.onclick = function() {
     window.location.href = 'mediAI_diagnosis_v2.html';
   };
+});
+</script>
+
+<script src="ui.js"></script>
+
+
+<!-- Notification Modal -->
+<div class="modal-overlay" id="notifModal">
+    <div class="modal-box" style="position:absolute; top:70px; right:20px; margin:0; transform:none">
+        <div class="modal-header" style="margin-bottom:10px">
+            <span>Bildirimler</span>
+            <button class="modal-close" onclick="document.getElementById('notifModal').classList.remove('open')">&times;</button>
+        </div>
+        <div class="modal-body" style="margin:0; padding:0">
+            <div style="padding:10px; border-bottom:1px solid #e2e8f0; font-size:12px">
+                <strong style="color:#0f6e56">Yeni Analiz Sonucu</strong><br>
+                <span style="color:#64748b">Ahmet Yıldız için BT analizi tamamlandı.</span>
+            </div>
+            <div style="padding:10px; font-size:12px">
+                <strong style="color:#1a5fa8">Sistem Mesajı</strong><br>
+                <span style="color:#64748b">Model güncellemesi v2.1.4 devrede.</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var searchInput = document.querySelector('input[placeholder*="ara"]');
+    if(searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if(e.key === 'Enter' && this.value.trim() !== '') {
+                showGlobalToast('"' + this.value + '" aranıyor...', 'success');
+                setTimeout(() => { showGlobalToast('Sonuç bulunamadı.', 'error'); }, 1500);
+            }
+        });
+    }
+    
+    // old bell logic removed
+    if(bellBtn && bellBtn.innerText.includes('🔔')) {
+        bellBtn.onclick = function() { document.getElementById('notifModal').classList.add('open'); }
+    }
+});
+</script>
+
+
+
+<div class="modal-overlay" id="planModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <span>Tedavi Planına Aşama Ekle</span>
+            <button class="modal-close" onclick="document.getElementById('planModal').classList.remove('open')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <label style="font-size:12px; margin-bottom:4px; display:block">Aşama Adı</label>
+            <input type="text" id="plan-title" class="modal-input" placeholder="Örn: Konsültasyon Sonucu">
+            <label style="font-size:12px; margin-bottom:4px; display:block">Detay</label>
+            <textarea id="plan-desc" class="modal-input" rows="3" placeholder="Detayları giriniz..."></textarea>
+        </div>
+        <div class="modal-footer">
+            <div class="btn" onclick="document.getElementById('planModal').classList.remove('open')">İptal</div>
+            <div class="btn btn-primary" onclick="addPlanStep()">Ekle</div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="medModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <span>Yeni İlaç Ekle</span>
+            <button class="modal-close" onclick="document.getElementById('medModal').classList.remove('open')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <label style="font-size:12px; margin-bottom:4px; display:block">İlaç Adı</label>
+            <input type="text" id="med-name" class="modal-input" placeholder="İlaç Adı">
+            <label style="font-size:12px; margin-bottom:4px; display:block">Dozaj / Sıklık</label>
+            <input type="text" id="med-dose" class="modal-input" placeholder="Örn: 500mg, Günde 2x1">
+        </div>
+        <div class="modal-footer">
+            <div class="btn" onclick="document.getElementById('medModal').classList.remove('open')">İptal</div>
+            <div class="btn btn-primary" onclick="addMed()">Kaydet</div>
+        </div>
+    </div>
+</div>
+
+<script>
+function addPlanStep() {
+    var title = document.getElementById('plan-title').value;
+    var desc = document.getElementById('plan-desc').value;
+    if(!title) return;
+    var stepHtml = `
+    <div class="plan-step">
+      <div class="step-num" style="background:#e8f0fb;color:#185fa5">Yeni</div>
+      <div style="flex:1">
+        <div style="font-size:12px;font-weight:500;color:#0b1c30;margin-bottom:2px">${title}</div>
+        <div style="font-size:11px;color:#526070">${desc}</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px"><span style="font-size:10px;color:#8a9aaa">Şimdi</span><span class="badge bb">Aktif</span></div>
+      </div>
+    </div>`;
+    var container = document.querySelector('.card:first-child');
+    if(container) container.insertAdjacentHTML('beforeend', stepHtml);
+    document.getElementById('planModal').classList.remove('open');
+    showGlobalToast('Plan aşaması eklendi.', 'success');
+}
+
+function addMed() {
+    var name = document.getElementById('med-name').value;
+    var dose = document.getElementById('med-dose').value;
+    if(!name) return;
+    var medHtml = `
+    <div class="med-row">
+      <div class="med-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="3" y="3" width="10" height="10" rx="2" stroke="#526070" stroke-width="1.2"/><path d="M8 6v4M6 8h4" stroke="#526070" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+      <div><div style="font-size:12px;font-weight:500;color:#0b1c30">${name}</div><div style="font-size:11px;color:#526070">${dose}</div></div>
+      <div class="med-sched">Yeni Eklendi</div>
+    </div>`;
+    var medCards = document.querySelectorAll('.card');
+    if(medCards.length >= 2) medCards[1].insertAdjacentHTML('beforeend', medHtml);
+    document.getElementById('medModal').classList.remove('open');
+    showGlobalToast('Yeni ilaç reçeteye yazıldı.', 'success');
+}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    // ROBUST BELL LOGIC
+    document.querySelectorAll('.notif-btn').forEach(function(btn) {
+        btn.onclick = function() {
+            var m = document.getElementById('notifModal');
+            if(m) m.classList.add('open');
+            else showGlobalToast('Bildirim bulunmuyor.', 'error');
+        };
+    });
+    
 });
 </script>

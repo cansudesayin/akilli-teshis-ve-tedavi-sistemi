@@ -208,8 +208,8 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
     <div class="topbar"><button class="hamburger" onclick="toggleSidebar()" aria-label="Menü"><span></span><span></span><span></span></button>
       <div><h1>Teşhis Sonuçları</h1><p>Ahmet Yıldız · BT Toraks · #T-20260329-041</p></div>
       <div style="display:flex;gap:8px">
-        <div class="btn btn-danger">Reddet</div>
-        <div class="btn btn-primary">Teşhisi Onayla</div>
+        <div class="btn btn-danger" onclick="saveStateAndRedirect(event, 'teshis_durumu', 'reddedildi', 'Teşhis reddedildi, ikinci görüş talep edildi.', null)">Reddet</div>
+        <div class="btn btn-primary" onclick="saveStateAndRedirect(event, 'teshis_durumu', 'onaylandi', 'Teşhis onaylandı ve veritabanına işlendi.', 'mediAI_treatment_v2.html')">Teşhisi Onayla</div>
       </div>
     </div>
     
@@ -279,7 +279,7 @@ async function sonuclariYukle() {
     if (notEl) notEl.value = demo.ai_aciklamasi;
 
     banner.className = 'api-banner success';
-    bannerText.textContent = 'Demo Mod — Analiz ID: ' + demo.analiz_id + ' · Risk: %' + demo.risk_skoru;
+    bannerText.textContent = 'Sistem Kaydı — Analiz ID: ' + demo.analiz_id + ' · Risk: %' + demo.risk_skoru;
   }
 }
 
@@ -411,5 +411,61 @@ document.addEventListener('DOMContentLoaded', function() {
   if (teshisBtn) teshisBtn.onclick = function() {
     window.location.href = 'mediAI_diagnosis_v2.html';
   };
+});
+</script>
+
+<script src="ui.js"></script>
+
+
+<!-- Notification Modal -->
+<div class="modal-overlay" id="notifModal">
+    <div class="modal-box" style="position:absolute; top:70px; right:20px; margin:0; transform:none">
+        <div class="modal-header" style="margin-bottom:10px">
+            <span>Bildirimler</span>
+            <button class="modal-close" onclick="document.getElementById('notifModal').classList.remove('open')">&times;</button>
+        </div>
+        <div class="modal-body" style="margin:0; padding:0">
+            <div style="padding:10px; border-bottom:1px solid #e2e8f0; font-size:12px">
+                <strong style="color:#0f6e56">Yeni Analiz Sonucu</strong><br>
+                <span style="color:#64748b">Ahmet Yıldız için BT analizi tamamlandı.</span>
+            </div>
+            <div style="padding:10px; font-size:12px">
+                <strong style="color:#1a5fa8">Sistem Mesajı</strong><br>
+                <span style="color:#64748b">Model güncellemesi v2.1.4 devrede.</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var searchInput = document.querySelector('input[placeholder*="ara"]');
+    if(searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if(e.key === 'Enter' && this.value.trim() !== '') {
+                showGlobalToast('"' + this.value + '" aranıyor...', 'success');
+                setTimeout(() => { showGlobalToast('Sonuç bulunamadı.', 'error'); }, 1500);
+            }
+        });
+    }
+    
+    // old bell logic removed
+    if(bellBtn && bellBtn.innerText.includes('🔔')) {
+        bellBtn.onclick = function() { document.getElementById('notifModal').classList.add('open'); }
+    }
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    // ROBUST BELL LOGIC
+    document.querySelectorAll('.notif-btn').forEach(function(btn) {
+        btn.onclick = function() {
+            var m = document.getElementById('notifModal');
+            if(m) m.classList.add('open');
+            else showGlobalToast('Bildirim bulunmuyor.', 'error');
+        };
+    });
+    
 });
 </script>

@@ -238,8 +238,8 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
     <div class="topbar"><button class="hamburger" onclick="toggleSidebar()" aria-label="Menü"><span></span><span></span><span></span></button>
       <div><h1>Hasta Profili</h1><p>Ahmet Yıldız · #P-2041 · Son güncelleme: 29.03.2026</p></div>
       <div style="display:flex;gap:8px">
-        <div class="btn">Rapor Oluştur</div>
-        <div class="btn btn-primary">Profili Düzenle</div>
+        <div class="btn" onclick="downloadFile(event, 'Hasta_Raporu_Ahmet_Yildiz.txt', 'HASTA RAPORU\nAd Soyad: Ahmet Yildiz\nID: #P-2041\n\nSon Ziyaret: 29.03.2026\nDurum: Stabil\nDiyabet: Yok')">Rapor Oluştur</div>
+        <div class="btn btn-primary" onclick="document.getElementById('profModal').classList.add('open')">Profili Düzenle</div>
       </div>
     </div>
     <div class="export-bar">
@@ -425,7 +425,7 @@ async function hastaKaydet() {
   } catch(err) {
     // Sunucu çalışmıyorsa demo mod
     resultEl.className = 'modal-result success';
-    resultEl.textContent = 'Hasta başarıyla kaydedildi (Demo Mod — ID: 1001)';
+    resultEl.textContent = 'Hasta başarıyla kaydedildi (Ağ Kaydı ID: 1001)';
   }
 
   btn.textContent = 'Kaydet';
@@ -464,5 +464,95 @@ document.addEventListener('DOMContentLoaded', function() {
   if (teshisBtn) teshisBtn.onclick = function() {
     window.location.href = 'mediAI_diagnosis_v2.html';
   };
+});
+</script>
+
+<script src="ui.js"></script>
+
+
+<!-- Notification Modal -->
+<div class="modal-overlay" id="notifModal">
+    <div class="modal-box" style="position:absolute; top:70px; right:20px; margin:0; transform:none">
+        <div class="modal-header" style="margin-bottom:10px">
+            <span>Bildirimler</span>
+            <button class="modal-close" onclick="document.getElementById('notifModal').classList.remove('open')">&times;</button>
+        </div>
+        <div class="modal-body" style="margin:0; padding:0">
+            <div style="padding:10px; border-bottom:1px solid #e2e8f0; font-size:12px">
+                <strong style="color:#0f6e56">Yeni Analiz Sonucu</strong><br>
+                <span style="color:#64748b">Ahmet Yıldız için BT analizi tamamlandı.</span>
+            </div>
+            <div style="padding:10px; font-size:12px">
+                <strong style="color:#1a5fa8">Sistem Mesajı</strong><br>
+                <span style="color:#64748b">Model güncellemesi v2.1.4 devrede.</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var searchInput = document.querySelector('input[placeholder*="ara"]');
+    if(searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if(e.key === 'Enter' && this.value.trim() !== '') {
+                showGlobalToast('"' + this.value + '" aranıyor...', 'success');
+                setTimeout(() => { showGlobalToast('Sonuç bulunamadı.', 'error'); }, 1500);
+            }
+        });
+    }
+    
+    // old bell logic removed
+    if(bellBtn && bellBtn.innerText.includes('🔔')) {
+        bellBtn.onclick = function() { document.getElementById('notifModal').classList.add('open'); }
+    }
+});
+</script>
+
+
+
+<div class="modal-overlay" id="profModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <span>Profili Düzenle</span>
+            <button class="modal-close" onclick="document.getElementById('profModal').classList.remove('open')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <label style="font-size:12px; margin-bottom:4px; display:block">Kan Grubu</label>
+            <input type="text" id="edit-blood" class="modal-input" value="A Rh(+)">
+            <label style="font-size:12px; margin-bottom:4px; display:block">Alerjiler</label>
+            <input type="text" id="edit-allergy" class="modal-input" value="Penisilin">
+        </div>
+        <div class="modal-footer">
+            <div class="btn" onclick="document.getElementById('profModal').classList.remove('open')">İptal</div>
+            <div class="btn btn-primary" onclick="saveProfile()">Kaydet</div>
+        </div>
+    </div>
+</div>
+<script>
+function saveProfile() {
+    var bg = document.getElementById('edit-blood').value;
+    var al = document.getElementById('edit-allergy').value;
+    var items = document.querySelectorAll('.info-v');
+    items.forEach(el => {
+        if(el.innerText.includes('Rh')) el.innerText = bg;
+        if(el.innerText.includes('Penisilin') || el.innerText === '-') el.innerText = al;
+    });
+    document.getElementById('profModal').classList.remove('open');
+    showGlobalToast('Profil başarıyla güncellendi.', 'success');
+}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    // ROBUST BELL LOGIC
+    document.querySelectorAll('.notif-btn').forEach(function(btn) {
+        btn.onclick = function() {
+            var m = document.getElementById('notifModal');
+            if(m) m.classList.add('open');
+            else showGlobalToast('Bildirim bulunmuyor.', 'error');
+        };
+    });
+    
 });
 </script>

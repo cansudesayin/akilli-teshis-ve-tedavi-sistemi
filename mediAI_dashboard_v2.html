@@ -253,7 +253,7 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
       </div>
       <div class="mid-grid">
         <div class="card">
-          <div class="card-header"><span class="card-title">Haftalık Analiz Dağılımı</span><span class="card-action">Raporu İndir</span></div>
+          <div class="card-header"><span class="card-title">Haftalık Analiz Dağılımı</span><span class="card-action" onclick="downloadFile(event, 'MediAI_Haftalik_Rapor.txt', 'MediAI Sistem Raporu\nTarih: 2026-03-29\n\nToplam Analiz: 124\nKritik Vaka: 3\nSistem Durumu: Stabil')">Raporu İndir</span></div>
           <div class="legend">
             <div class="legend-item"><div class="legend-dot" style="background:#1a5fa8"></div>Akciğer BT</div>
             <div class="legend-item"><div class="legend-dot" style="background:#0f6e56"></div>MRI Beyin</div>
@@ -270,7 +270,7 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
           </div>
         </div>
         <div class="card">
-          <div class="card-header"><span class="card-title">Son Aktivite</span><span class="card-action">Tümünü Gör</span></div>
+          <div class="card-header"><span class="card-title">Son Aktivite</span><span class="card-action" onclick="document.getElementById('actModal').classList.add('open')">Tümünü Gör</span></div>
           <div class="act-item"><div class="act-dot" style="background:#1a5fa8"></div><span class="act-text">Akciğer BT analizi tamamlandı</span><span class="act-time">2d</span></div>
           <div class="act-item"><div class="act-dot" style="background:#e24b4a"></div><span class="act-text">Yüksek öncelikli teşhis eklendi</span><span class="act-time">15d</span></div>
           <div class="act-item"><div class="act-dot" style="background:#0f6e56"></div><span class="act-text">Tedavi planı güncellendi</span><span class="act-time">1s</span></div>
@@ -287,7 +287,7 @@ body.dark-mode .prob-bar{background:#1a2535!important;}
           <div class="status-row"><span class="status-label">Yedekleme</span><span class="badge bb">Senkron</span></div>
         </div>
         <div class="card">
-          <div class="card-header"><span class="card-title">Bekleyen Analizler</span><span class="card-action">Sıraya Git</span></div>
+          <div class="card-header"><span class="card-title">Bekleyen Analizler</span><span class="card-action" onclick="window.location.href='mediAI_image_analysis_v2.html'">Sıraya Git</span></div>
           <div class="pt-row">
             <div class="pt-av" style="background:#e8f0fb;color:#185fa5">AY</div>
             <div><div style="font-size:12px;font-weight:500;color:#0b1c30">Ahmet Yıldız</div><div style="font-size:11px;color:#526070">Akciğer BT</div></div>
@@ -363,5 +363,84 @@ document.addEventListener('DOMContentLoaded', function() {
   if (teshisBtn) teshisBtn.onclick = function() {
     window.location.href = 'mediAI_diagnosis_v2.html';
   };
+});
+</script>
+
+<script src="ui.js"></script>
+
+
+<!-- Notification Modal -->
+<div class="modal-overlay" id="notifModal">
+    <div class="modal-box" style="position:absolute; top:70px; right:20px; margin:0; transform:none">
+        <div class="modal-header" style="margin-bottom:10px">
+            <span>Bildirimler</span>
+            <button class="modal-close" onclick="document.getElementById('notifModal').classList.remove('open')">&times;</button>
+        </div>
+        <div class="modal-body" style="margin:0; padding:0">
+            <div style="padding:10px; border-bottom:1px solid #e2e8f0; font-size:12px">
+                <strong style="color:#0f6e56">Yeni Analiz Sonucu</strong><br>
+                <span style="color:#64748b">Ahmet Yıldız için BT analizi tamamlandı.</span>
+            </div>
+            <div style="padding:10px; font-size:12px">
+                <strong style="color:#1a5fa8">Sistem Mesajı</strong><br>
+                <span style="color:#64748b">Model güncellemesi v2.1.4 devrede.</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var searchInput = document.querySelector('input[placeholder*="ara"]');
+    if(searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if(e.key === 'Enter' && this.value.trim() !== '') {
+                showGlobalToast('"' + this.value + '" aranıyor...', 'success');
+                setTimeout(() => { showGlobalToast('Sonuç bulunamadı.', 'error'); }, 1500);
+            }
+        });
+    }
+    
+    // old bell logic removed
+    if(bellBtn && bellBtn.innerText.includes('🔔')) {
+        bellBtn.onclick = function() { document.getElementById('notifModal').classList.add('open'); }
+    }
+});
+</script>
+
+
+
+<div class="modal-overlay" id="actModal">
+    <div class="modal-box" style="max-width: 500px">
+        <div class="modal-header">
+            <span>Tüm Aktiviteler</span>
+            <button class="modal-close" onclick="document.getElementById('actModal').classList.remove('open')">&times;</button>
+        </div>
+        <div class="modal-body" style="max-height: 300px; overflow-y: auto;">
+            <ul style="list-style: none; padding:0; margin:0; font-size:13px; line-height:1.6">
+                <li style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #e2e8f0"><b>Bugün 14:30</b> - Yeni hasta kaydı oluşturuldu: Zeynep K.</li>
+                <li style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #e2e8f0"><b>Bugün 11:15</b> - Ahmet Yıldız için BT analizi tamamlandı.</li>
+                <li style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #e2e8f0"><b>Dün 09:45</b> - Sistem güncellemesi v2.1.4 uygulandı.</li>
+                <li style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #e2e8f0"><b>26 Mart</b> - Dr. Selin Bozkurt sisteme giriş yaptı.</li>
+                <li><b>25 Mart</b> - Haftalık sistem yedeği alındı.</li>
+            </ul>
+        </div>
+        <div class="modal-footer">
+            <div class="btn" onclick="document.getElementById('actModal').classList.remove('open')">Kapat</div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    // ROBUST BELL LOGIC
+    document.querySelectorAll('.notif-btn').forEach(function(btn) {
+        btn.onclick = function() {
+            var m = document.getElementById('notifModal');
+            if(m) m.classList.add('open');
+            else showGlobalToast('Bildirim bulunmuyor.', 'error');
+        };
+    });
+    
 });
 </script>
